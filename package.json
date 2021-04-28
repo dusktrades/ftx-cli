@@ -1,0 +1,39 @@
+{
+  "name": "node-template",
+  "description": "Personal template for back-end Node.js projects.",
+  "author": {
+    "name": "dusktrades",
+    "email": "dusktrades@protonmail.com",
+    "url": "https://dusktrades.com"
+  },
+  "repository": "github:dusktrades/node-template",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "clean:node_modules": "rm -rf ./node_modules",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "node --require dotenv/config ./src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-sonarjs": "^0.7.0",
+    "eslint-plugin-unicorn": "^31.0.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1"
+  }
+}

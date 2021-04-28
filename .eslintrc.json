@@ -1,0 +1,77 @@
+{
+  "env": { "es2021": true, "node": true },
+  "extends": [
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:node/recommended",
+    "plugin:sonarjs/recommended",
+    "plugin:unicorn/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "plugins": ["import", "node", "sonarjs", "unicorn"],
+  "rules": {
+    "arrow-body-style": ["error", "as-needed"],
+    "curly": ["error", "all"],
+    "no-console": "off",
+    "no-mixed-operators": "error",
+    "no-nested-ternary": "error",
+    "no-param-reassign": ["error", { "props": false }],
+    "no-restricted-syntax": ["off", "ForOfStatement"],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": false }
+    ],
+
+    "import/exports-last": "error",
+    "import/extensions": ["error", "always", { "ignorePackages": true }],
+    "import/namespace": "error",
+    "import/no-default-export": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/postcss.config.js", "**/webpack.config.js"],
+        "optionalDependencies": false
+      }
+    ],
+    "import/prefer-default-export": "off",
+
+    "node/no-unsupported-features/es-syntax": "off",
+
+    "sonarjs/prefer-immediate-return": "error",
+
+    "unicorn/custom-error-definition": "error",
+    "unicorn/filename-case": ["error", { "case": "camelCase" }],
+    "unicorn/no-nested-ternary": "off",
+    "unicorn/no-null": "off",
+    "unicorn/no-unsafe-regex": "error",
+    "unicorn/no-unused-properties": "error",
+    "unicorn/number-literal-case": "off",
+    "unicorn/prefer-replace-all": "error",
+    "unicorn/prevent-abbreviations": [
+      "error",
+      {
+        "replacements": {
+          "arrs": { "arrays": true },
+          "char": { "character": true },
+          "chars": { "characters": true },
+          "cum": { "cumulative": true },
+          "fn": { "function": true },
+          "fns": { "functions": true },
+          "init": { "initialise": true },
+          "msgs": { "messages": true },
+          "objs": { "objects": true },
+          "params": { "parameters": true },
+
+          "props": false
+        }
+      }
+    ]
+  }
+}
