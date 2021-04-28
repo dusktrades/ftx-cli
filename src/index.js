@@ -1,7 +1,5 @@
-import { CONFIG } from './config/index.js';
-
 function main() {
-  console.log(CONFIG.LOG_MESSAGE);
+  console.log('Starting...');
 }
 
 main();

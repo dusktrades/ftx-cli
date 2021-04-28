@@ -1,5 +1,3 @@
-const CONFIG = {
-  LOG_MESSAGE: '[NODE-TEMPLATE] Running...',
-};
+const CONFIG = {};
 
 export { CONFIG };

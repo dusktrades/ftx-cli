@@ -1,12 +1,12 @@
 {
-  "name": "node-template",
-  "description": "Personal template for back-end Node.js projects.",
+  "name": "ftx-smart-lending",
+  "description": "FTX lending execution and monitoring CLI tool.",
   "author": {
     "name": "dusktrades",
     "email": "dusktrades@protonmail.com",
     "url": "https://dusktrades.com"
   },
-  "repository": "github:dusktrades/node-template",
+  "repository": "github:dusktrades/ftx-smart-lending",
   "license": "MIT",
   "private": true,
   "engines": {
