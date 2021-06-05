@@ -9,10 +9,26 @@
   },
   "repository": "github:dusktrades/ftx-cli",
   "license": "MIT",
+  "homepage": "https://github.com/dusktrades/ftx-cli#readme",
+  "keywords": [
+    "ftx",
+    "crypto",
+    "cryptocurrency",
+    "stablecoins",
+    "trading",
+    "lending",
+    "borrowing",
+    "cli"
+  ],
   "engines": {
     "node": ">=14.13.0"
   },
   "type": "module",
+  "files": [
+    "bin",
+    "docs",
+    "src"
+  ],
   "bin": {
     "ftx": "./bin/cli.js"
   },
