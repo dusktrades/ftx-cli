@@ -1,13 +1,7 @@
 import { Ftx } from '../../api/index.js';
 import { CliUi, Logger } from '../../common/index.js';
-
-import {
-  convertDecimalToPercentage,
-  convertHourlyToYearly,
-  formatPercentage,
-} from '../../util/index.js';
-
 import { composeTableData } from '../composeTableData.js';
+import { formatRates } from '../formatRates.js';
 
 function composeCurrenciesFilter(currency) {
   return currency == null ? null : [currency];
@@ -22,31 +16,7 @@ function createTable() {
 }
 
 function composeTableEntry(entry) {
-  const previousHourlyRatePercentage = convertDecimalToPercentage(
-    entry.previous
-  );
-
-  const previousYearlyRatePercentage = convertHourlyToYearly(
-    previousHourlyRatePercentage
-  );
-
-  const estimatedHourlyRatePercentage = convertDecimalToPercentage(
-    entry.estimate
-  );
-
-  const estimatedYearlyRatePercentage = convertHourlyToYearly(
-    estimatedHourlyRatePercentage
-  );
-
-  const formattedPrevious = `${formatPercentage(
-    previousHourlyRatePercentage
-  )} / ${formatPercentage(previousYearlyRatePercentage)}`;
-
-  const formattedEstimate = `${formatPercentage(
-    estimatedHourlyRatePercentage
-  )} / ${formatPercentage(estimatedYearlyRatePercentage)}`;
-
-  return [entry.coin, formattedPrevious, formattedEstimate];
+  return [entry.coin, formatRates(entry.previous), formatRates(entry.estimate)];
 }
 
 async function run(options) {

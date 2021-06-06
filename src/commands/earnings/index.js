@@ -2,13 +2,12 @@ import { Ftx } from '../../api/index.js';
 import { CliUi, Logger } from '../../common/index.js';
 
 import {
-  convertDecimalToPercentage,
-  convertHourlyToYearly,
   formatCurrency,
-  formatPercentage,
   formatUsd,
   sortAlphabetically,
 } from '../../util/index.js';
+
+import { formatRates } from '../formatRates.js';
 
 function calculateAggregateMetrics(lendingHistory) {
   const aggregateMetrics = {};
@@ -52,24 +51,17 @@ function formatDuration(totalHoursLent) {
   return `${totalHoursLent} ${hourString} (~${totalDaysLent} ${dayString})`;
 }
 
-function formatRates({ totalHoursLent, totalHourlyRate }) {
-  const hourlyDecimal = totalHourlyRate / totalHoursLent;
-  const hourlyPercentage = convertDecimalToPercentage(hourlyDecimal);
-  const yearlyPercentage = convertHourlyToYearly(hourlyPercentage);
-
-  return [
-    formatPercentage(hourlyPercentage),
-    formatPercentage(yearlyPercentage),
-  ].join(' / ');
-}
-
-function composeTableEntry([currency, metrics], userRewards) {
+function composeTableEntry(
+  [currency, { totalHourlyRate, totalHoursLent }],
+  userRewards
+) {
+  const hourlyRateDecimal = totalHourlyRate / totalHoursLent;
   const proceeds = getProceedsByCurrency(userRewards, currency);
 
   return [
     currency,
-    formatDuration(metrics.totalHoursLent),
-    formatRates(metrics),
+    formatDuration(totalHoursLent),
+    formatRates(hourlyRateDecimal),
     formatCurrency(proceeds.value),
     formatUsd(proceeds.valueUsd),
   ];
