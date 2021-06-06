@@ -2,7 +2,7 @@
 
 > 💸 Supercharged FTX lending from the command line.
 
-![a](https://flat.badgen.net/npm/v/dusktrades/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/node/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/license/dusktrades/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/dt/ftx-cli?cache=300) [![a](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
+[![Version](https://flat.badgen.net/npm/v/dusktrades/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/dusktrades/ftx-cli?cache=300)](LICENSE) [![Total Downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
 
 ![Demo](docs/images/demo.png)
 
@@ -71,7 +71,7 @@ npx ftx-cli rates
 
 ### Global package (recommended)
 
-The quickest and easiest way to install is globally from [npm](https://www.npmjs.com).
+The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli).
 
 ```sh
 npm install --global ftx-cli
