@@ -333,9 +333,9 @@ FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsib
 
 ## Donate
 
-- BTC: bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys
-- ERC-20 (ETH): 0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d
-- SPL (SOL): 32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV
+**BTC:** `bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys`\
+**ETH/ERC-20:** `0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d`\
+**SOL/SPL:** `32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV`
 
 ## License
 
