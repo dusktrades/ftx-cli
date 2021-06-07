@@ -104,15 +104,12 @@ async function create(options) {
   const parsedOptions = {
     ...options,
     command: {
-      currency: options.command.currency.toUpperCase(),
+      currency: options.command.currency,
       size:
         options.command.size == null
           ? lendableResponse.data[0]?.lendable ?? 0
-          : Number.parseFloat(options.command.size),
-      minRate:
-        options.command.minRate == null
-          ? 0
-          : Number.parseFloat(options.command.minRate),
+          : options.command.size,
+      minRate: options.command.minRate == null ? 0 : options.command.minRate,
     },
   };
 
@@ -164,7 +161,7 @@ async function stop(options) {
   const parsedOptions = {
     ...options,
     command: {
-      currency: options.command.currency.toUpperCase(),
+      currency: options.command.currency,
       size: 0,
       minRate: 0,
     },

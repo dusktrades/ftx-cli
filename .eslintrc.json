@@ -46,11 +46,11 @@
 
     "sonarjs/prefer-immediate-return": "error",
 
+    "unicorn/better-regex": ["error", { "sortCharacterClasses": false }],
     "unicorn/custom-error-definition": "error",
     "unicorn/filename-case": ["error", { "case": "camelCase" }],
     "unicorn/no-nested-ternary": "off",
     "unicorn/no-null": "off",
-    "unicorn/no-unsafe-regex": "error",
     "unicorn/no-unused-properties": "error",
     "unicorn/number-literal-case": "off",
     "unicorn/prefer-node-protocol": "off",

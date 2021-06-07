@@ -10,18 +10,19 @@ function composeRegEx(decimalPlaces) {
   );
 }
 
-function getStringMatch(value, decimalPlaces) {
+function truncate(value, decimalPlaces) {
   /**
    * Use toFixed over toString to avoid scientific notation, with an extra
    * decimal place to prevent rounding.
    */
   const stringValue = value.toFixed(decimalPlaces + 1);
+  const match = stringValue.match(composeRegEx(decimalPlaces));
 
-  return stringValue.match(composeRegEx(decimalPlaces))[0];
-}
+  if (match == null) {
+    return null;
+  }
 
-function truncate(value, decimalPlaces) {
-  return Number.parseFloat(getStringMatch(value, decimalPlaces));
+  return Number.parseFloat(match[0]);
 }
 
 export { truncate };
