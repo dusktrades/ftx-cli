@@ -129,10 +129,17 @@ You can inline these options with any command to modify its behaviour. Inline op
 | `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
 | `-z, --repeat [cron expression]` | Repeat the command with optional cron schedule                                                         | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
+| `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
 
 ### Login
 
 Store FTX API credentials locally. This provides a convenient method of remaining authenticated with FTX. Please note any previously stored credentials will be overwritten.
+
+| Option                          | Description         | Default       | Notes                                                    |
+| ------------------------------- | ------------------- | ------------- | -------------------------------------------------------- |
+| `-k, --key <key>`               | FTX API key         |               | Required                                                 |
+| `-x, --secret <secret>`         | FTX API secret      |               | Required                                                 |
+| `-a, --subaccount <subaccount>` | FTX subaccount name | No subaccount | [Learn more about using subaccounts](#using-subaccounts) |
 
 ```sh
 # Store API credentials.
@@ -154,9 +161,17 @@ ftx logout
 
 Store option preferences locally. This lets you customise the default behaviour of the package so you don't need to continuously repeat the same options.
 
+| Option                      | Description                                                                                            | Default | Notes                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------------ |
+| `-e, --exchange <exchange>` | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`   | Options: `ftx`, `ftx-us` |
+| `--colour`                  | Enable coloured output                                                                                 | `true`  | Disable: `--no-colour`   |
+
 ```sh
 # Store preference to use FTX US.
 ftx config --exchange ftx-us
+
+# Store preference to disable coloured output.
+ftx config --no-colour
 ```
 
 ### Rates
