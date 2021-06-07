@@ -2,7 +2,7 @@
 
 > 💸 Supercharged FTX lending from the command line.
 
-![a](https://flat.badgen.net/npm/v/dusktrades/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/node/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/license/dusktrades/ftx-cli?cache=300) ![a](https://flat.badgen.net/npm/dt/ftx-cli?cache=300) [![a](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
+[![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total Downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
 
 ![Demo](docs/images/demo.png)
 
@@ -71,7 +71,7 @@ npx ftx-cli rates
 
 ### Global package (recommended)
 
-The quickest and easiest way to install is globally from [npm](https://www.npmjs.com).
+The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli).
 
 ```sh
 npm install --global ftx-cli
@@ -124,7 +124,7 @@ You can inline these options with any command to modify its behaviour. Inline op
 
 | Option                           | Description                                                                                            | Default       | Notes                                                                           |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------- |
-| `-e, --exchange`                 | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`         | Options: `ftx`, `ftx-us`                                                        |
+| `-e, --exchange <exchange>`      | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`         | Options: `ftx`, `ftx-us`                                                        |
 | `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
 | `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
@@ -348,9 +348,9 @@ FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsib
 
 ## Donate
 
-- BTC: bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys
-- ERC-20 (ETH): 0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d
-- SPL (SOL): 32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV
+**BTC:** `bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys`\
+**ETH/ERC-20:** `0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d`\
+**SOL/SPL:** `32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV`
 
 ## License
 
