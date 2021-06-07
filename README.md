@@ -216,11 +216,11 @@ Create a lending offer for a currency, or all if no currency is provided. Please
 
 🔐 Requires authentication
 
-| Option                      | Description                     | Default                 |
-| --------------------------- | ------------------------------- | ----------------------- |
-| `-c, --currency <currency>` | Currency symbol                 | All lendable currencies |
-| `-s, --size <size>`         | Currency amount                 | Maximum lendable size   |
-| `-r, --min-rate <rate>`     | Minimum yearly lending rate (%) | `0`                     |
+| Option                      | Description                     | Default                 | Notes                                                          |
+| --------------------------- | ------------------------------- | ----------------------- | -------------------------------------------------------------- |
+| `-c, --currency <currency>` | Currency symbol                 | All lendable currencies |                                                                |
+| `-s, --size <size>`         | Currency amount                 | Maximum lendable size   | Supports thousand (`k`, `K`) and million (`m`, `M`) shorthands |
+| `-r, --min-rate <rate>`     | Minimum yearly lending rate (%) | `0`                     |                                                                |
 
 ```sh
 # Offer all lendable currencies with no minimum rate.
@@ -238,8 +238,8 @@ ftx lend --currency twtr --size 100
 # Offer all USDT at a minimum rate of 7.5% per year.
 ftx lend --currency usdt --min-rate 7.5
 
-# Offer 10,000 USD at a minimum rate of 10% per year.
-ftx lend --currency usd --size 10000 --min-rate 10
+# Offer 10,500 USD at a minimum rate of 10% per year.
+ftx lend --currency usd --size 10.5k --min-rate 10
 ```
 
 ### Stop
