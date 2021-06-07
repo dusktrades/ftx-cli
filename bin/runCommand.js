@@ -17,6 +17,8 @@ function getGlobalOptions() {
     key: inlineGlobalOptions.key ?? CONFIG.USER.get('API_KEY'),
     secret: inlineGlobalOptions.secret ?? CONFIG.USER.get('API_SECRET'),
     subaccount: inlineGlobalOptions.subaccount ?? CONFIG.USER.get('SUBACCOUNT'),
+    enableColours:
+      inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
   };
 }
 

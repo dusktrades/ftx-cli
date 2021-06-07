@@ -17,6 +17,8 @@ const GLOBAL_OPTIONS = {
     '-z, --repeat [cron expression]',
     'repeat the command with optional schedule',
   ],
+  ENABLE_COLOURS: ['--colour', 'enable coloured output'],
+  DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
 };
 
 const COMMAND_OPTIONS = {
@@ -36,7 +38,9 @@ program
   .option(...GLOBAL_OPTIONS.API_KEY)
   .option(...GLOBAL_OPTIONS.API_SECRET)
   .option(...GLOBAL_OPTIONS.SUBACCOUNT)
-  .option(...GLOBAL_OPTIONS.REPEAT);
+  .option(...GLOBAL_OPTIONS.REPEAT)
+  .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
+  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS);
 
 program
   .command('login')

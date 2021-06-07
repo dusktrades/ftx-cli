@@ -1,14 +1,8 @@
 import { Ftx } from '../../api/index.js';
 import { CliUi, Logger } from '../../common/index.js';
-
-import {
-  convertDecimalToPercentage,
-  convertHourlyToYearly,
-  formatCurrency,
-  formatPercentage,
-} from '../../util/index.js';
-
+import { formatCurrency } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
+import { formatRates } from '../formatRates.js';
 
 function createTable() {
   return CliUi.createTable([
@@ -20,27 +14,17 @@ function createTable() {
   ]);
 }
 
-function composeTableEntry(entry) {
-  const minHourlyRatePercentage = convertDecimalToPercentage(entry.minRate);
-
-  const minYearlyRatePercentage = convertHourlyToYearly(
-    minHourlyRatePercentage
-  );
-
-  const formattedMinRates = `${formatPercentage(
-    minHourlyRatePercentage
-  )} / ${formatPercentage(minYearlyRatePercentage)}`;
-
-  return [
-    entry.coin,
-    formatCurrency(entry.lendable),
-    formatCurrency(entry.offered),
-    formatCurrency(entry.locked),
-    formattedMinRates,
-  ];
-}
-
 async function run(options) {
+  function composeTableEntry(entry) {
+    return [
+      entry.coin,
+      formatCurrency(entry.lendable),
+      formatCurrency(entry.offered),
+      formatCurrency(entry.locked),
+      formatRates(entry.minRate, options.global.enableColours),
+    ];
+  }
+
   const { data, error } = await Ftx.lendingOffers.get(options, {
     active: true,
   });

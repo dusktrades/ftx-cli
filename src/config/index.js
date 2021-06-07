@@ -8,6 +8,7 @@ const USER = new Conf({
   projectName: PACKAGE.name,
   projectSuffix: '',
   defaults: {
+    ENABLE_COLOURS: true,
     EXCHANGE: 'ftx',
   },
 });
