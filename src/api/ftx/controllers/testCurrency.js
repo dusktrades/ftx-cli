@@ -1,9 +1,5 @@
 function testCurrency(filter, currency) {
-  return filter == null
-    ? true
-    : filter.some(
-        (filterCurrency) => filterCurrency.toUpperCase() === currency
-      );
+  return filter == null ? true : filter.includes(currency);
 }
 
 export { testCurrency };

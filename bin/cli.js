@@ -3,6 +3,8 @@
 import { Option, program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
+import { parseCurrency } from './parseCurrency.js';
+import { parseMinRate } from './parseMinRate.js';
 import { parseSize } from './parseSize.js';
 import { runCommand } from './runCommand.js';
 
@@ -24,7 +26,7 @@ const GLOBAL_OPTIONS = {
 
 const COMMAND_OPTIONS = {
   // TODO: Parse to lowercase as early as possible.
-  CURRENCY: ['-c, --currency <currency>', 'currency symbol'],
+  CURRENCY: ['-c, --currency <currency>', 'currency symbol', parseCurrency],
 };
 
 program.version(CONFIG.PACKAGE.version, '-v, --version');
@@ -86,7 +88,11 @@ program
   )
   .option(...COMMAND_OPTIONS.CURRENCY)
   .option('-s, --size <size>', 'currency amount', parseSize)
-  .option('-r, --min-rate <rate>', 'minimum yearly lending rate (%)')
+  .option(
+    '-r, --min-rate <rate>',
+    'minimum yearly lending rate (%)',
+    parseMinRate
+  )
   .action((inlineCommandOptions) => runCommand('lend', inlineCommandOptions));
 
 program
