@@ -15,11 +15,15 @@ function createTable() {
   ]);
 }
 
-function composeTableEntry(entry) {
-  return [entry.coin, formatRates(entry.previous), formatRates(entry.estimate)];
-}
-
 async function run(options) {
+  function composeTableEntry(entry) {
+    return [
+      entry.coin,
+      formatRates(entry.previous, options.global.enableColours),
+      formatRates(entry.estimate, options.global.enableColours),
+    ];
+  }
+
   const { data, error } = await Ftx.lendingRates.get(options, {
     currencies: composeCurrenciesFilter(options.command.currency),
   });

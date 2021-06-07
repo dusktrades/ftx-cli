@@ -53,7 +53,8 @@ function formatDuration(totalHoursLent) {
 
 function composeTableEntry(
   [currency, { totalHourlyRate, totalHoursLent }],
-  userRewards
+  userRewards,
+  enableColours
 ) {
   const hourlyRateDecimal = totalHourlyRate / totalHoursLent;
   const proceeds = getProceedsByCurrency(userRewards, currency);
@@ -61,16 +62,16 @@ function composeTableEntry(
   return [
     currency,
     formatDuration(totalHoursLent),
-    formatRates(hourlyRateDecimal),
+    formatRates(hourlyRateDecimal, enableColours),
     formatCurrency(proceeds.value),
     formatUsd(proceeds.valueUsd),
   ];
 }
 
-function composeTableData(aggregateMetrics, userRewards) {
+function composeTableData(aggregateMetrics, userRewards, enableColours) {
   return [
     ...aggregateMetrics
-      .map((entry) => composeTableEntry(entry, userRewards))
+      .map((entry) => composeTableEntry(entry, userRewards, enableColours))
       .sort(([currencyA], [currencyB]) =>
         sortAlphabetically(currencyA, currencyB)
       ),
@@ -108,7 +109,12 @@ async function run(options) {
 
   const aggregateMetrics = calculateAggregateMetrics(lendingHistory);
   const table = createTable();
-  const tableData = composeTableData(aggregateMetrics, userRewards);
+
+  const tableData = composeTableData(
+    aggregateMetrics,
+    userRewards,
+    options.global.enableColours
+  );
 
   table.push(...tableData);
   CliUi.logTable(table);

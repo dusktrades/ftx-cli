@@ -18,24 +18,34 @@ function getColour(yearlyPercentage) {
   return 'green';
 }
 
-function formatYearlyPercentage(yearlyPercentage) {
+function formatYearlyPercentage(yearlyPercentage, enableColours) {
+  const formattedPercentage = formatPercentage(yearlyPercentage);
+
+  if (!enableColours) {
+    return formattedPercentage;
+  }
+
   const colour = getColour(yearlyPercentage);
 
-  return chalk[colour](formatPercentage(yearlyPercentage));
+  return chalk[colour](formattedPercentage);
 }
 
-function formatString(hourlyPercentage, yearlyPercentage) {
+function formatString(hourlyPercentage, yearlyPercentage, enableColours) {
   const formattedHourlyPercentage = formatPercentage(hourlyPercentage);
-  const formattedYearlyPercentage = formatYearlyPercentage(yearlyPercentage);
+
+  const formattedYearlyPercentage = formatYearlyPercentage(
+    yearlyPercentage,
+    enableColours
+  );
 
   return `${formattedHourlyPercentage} / ${formattedYearlyPercentage}`;
 }
 
-function formatRates(hourlyDecimal) {
+function formatRates(hourlyDecimal, enableColours) {
   const hourlyPercentage = convertDecimalToPercentage(hourlyDecimal);
   const yearlyPercentage = convertHourlyToYearly(hourlyPercentage);
 
-  return formatString(hourlyPercentage, yearlyPercentage);
+  return formatString(hourlyPercentage, yearlyPercentage, enableColours);
 }
 
 export { formatRates };
