@@ -2,6 +2,10 @@ import { InvalidOptionArgumentError } from 'commander';
 
 import { isPositiveFloat } from '../src/util/index.js';
 
+function parseCurrency(value) {
+  return value.toUpperCase();
+}
+
 function parseThousandString(value) {
   const [multiplier] = value.split(/[kK]/);
 
@@ -34,4 +38,20 @@ function parseSize(value) {
   return Number.parseFloat(value);
 }
 
-export { parseSize };
+function parseMinRate(value) {
+  if (!isPositiveFloat(value)) {
+    throw new InvalidOptionArgumentError(
+      'Not an accepted minimum rate format.'
+    );
+  }
+
+  return Number.parseFloat(value);
+}
+
+const parseOption = {
+  currency: parseCurrency,
+  size: parseSize,
+  minRate: parseMinRate,
+};
+
+export { parseOption };
