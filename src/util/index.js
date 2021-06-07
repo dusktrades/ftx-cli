@@ -7,6 +7,7 @@ export { formatCurrency } from './formatCurrency.js';
 export { formatPercentage } from './formatPercentage.js';
 export { formatUsd } from './formatUsd.js';
 export { getUnixTimestamp } from './getUnixTimestamp.js';
+export { isPositiveFloat } from './isPositiveFloat.js';
 export { removeNullValues } from './removeNullValues.js';
 export { sortAlphabetically } from './sortAlphabetically.js';
 export { truncate } from './truncate.js';

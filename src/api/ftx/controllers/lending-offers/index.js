@@ -108,7 +108,7 @@ async function create(options) {
       size:
         options.command.size == null
           ? lendableResponse.data[0]?.lendable ?? 0
-          : Number.parseFloat(options.command.size),
+          : options.command.size,
       minRate:
         options.command.minRate == null
           ? 0

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { program, Option } from 'commander';
+import { Option, program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
+import { parseSize } from './parseSize.js';
 import { runCommand } from './runCommand.js';
 
 const GLOBAL_OPTIONS = {
@@ -20,6 +21,7 @@ const GLOBAL_OPTIONS = {
 };
 
 const COMMAND_OPTIONS = {
+  // TODO: Parse to lowercase as early as possible.
   CURRENCY: ['-c, --currency <currency>', 'currency symbol'],
 };
 
@@ -79,7 +81,7 @@ program
     'create a lending offer for a currency, or all if no currency is provided'
   )
   .option(...COMMAND_OPTIONS.CURRENCY)
-  .option('-s, --size <size>', 'currency amount')
+  .option('-s, --size <size>', 'currency amount', parseSize)
   .option('-r, --min-rate <rate>', 'minimum yearly lending rate (%)')
   .action((inlineCommandOptions) => runCommand('lend', inlineCommandOptions));
 
