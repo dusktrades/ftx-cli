@@ -2,13 +2,12 @@ import { Ftx } from '../../api/index.js';
 import { CliUi, Logger } from '../../common/index.js';
 
 import {
-  convertDecimalToPercentage,
-  convertHourlyToYearly,
   formatCurrency,
-  formatPercentage,
   formatUsd,
   sortAlphabetically,
 } from '../../util/index.js';
+
+import { formatRates } from '../formatRates.js';
 
 function calculateAggregateMetrics(lendingHistory) {
   const aggregateMetrics = {};
@@ -52,33 +51,27 @@ function formatDuration(totalHoursLent) {
   return `${totalHoursLent} ${hourString} (~${totalDaysLent} ${dayString})`;
 }
 
-function formatRates({ totalHoursLent, totalHourlyRate }) {
-  const hourlyDecimal = totalHourlyRate / totalHoursLent;
-  const hourlyPercentage = convertDecimalToPercentage(hourlyDecimal);
-  const yearlyPercentage = convertHourlyToYearly(hourlyPercentage);
-
-  return [
-    formatPercentage(hourlyPercentage),
-    formatPercentage(yearlyPercentage),
-  ].join(' / ');
-}
-
-function composeTableEntry([currency, metrics], userRewards) {
+function composeTableEntry(
+  [currency, { totalHourlyRate, totalHoursLent }],
+  userRewards,
+  enableColours
+) {
+  const hourlyRateDecimal = totalHourlyRate / totalHoursLent;
   const proceeds = getProceedsByCurrency(userRewards, currency);
 
   return [
     currency,
-    formatDuration(metrics.totalHoursLent),
-    formatRates(metrics),
+    formatDuration(totalHoursLent),
+    formatRates(hourlyRateDecimal, enableColours),
     formatCurrency(proceeds.value),
     formatUsd(proceeds.valueUsd),
   ];
 }
 
-function composeTableData(aggregateMetrics, userRewards) {
+function composeTableData(aggregateMetrics, userRewards, enableColours) {
   return [
     ...aggregateMetrics
-      .map((entry) => composeTableEntry(entry, userRewards))
+      .map((entry) => composeTableEntry(entry, userRewards, enableColours))
       .sort(([currencyA], [currencyB]) =>
         sortAlphabetically(currencyA, currencyB)
       ),
@@ -116,7 +109,12 @@ async function run(options) {
 
   const aggregateMetrics = calculateAggregateMetrics(lendingHistory);
   const table = createTable();
-  const tableData = composeTableData(aggregateMetrics, userRewards);
+
+  const tableData = composeTableData(
+    aggregateMetrics,
+    userRewards,
+    options.global.enableColours
+  );
 
   table.push(...tableData);
   CliUi.logTable(table);
