@@ -176,11 +176,11 @@ ftx config --no-colour
 
 ### Rates
 
-Display lending rates for a currency, or all if no currency is provided.
+Display lending rates.
 
-| Option                      | Description     | Default                 |
-| --------------------------- | --------------- | ----------------------- |
-| `-c, --currency <currency>` | Currency symbol | All lendable currencies |
+| Option                      | Description        | Default                 | Notes                         |
+| --------------------------- | ------------------ | ----------------------- | ----------------------------- |
+| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list |
 
 ```sh
 # Display lending rates for all currencies.
@@ -188,6 +188,9 @@ ftx rates
 
 # Display lending rates for BTC.
 ftx rates --currency btc
+
+# Display lending rates for USD and USDT.
+ftx rates --currency usd,usdt
 ```
 
 ### Earnings
@@ -212,13 +215,13 @@ ftx offers
 
 ### Lend
 
-Create a lending offer for a currency, or all if no currency is provided. Please note any matching existing offer(s) will be updated.
+Create lending offer(s). Please note any matching existing offer(s) will be updated.
 
 🔐 Requires authentication
 
 | Option                      | Description                     | Default                 | Notes                                                          |
 | --------------------------- | ------------------------------- | ----------------------- | -------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol                 | All lendable currencies |                                                                |
+| `-c, --currency <currency>` | Currency symbol(s)              | All lendable currencies | Supports comma-separated list                                  |
 | `-s, --size <size>`         | Currency amount                 | Maximum lendable size   | Supports thousand (`k`, `K`) and million (`m`, `M`) shorthands |
 | `-r, --min-rate <rate>`     | Minimum yearly lending rate (%) | `0`                     |                                                                |
 
@@ -235,8 +238,8 @@ ftx lend --min-rate 5
 # Offer 100 TWTR with no minimum rate.
 ftx lend --currency twtr --size 100
 
-# Offer all USDT at a minimum rate of 7.5% per year.
-ftx lend --currency usdt --min-rate 7.5
+# Offer all USD and USDT at a minimum rate of 7.5% per year.
+ftx lend --currency usd,usdt --min-rate 7.5
 
 # Offer 10,500 USD at a minimum rate of 10% per year.
 ftx lend --currency usd --size 10.5k --min-rate 10
@@ -244,13 +247,13 @@ ftx lend --currency usd --size 10.5k --min-rate 10
 
 ### Stop
 
-Withdraw my lending offer for a currency, or all if no currency is provided.
+Withdraw lending offer(s).
 
 🔐 Requires authentication
 
-| Option                      | Description     | Default                 |
-| --------------------------- | --------------- | ----------------------- |
-| `-c, --currency <currency>` | Currency symbol | All lendable currencies |
+| Option                      | Description        | Default                 | Notes                         |
+| --------------------------- | ------------------ | ----------------------- | ----------------------------- |
+| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list |
 
 ```sh
 # Withdraw all offers.
@@ -258,6 +261,9 @@ ftx stop
 
 # Withdraw offer for USD.
 ftx stop --currency usd
+
+# Withdraw offers for USD and USDT.
+ftx stop --currency usd,usdt
 ```
 
 > ⚠️ Funds will stay locked by FTX for up to 1 hour after withdrawing your offer.

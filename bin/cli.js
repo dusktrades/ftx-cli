@@ -25,7 +25,7 @@ const GLOBAL_OPTIONS = {
 const COMMAND_OPTIONS = {
   CURRENCY: [
     '-c, --currency <currency>',
-    'currency symbol',
+    'currency symbol(s)',
     parseOption.currency,
   ],
   SIZE: ['-s, --size <size>', 'currency amount', parseOption.size],
@@ -70,9 +70,7 @@ program
 
 program
   .command('rates')
-  .description(
-    'display lending rates for a currency, or all if no currency is provided'
-  )
+  .description('display lending rates')
   .option(...COMMAND_OPTIONS.CURRENCY)
   .action((inlineCommandOptions) => runCommand('rates', inlineCommandOptions));
 
@@ -90,9 +88,7 @@ program
 
 program
   .command('lend')
-  .description(
-    'create a lending offer for a currency, or all if no currency is provided'
-  )
+  .description('create lending offer(s)')
   .option(...COMMAND_OPTIONS.CURRENCY)
   .option(...COMMAND_OPTIONS.SIZE)
   .option(...COMMAND_OPTIONS.MIN_RATE)
@@ -100,9 +96,7 @@ program
 
 program
   .command('stop')
-  .description(
-    'withdraw my lending offer for a currency, or all if no currency is provided'
-  )
+  .description('withdraw lending offer(s)')
   .option(...COMMAND_OPTIONS.CURRENCY)
   .action((inlineCommandOptions) => runCommand('stop', inlineCommandOptions));
 

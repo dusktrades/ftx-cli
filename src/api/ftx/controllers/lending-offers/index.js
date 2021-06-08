@@ -93,7 +93,7 @@ async function get(options, filters) {
 
 async function create(options) {
   const lendableResponse = await get(options, {
-    currencies: [options.command.currency],
+    currencies: options.command.currency,
     lendable: true,
   });
 
@@ -101,19 +101,35 @@ async function create(options) {
     return lendableResponse;
   }
 
-  const parsedOptions = {
-    ...options,
-    command: {
-      currency: options.command.currency,
-      size:
-        options.command.size == null
-          ? lendableResponse.data[0]?.lendable ?? 0
-          : options.command.size,
-      minRate: options.command.minRate == null ? 0 : options.command.minRate,
-    },
-  };
+  const promises = options.command.currency.map((currency) => {
+    const matchedLendableEntry = lendableResponse.data.find(
+      (entry) => entry.coin === currency
+    );
 
-  return submit(parsedOptions);
+    const parsedOptions = {
+      ...options,
+      command: {
+        currency,
+        size:
+          options.command.size == null
+            ? matchedLendableEntry?.lendable ?? 0
+            : options.command.size,
+        minRate: options.command.minRate == null ? 0 : options.command.minRate,
+      },
+    };
+
+    return submit(parsedOptions);
+  });
+
+  const responses = await Promise.all(promises);
+
+  for (const response of responses) {
+    if (response.error != null) {
+      return response;
+    }
+  }
+
+  return responses;
 }
 
 async function createAll(options) {
@@ -133,13 +149,8 @@ async function createAll(options) {
       command: {
         currency: entry.coin,
         size:
-          options.command.size == null
-            ? entry.lendable
-            : Number.parseFloat(options.command.size),
-        minRate:
-          options.command.minRate == null
-            ? 0
-            : Number.parseFloat(options.command.minRate),
+          options.command.size == null ? entry.lendable : options.command.size,
+        minRate: options.command.minRate == null ? 0 : options.command.minRate,
       },
     };
 
@@ -158,16 +169,24 @@ async function createAll(options) {
 }
 
 async function stop(options) {
-  const parsedOptions = {
-    ...options,
-    command: {
-      currency: options.command.currency,
-      size: 0,
-      minRate: 0,
-    },
-  };
+  const promises = options.command.currency.map((currency) => {
+    const parsedOptions = {
+      ...options,
+      command: { currency, size: 0, minRate: 0 },
+    };
 
-  return submit(parsedOptions);
+    return submit(parsedOptions);
+  });
+
+  const responses = await Promise.all(promises);
+
+  for (const response of responses) {
+    if (response.error != null) {
+      return response;
+    }
+  }
+
+  return responses;
 }
 
 async function stopAll(options) {
@@ -180,16 +199,13 @@ async function stopAll(options) {
   const promises = offeredResponse.data.map((entry) => {
     const parsedOptions = {
       ...options,
-      command: {
-        currency: entry.coin,
-        size: 0,
-        minRate: 0,
-      },
+      command: { currency: entry.coin, size: 0, minRate: 0 },
     };
 
     return submit(parsedOptions);
   });
 
+  // TODO: Reuse.
   const responses = await Promise.all(promises);
 
   for (const response of responses) {

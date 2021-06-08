@@ -3,7 +3,7 @@ import { InvalidOptionArgumentError } from 'commander';
 import { isPositiveFloat } from '../src/util/index.js';
 
 function parseCurrency(value) {
-  return value.toUpperCase();
+  return value.split(',').map((entry) => entry.toUpperCase());
 }
 
 function parseThousandString(value) {
