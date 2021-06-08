@@ -3,10 +3,6 @@ import { CliUi, Logger } from '../../common/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
 
-function composeCurrenciesFilter(currency) {
-  return currency == null ? null : [currency];
-}
-
 function createTable() {
   return CliUi.createTable([
     'Currency',
@@ -25,7 +21,7 @@ async function run(options) {
   }
 
   const { data, error } = await Ftx.lendingRates.get(options, {
-    currencies: composeCurrenciesFilter(options.command.currency),
+    currencies: options.command.currency,
   });
 
   if (error != null) {
