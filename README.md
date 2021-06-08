@@ -178,9 +178,10 @@ ftx config --no-colour
 
 Display lending rates.
 
-| Option                      | Description        | Default                 | Notes                         |
-| --------------------------- | ------------------ | ----------------------- | ----------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list |
+| Option                      | Description        | Default                 | Notes                                        |
+| --------------------------- | ------------------ | ----------------------- | -------------------------------------------- |
+| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list                |
+| `--sort <sorting method>`   | Sorting method     | `currency`              | Options: `currency`, `previous`, `estimated` |
 
 ```sh
 # Display lending rates for all currencies.
@@ -189,8 +190,8 @@ ftx rates
 # Display lending rates for BTC.
 ftx rates --currency btc
 
-# Display lending rates for USD and USDT.
-ftx rates --currency usd,usdt
+# Display lending rates for USD and USDT, sorted by estimated next lending rate.
+ftx rates --currency usd,usdt --sort estimated
 ```
 
 ### Earnings
@@ -209,8 +210,16 @@ Display my open lending offers.
 
 🔐 Requires authentication
 
+| Option                    | Description    | Default    | Notes                                                            |
+| ------------------------- | -------------- | ---------- | ---------------------------------------------------------------- |
+| `--sort <sorting method>` | Sorting method | `currency` | Options: `currency`, `lendable`, `offered`, `locked`, `min-rate` |
+
 ```sh
+# Display my open lending offers.
 ftx offers
+
+# Display my open lending offers, sorted by locked size.
+ftx offers --sort locked
 ```
 
 ### Lend
