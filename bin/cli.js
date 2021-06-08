@@ -6,6 +6,12 @@ import { CONFIG } from '../src/config/index.js';
 import { parseOption } from './parseOption.js';
 import { runCommand } from './runCommand.js';
 
+function composeSortOption(choices) {
+  return new Option('--sort <sorting method>', 'Sorting method').choices(
+    choices
+  );
+}
+
 const GLOBAL_OPTIONS = {
   EXCHANGE: new Option(
     '-e, --exchange <exchange>',
@@ -72,6 +78,7 @@ program
   .command('rates')
   .description('display lending rates')
   .option(...COMMAND_OPTIONS.CURRENCY)
+  .addOption(composeSortOption(['currency', 'previous', 'estimated']))
   .action((inlineCommandOptions) => runCommand('rates', inlineCommandOptions));
 
 program
