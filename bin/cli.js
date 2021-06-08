@@ -91,6 +91,9 @@ program
 program
   .command('offers')
   .description('display my open lending offers')
+  .addOption(
+    composeSortOption(['currency', 'lendable', 'offered', 'locked', 'min-rate'])
+  )
   .action((inlineCommandOptions) => runCommand('offers', inlineCommandOptions));
 
 program

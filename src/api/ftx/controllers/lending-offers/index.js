@@ -3,6 +3,7 @@ import got from 'got';
 import {
   convertPercentageToDecimal,
   convertYearlyToHourly,
+  sortAlphabetically,
   truncate,
 } from '../../../../util/index.js';
 
@@ -72,6 +73,29 @@ function filterData(data, filters) {
   );
 }
 
+// TODO: Refactor.
+function sortData(data, sortBy) {
+  return [...data].sort((a, b) => {
+    if (sortBy === 'lendable') {
+      return b.lendable - a.lendable;
+    }
+
+    if (sortBy === 'offered') {
+      return b.offered - a.offered;
+    }
+
+    if (sortBy === 'locked') {
+      return b.locked - a.locked;
+    }
+
+    if (sortBy === 'min-rate') {
+      return b.minRate - a.minRate;
+    }
+
+    return sortAlphabetically(a.coin, b.coin);
+  });
+}
+
 async function get(options, filters) {
   // Lending info endpoint provides more detail than lending offers endpoint.
   const endpoint = ENDPOINTS.LENDING_INFO;
@@ -84,8 +108,9 @@ async function get(options, filters) {
 
   try {
     const data = (await got(url, { headers }).json()).result;
+    const filteredData = filterData(data, filters);
 
-    return { data: filterData(data, filters) };
+    return { data: sortData(filteredData, options.command.sort) };
   } catch (error) {
     return handleError(error);
   }
