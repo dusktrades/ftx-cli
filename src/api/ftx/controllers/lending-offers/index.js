@@ -13,10 +13,6 @@ import { composeUrl } from '../composeUrl.js';
 import { handleError } from '../handleError.js';
 import { testCurrency } from '../testCurrency.js';
 
-/**
- * TODO: Fix sometimes still returning 'Size too large' errors. Related to
- * occasional stale API responses?
- */
 function composeRequestBody(options) {
   return {
     coin: options.command.currency,
@@ -116,6 +112,18 @@ async function get(options, filters) {
   }
 }
 
+/**
+ * At the time of writing, the FTX API technically accepts up to 8 decimal
+ * places. However, it behaves strangely (unpredictable 'Size too large' errors)
+ * above 6 decimal places near lendable size due to inconsistent lendable size
+ * values being returned. Therefore, we 'correct' lendable size, by truncating
+ * it to 6 decimal places, before using it in subsequent API calls. The FTX UI
+ * also encourages inputs up to 6 decimal places.
+ */
+function correctLendableSize(lendableSize) {
+  return truncate(lendableSize, 6);
+}
+
 async function create(options) {
   const lendableResponse = await get(options, {
     currencies: options.command.currency,
@@ -131,15 +139,28 @@ async function create(options) {
       (entry) => entry.coin === currency
     );
 
+    // TODO: Simplify/better scoping/don't send requests with 0 size.
+    function composeSize() {
+      // If size option is provided, use that.
+      if (options.command.size != null) {
+        return options.command.size;
+      }
+
+      // If the currency has a lendable size value, use that.
+      if (matchedLendableEntry != null) {
+        return correctLendableSize(matchedLendableEntry.lendable);
+      }
+
+      // As a last resort, default to 0.
+      return 0;
+    }
+
     const parsedOptions = {
       ...options,
       command: {
         currency,
-        size:
-          options.command.size == null
-            ? matchedLendableEntry?.lendable ?? 0
-            : options.command.size,
-        minRate: options.command.minRate == null ? 0 : options.command.minRate,
+        size: composeSize(),
+        minRate: options.command.minRate ?? 0,
       },
     };
 
@@ -164,18 +185,13 @@ async function createAll(options) {
     return lendableResponse;
   }
 
-  if (lendableResponse.data.length === 0) {
-    return { error: 'No lendable currencies found' };
-  }
-
   const promises = lendableResponse.data.map((entry) => {
     const parsedOptions = {
       ...options,
       command: {
         currency: entry.coin,
-        size:
-          options.command.size == null ? entry.lendable : options.command.size,
-        minRate: options.command.minRate == null ? 0 : options.command.minRate,
+        size: options.command.size ?? correctLendableSize(entry.lendable),
+        minRate: options.command.minRate ?? 0,
       },
     };
 
