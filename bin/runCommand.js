@@ -29,7 +29,6 @@ function getOptions(inlineCommandOptions) {
   };
 }
 
-// TODO: We should parse the cron input so CLI has the chance to reject.
 function getCronExpression(repeat) {
   return repeat === true ? DEFAULT_CRON_EXPRESSION : repeat;
 }

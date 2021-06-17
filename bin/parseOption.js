@@ -1,6 +1,16 @@
 import { InvalidOptionArgumentError } from 'commander';
+import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
+
+function parseRepeat(value) {
+  if (!cron.validate(value)) {
+    throw new InvalidOptionArgumentError(
+      'Not an accepted cron expression format.'
+    );
+  }
+  return value;
+}
 
 function parseCurrency(value) {
   return value.split(',').map((entry) => entry.toUpperCase());
@@ -49,6 +59,7 @@ function parseMinRate(value) {
 }
 
 const parseOption = {
+  repeat: parseRepeat,
   currency: parseCurrency,
   size: parseSize,
   minRate: parseMinRate,
