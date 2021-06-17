@@ -25,13 +25,13 @@ async function run(options) {
   });
 
   if (error != null) {
-    Logger.error(error);
+    Logger.error(error, options);
 
     return;
   }
 
   if (data.length === 0) {
-    Logger.info('No lending rates found');
+    Logger.info('No lending rates found', options);
 
     return;
   }

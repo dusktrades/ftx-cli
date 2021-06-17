@@ -24,7 +24,7 @@ function setCredentials({ key, secret, subaccount }) {
   setSubaccount(subaccount);
 }
 
-async function run() {
+async function run(options) {
   /**
    * We need to query options directly because options object could include
    * credentials overwritten by config store.
@@ -36,13 +36,13 @@ async function run() {
    * login has failed if we don't receive these options.
    */
   if (!canAuthenticate(inlineGlobalOptions)) {
-    Logger.error('Please provide an API key and secret');
+    Logger.error('Please provide an API key and secret', options);
 
     return;
   }
 
   setCredentials(inlineGlobalOptions);
-  Logger.info('Stored API credentials');
+  Logger.info('Stored API credentials', options);
 }
 
 const login = { run };
