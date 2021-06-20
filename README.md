@@ -28,6 +28,7 @@
   - [Offers](#offers)
   - [Lend](#lend)
   - [Stop](#stop)
+  - [Futures](#futures)
 - [Examples](#examples)
   - [Using subaccounts](#using-subaccounts)
   - [Repeating commands and auto-compounding](#repeating-commands-and-auto-compounding)
@@ -276,6 +277,35 @@ ftx stop --currency usd,usdt
 ```
 
 > ⚠️ Funds will stay locked by FTX for up to 1 hour after withdrawing your offer.
+
+### Futures
+
+Display futures stats.
+
+| Option                      | Description        | Default          | Notes                                                                                                                  |
+| --------------------------- | ------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                          |
+| `-t, --type <type>`         | Future type        | All future types | Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                           |
+| `--sort <sorting method>`   | Sorting method     | `name`           | Options: `name`, `last-price`, `mark-price`, `volume`, `open-interest` (`oi`), `previous-funding`, `estimated-funding` |
+
+```sh
+# Display stats for all futures.
+ftx futures
+
+# Display stats for all BTC and ETH-related futures.
+ftx futures --currency btc,eth
+
+# Display stats for all perpetual futures.
+ftx futures --type perpetual
+
+# Display stats for all perpetual futures, sorted by estimated next funding rate.
+ftx futures --type perpetual --sort estimated-funding
+
+# Display stats for BTC quarterly futures, sorted by open interest.
+ftx futures --currency btc --type quarterly --sort open-interest
+```
+
+> ⚠️ This command is currently intensive on the FTX API due to the amount of data required. You can reduce load by using the `currency` and `type` filters, and by avoiding repeating the command too quickly.
 
 ![Divider](docs/images/divider.png)
 
