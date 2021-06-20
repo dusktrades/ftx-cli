@@ -21,7 +21,7 @@ async function run(options) {
       formatCurrency(entry.lendable),
       formatCurrency(entry.offered),
       formatCurrency(entry.locked),
-      formatRates(entry.minRate, options.global.enableColours),
+      formatRates(entry.minRate, 'lending', options.global.enableColours),
     ];
   }
 

@@ -23,6 +23,13 @@ function composeQueryString(parameters = {}) {
 }
 
 const ENDPOINTS = {
+  FUNDING_RATES(parameters) {
+    return `funding_rates${composeQueryString(parameters)}`;
+  },
+  FUTURES: 'futures',
+  FUTURE_STATS(name) {
+    return `futures/${name}/stats`;
+  },
   LENDING_HISTORY(parameters) {
     return `spot_margin/lending_history${composeQueryString(parameters)}`;
   },

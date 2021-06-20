@@ -15,8 +15,8 @@ async function run(options) {
   function composeTableEntry(entry) {
     return [
       entry.coin,
-      formatRates(entry.previous, options.global.enableColours),
-      formatRates(entry.estimate, options.global.enableColours),
+      formatRates(entry.previous, 'lending', options.global.enableColours),
+      formatRates(entry.estimate, 'lending', options.global.enableColours),
     ];
   }
 

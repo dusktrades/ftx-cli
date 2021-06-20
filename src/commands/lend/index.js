@@ -3,6 +3,7 @@ import { Logger } from '../../common/index.js';
 import { offers } from '../offers/index.js';
 
 async function run(options) {
+  // TODO: Move branching like this to derived API controllers.
   const { error } =
     options.command.currency == null
       ? await Ftx.lendingOffers.createAll(options)

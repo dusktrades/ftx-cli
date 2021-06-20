@@ -7,7 +7,7 @@ import { composeUrl } from '../composeUrl.js';
 import { handleError } from '../handleError.js';
 
 async function getPage(options, { startTime, endTime }) {
-  const endpoint = `${ENDPOINTS.LENDING_HISTORY({ startTime, endTime })}`;
+  const endpoint = ENDPOINTS.LENDING_HISTORY({ startTime, endTime });
   const url = composeUrl(endpoint, options.global.exchange);
 
   const headers = {
