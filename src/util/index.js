@@ -11,6 +11,7 @@ export { getUnixTimestamp } from './getUnixTimestamp.js';
 export { getValueSign } from './getValueSign.js';
 export { isPositiveFloat } from './isPositiveFloat.js';
 export { removeNullValues } from './removeNullValues.js';
+export { shorthandNumber } from './shorthandNumber.js';
 export { sortAlphabetically } from './sortAlphabetically.js';
 export { sortHighToLow } from './sortHighToLow.js';
 export { truncate } from './truncate.js';

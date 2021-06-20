@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 import { Ftx } from '../../api/index.js';
 import { CliUi, Logger } from '../../common/index.js';
-import { formatPercentageChange, formatUsd } from '../../util/index.js';
+import { formatPercentageChange, shorthandNumber } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
 
@@ -81,9 +81,9 @@ async function run(options) {
       formatPrice(entry.markPrice),
       formatChange(entry, options),
       `${entry.volume24h} ${entry.underlying}`,
-      formatUsd(entry.volumeUsd24h),
+      `$${shorthandNumber(entry.volumeUsd24h)}`,
       `${entry.openInterest} ${entry.underlying}`,
-      formatUsd(entry.openInterestUsd),
+      `$${shorthandNumber(entry.openInterestUsd)}`,
       formatFundingRates(entry.previousFundingRate, options),
       formatFundingRates(entry.nextFundingRate, options),
     ];
