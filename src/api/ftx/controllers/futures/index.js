@@ -7,15 +7,12 @@ import { composeUrl } from '../composeUrl.js';
 import { fundingRates } from '../funding-rates/index.js';
 import { handleError } from '../handleError.js';
 
-function allowName(entry, filters) {
+function allowUnderlying(entry, filters) {
   if (filters.currencies == null) {
     return true;
   }
 
-  // Future names are formatted '{CURRENCY}-X'.
-  const futureCurrency = entry.name.split('-')[0];
-
-  return filters.currencies.includes(futureCurrency);
+  return filters.currencies.includes(entry.underlying);
 }
 
 function filterData(data, filters) {
@@ -25,7 +22,7 @@ function filterData(data, filters) {
 
   return data.filter(
     (entry) =>
-      allowName(entry, filters) &&
+      allowUnderlying(entry, filters) &&
       (filters.type == null ? true : filters.type === entry.type)
   );
 }
