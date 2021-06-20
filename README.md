@@ -282,11 +282,11 @@ ftx stop --currency usd,usdt
 
 Display futures stats.
 
-| Option                      | Description        | Default          | Notes                                                                                                                  |
-| --------------------------- | ------------------ | ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                          |
-| `-t, --type <type>`         | Future type        | All future types | Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                           |
-| `--sort <sorting method>`   | Sorting method     | `name`           | Options: `name`, `last-price`, `mark-price`, `volume`, `open-interest` (`oi`), `previous-funding`, `estimated-funding` |
+| Option                      | Description        | Default          | Notes                                                                                                                                                                                  |
+| --------------------------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                                                                                          |
+| `-t, --type <type>`         | Future type        | All future types | Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                                                           |
+| `--sort <sorting method>`   | Sorting method     | `name`           | Options:<br />`name`<br />`last-price`<br />`mark-price`<br />`change-1h`<br />`change-24h`<br />`volume`<br />`open-interest` (`oi`)<br />`previous-funding`<br />`estimated-funding` |
 
 ```sh
 # Display stats for all futures.

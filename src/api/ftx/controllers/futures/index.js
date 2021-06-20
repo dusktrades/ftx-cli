@@ -133,6 +133,7 @@ function composeData(futuresStats, previousFundingRates) {
   });
 }
 
+// TODO: Refactor.
 function sortData(data, sortBy) {
   const alphabeticalData = [...data].sort((a, b) =>
     sortAlphabetically(a.name, b.name)
@@ -147,6 +148,18 @@ function sortData(data, sortBy) {
   if (sortBy === 'mark-price') {
     return alphabeticalData.sort((a, b) =>
       sortHighToLow(a.markPrice, b.markPrice)
+    );
+  }
+
+  if (sortBy === 'change-1h') {
+    return alphabeticalData.sort((a, b) =>
+      sortHighToLow(a.change1hPercentage, b.change1hPercentage)
+    );
+  }
+
+  if (sortBy === 'change-24h') {
+    return alphabeticalData.sort((a, b) =>
+      sortHighToLow(a.change24hPercentage, b.change24hPercentage)
     );
   }
 

@@ -123,6 +123,8 @@ program
       'name',
       'last-price',
       'mark-price',
+      'change-1h',
+      'change-24h',
       'volume',
       'open-interest',
       'oi',
