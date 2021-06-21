@@ -23,6 +23,7 @@ const GLOBAL_OPTIONS = {
   REPEAT: [
     '-z, --repeat [cron expression]',
     'repeat the command with optional schedule',
+    parseOption.repeat,
   ],
   ENABLE_COLOURS: ['--colour', 'enable coloured output'],
   DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
