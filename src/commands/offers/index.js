@@ -30,13 +30,13 @@ async function run(options) {
   });
 
   if (error != null) {
-    Logger.error(error);
+    Logger.error(error, options);
 
     return;
   }
 
   if (data.length === 0) {
-    Logger.info('No lending offers found');
+    Logger.info('No lending offers found', options);
 
     return;
   }

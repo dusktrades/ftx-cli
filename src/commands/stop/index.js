@@ -9,12 +9,12 @@ async function run(options) {
       : await Ftx.lendingOffers.stop(options);
 
   if (error != null) {
-    Logger.error(error);
+    Logger.error(error, options);
 
     return;
   }
 
-  Logger.info('Withdrew lending offer(s)');
+  Logger.info('Withdrew lending offer(s)', options);
 
   // Show updated offer list.
   await offers.run(options);

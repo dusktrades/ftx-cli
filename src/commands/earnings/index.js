@@ -90,19 +90,19 @@ async function run(options) {
   ]);
 
   if (lendingHistory.error != null) {
-    Logger.error(lendingHistory.error);
+    Logger.error(lendingHistory.error, options);
 
     return;
   }
 
   if (userRewards.error != null) {
-    Logger.error(userRewards.error);
+    Logger.error(userRewards.error, options);
 
     return;
   }
 
   if (lendingHistory.data.length === 0) {
-    Logger.info('No lending history found');
+    Logger.info('No lending history found', options);
 
     return;
   }

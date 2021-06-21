@@ -9,12 +9,12 @@ async function run(options) {
       : await Ftx.lendingOffers.create(options);
 
   if (error != null) {
-    Logger.error(error);
+    Logger.error(error, options);
 
     return;
   }
 
-  Logger.info('Created lending offer(s)');
+  Logger.info('Created lending offer(s)', options);
 
   // Show updated offer list.
   await offers.run(options);

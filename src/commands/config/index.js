@@ -38,9 +38,9 @@ function setOptions() {
   }
 }
 
-async function run() {
+async function run(options) {
   setOptions();
-  Logger.info('Stored option preferences');
+  Logger.info('Stored option preferences', options);
 }
 
 const config = { run };
