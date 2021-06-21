@@ -33,13 +33,6 @@
     "import/extensions": ["error", "always", { "ignorePackages": true }],
     "import/namespace": "error",
     "import/no-default-export": "error",
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": ["**/postcss.config.js", "**/webpack.config.js"],
-        "optionalDependencies": false
-      }
-    ],
     "import/prefer-default-export": "off",
 
     "node/no-unsupported-features/es-syntax": "off",
