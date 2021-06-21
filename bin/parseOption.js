@@ -58,11 +58,32 @@ function parseMinRate(value) {
   return Number.parseFloat(value);
 }
 
+function parseFutureType(value) {
+  const choices = ['perp', 'perpetual', 'quarterly', 'dated', 'move'];
+
+  if (['perp', 'perpetual'].includes(value)) {
+    return 'perpetual';
+  }
+
+  if (['quarterly', 'dated'].includes(value)) {
+    return 'future';
+  }
+
+  if (value === 'move') {
+    return 'move';
+  }
+
+  throw new InvalidOptionArgumentError(
+    `Allowed choices are ${choices.join(', ')}.`
+  );
+}
+
 const parseOption = {
   repeat: parseRepeat,
   currency: parseCurrency,
   size: parseSize,
   minRate: parseMinRate,
+  futureType: parseFutureType,
 };
 
 export { parseOption };

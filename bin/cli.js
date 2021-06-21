@@ -41,6 +41,9 @@ const COMMAND_OPTIONS = {
     'minimum yearly lending rate (%)',
     parseOption.minRate,
   ],
+  FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
+    parseOption.futureType
+  ),
 };
 
 program.version(CONFIG.PACKAGE.version, '-v, --version');
@@ -110,5 +113,28 @@ program
   .description('withdraw lending offer(s)')
   .option(...COMMAND_OPTIONS.CURRENCY)
   .action((inlineCommandOptions) => runCommand('stop', inlineCommandOptions));
+
+program
+  .command('futures')
+  .description('display futures stats')
+  .option(...COMMAND_OPTIONS.CURRENCY)
+  .addOption(COMMAND_OPTIONS.FUTURE_TYPE)
+  .addOption(
+    composeSortOption([
+      'name',
+      'last-price',
+      'mark-price',
+      'change-1h',
+      'change-24h',
+      'volume',
+      'open-interest',
+      'oi',
+      'previous-funding',
+      'estimated-funding',
+    ])
+  )
+  .action((inlineCommandOptions) =>
+    runCommand('futures', inlineCommandOptions)
+  );
 
 program.parseAsync(process.argv);

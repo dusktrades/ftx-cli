@@ -1,5 +1,6 @@
 import { config } from './config/index.js';
 import { earnings } from './earnings/index.js';
+import { futures } from './futures/index.js';
 import { lend } from './lend/index.js';
 import { login } from './login/index.js';
 import { logout } from './logout/index.js';
@@ -10,6 +11,7 @@ import { stop } from './stop/index.js';
 const Commands = {
   config,
   earnings,
+  futures,
   lend,
   login,
   logout,

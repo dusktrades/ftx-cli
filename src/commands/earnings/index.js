@@ -62,7 +62,7 @@ function composeTableEntry(
   return [
     currency,
     formatDuration(totalHoursLent),
-    formatRates(hourlyRateDecimal, enableColours),
+    formatRates(hourlyRateDecimal, 'lending', enableColours),
     formatCurrency(proceeds.value),
     formatUsd(proceeds.valueUsd),
   ];
@@ -84,6 +84,7 @@ function composeTableData(aggregateMetrics, userRewards, enableColours) {
 }
 
 async function run(options) {
+  // TODO: This kind of stuff should go in derived API controllers.
   const [lendingHistory, userRewards] = await Promise.all([
     Ftx.lendingHistory.get(options),
     Ftx.userRewards.get(options),
