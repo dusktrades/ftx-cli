@@ -12,10 +12,10 @@ function composeRegEx(decimalPlaces) {
 
 function truncate(value, decimalPlaces) {
   /**
-   * Use toFixed over toString to avoid scientific notation, with an extra
-   * decimal place to prevent rounding.
+   * Use toFixed over toString to avoid scientific notation, with extra decimal
+   * places to prevent rounding.
    */
-  const stringValue = value.toFixed(decimalPlaces + 1);
+  const stringValue = value.toFixed(decimalPlaces + 2);
   const match = stringValue.match(composeRegEx(decimalPlaces));
 
   if (match == null) {
