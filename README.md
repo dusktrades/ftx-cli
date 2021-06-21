@@ -331,7 +331,9 @@ It's possible to get rate-limited by FTX if you attempt to execute large amounts
 
 ### Why did I receive _'Size too large'_ error?
 
-The official FTX API sometimes behaves strangely with decimal precision when creating lending offers close to your lendable size, which means you can sometimes unexpectedly receive 'Size too large' errors. To mitigate this, we automatically truncate any size to 8 decimal places before communicating with FTX. This makes the errors less common, but it remains possible to receive them while we look for a more robust solution.
+The FTX API seems to accept sizes with precision up to 8 decimal places, which you can utilise if you set size explicitly.
+
+However, we have encountered strange behaviour when creating lending offers close to your lendable size (such as when auto-compounding), therefore we truncate lendable size to 6 decimal places before communicating with FTX. This makes the errors less common, but it remains possible to receive them while we look for a more robust solution. As a workaround, you can try the command again or wait for the next repeat scheduled run.
 
 ### Why did I receive X error?
 
