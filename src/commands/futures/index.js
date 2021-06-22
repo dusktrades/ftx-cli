@@ -92,7 +92,7 @@ async function run(options) {
   const { data, error } = await Ftx.futures.getStats(options);
 
   if (error != null) {
-    Logger.error(error);
+    Logger.error(error, options);
 
     return;
   }
