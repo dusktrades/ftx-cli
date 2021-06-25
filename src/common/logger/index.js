@@ -1,10 +1,9 @@
 import chalk from 'chalk';
 
-function formatLevel(level, options) {
+function formatLevel(level, enableColours) {
   const formattedLevel = level.text.toUpperCase().padEnd(5);
 
-  // User doesn't want coloured outputs.
-  if (!options.global.enableColours) {
+  if (!enableColours) {
     return formattedLevel;
   }
 
@@ -16,19 +15,19 @@ function formatLevel(level, options) {
   return chalk[level.colour](formattedLevel);
 }
 
-function log(level, message, options) {
+function log(level, message, enableColours) {
   const formattedTimestamp = new Date().toISOString();
-  const formattedLevel = formatLevel(level, options);
+  const formattedLevel = formatLevel(level, enableColours);
 
   console.log(`${formattedTimestamp}  ${formattedLevel}  ${message}`);
 }
 
 const Logger = {
-  info(message, options) {
-    log({ text: 'info' }, message, options);
+  info(message, { enableColours }) {
+    log({ text: 'info' }, message, enableColours);
   },
-  error(message, options) {
-    log({ text: 'error', colour: 'red' }, message, options);
+  error(message, { enableColours }) {
+    log({ text: 'error', colour: 'red' }, message, enableColours);
   },
 };
 

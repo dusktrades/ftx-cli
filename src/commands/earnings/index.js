@@ -1,29 +1,7 @@
 import { Ftx } from '../../api/index.js';
-import { CliUi, Logger } from '../../common/index.js';
-
-import {
-  formatCurrency,
-  formatUsd,
-  sortAlphabetically,
-} from '../../util/index.js';
-
+import { CliUi } from '../../common/index.js';
+import { formatCurrency, formatUsd } from '../../util/index.js';
 import { formatRates } from '../formatRates.js';
-
-function calculateAggregateMetrics(lendingHistory) {
-  const aggregateMetrics = {};
-
-  for (const entry of lendingHistory.data) {
-    const totalHoursLent =
-      (aggregateMetrics[entry.coin]?.totalHoursLent ?? 0) + 1;
-
-    const totalHourlyRate =
-      (aggregateMetrics[entry.coin]?.totalHourlyRate ?? 0) + entry.rate;
-
-    aggregateMetrics[entry.coin] = { totalHoursLent, totalHourlyRate };
-  }
-
-  return Object.entries(aggregateMetrics);
-}
 
 function createTable() {
   return CliUi.createTable([
@@ -35,14 +13,6 @@ function createTable() {
   ]);
 }
 
-function getProceedsByCurrency(userRewards, currency) {
-  const proceeds = userRewards.data.lendingInterestByCoin.find(
-    (entry) => entry.coin === currency
-  );
-
-  return proceeds ?? { value: 0, valueUsd: 0 };
-}
-
 function formatDuration(totalHoursLent) {
   const totalDaysLent = Math.ceil(totalHoursLent / 24);
   const hourString = totalHoursLent === 1 ? 'hour' : 'hours';
@@ -51,73 +21,48 @@ function formatDuration(totalHoursLent) {
   return `${totalHoursLent} ${hourString} (~${totalDaysLent} ${dayString})`;
 }
 
-function composeTableEntry(
-  [currency, { totalHourlyRate, totalHoursLent }],
-  userRewards,
-  enableColours
-) {
-  const hourlyRateDecimal = totalHourlyRate / totalHoursLent;
-  const proceeds = getProceedsByCurrency(userRewards, currency);
-
+function composeTableEntry(entry, enableColours) {
   return [
-    currency,
-    formatDuration(totalHoursLent),
-    formatRates(hourlyRateDecimal, 'lending', enableColours),
-    formatCurrency(proceeds.value),
-    formatUsd(proceeds.valueUsd),
+    entry.currency,
+    formatDuration(entry.totalHoursLent),
+    formatRates(entry.hourlyRateDecimal, 'lending', enableColours),
+    formatCurrency(entry.proceeds),
+    formatUsd(entry.proceedsUsd),
   ];
 }
 
-function composeTableData(aggregateMetrics, userRewards, enableColours) {
-  return [
-    ...aggregateMetrics
-      .map((entry) => composeTableEntry(entry, userRewards, enableColours))
-      .sort(([currencyA], [currencyB]) =>
-        sortAlphabetically(currencyA, currencyB)
-      ),
-    [
-      'Total',
-      { content: '', colSpan: 3 },
-      formatUsd(userRewards.data.lendingInterestUsd),
-    ],
+function composeTableData(data, enableColours) {
+  const metricRows = data.metricsByCurrency.map((entry) =>
+    composeTableEntry(entry, enableColours)
+  );
+
+  const totalRow = [
+    'Total',
+    { content: '', colSpan: 3 },
+    formatUsd(data.lendingEarningsUsd),
   ];
+
+  return [...metricRows, totalRow];
 }
 
 async function run(options) {
-  // TODO: This kind of stuff should go in derived API controllers.
-  const [lendingHistory, userRewards] = await Promise.all([
-    Ftx.lendingHistory.get(options),
-    Ftx.userRewards.get(options),
-  ]);
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
 
-  if (lendingHistory.error != null) {
-    Logger.error(lendingHistory.error, options);
+  const data = await Ftx.lendingHistory.getAggregated({
+    exchange: options.global.exchange,
+    credentials,
+  });
 
-    return;
-  }
-
-  if (userRewards.error != null) {
-    Logger.error(userRewards.error, options);
-
-    return;
-  }
-
-  if (lendingHistory.data.length === 0) {
-    Logger.info('No lending history found', options);
-
-    return;
-  }
-
-  const aggregateMetrics = calculateAggregateMetrics(lendingHistory);
   const table = createTable();
-
-  const tableData = composeTableData(
-    aggregateMetrics,
-    userRewards,
-    options.global.enableColours
-  );
+  const tableData = composeTableData(data, options.global.enableColours);
 
   table.push(...tableData);
+
+  // TODO: Change to Logger.table().
   CliUi.logTable(table);
 }
 

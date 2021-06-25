@@ -1,4 +1,4 @@
-function sortHighToLow(a, b) {
+function compareHighToLow(a, b) {
   if (a === b) {
     return 0;
   }
@@ -14,4 +14,4 @@ function sortHighToLow(a, b) {
   return b - a;
 }
 
-export { sortHighToLow };
+export { compareHighToLow };

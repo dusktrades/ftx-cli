@@ -1,3 +1,5 @@
+export { compareAToZ } from './compareAToZ.js';
+export { compareHighToLow } from './compareHighToLow.js';
 export { convertDecimalToPercentage } from './convertDecimalToPercentage.js';
 export { convertHourlyToYearly } from './convertHourlyToYearly.js';
 export { convertIsoToUnix } from './convertIsoToUnix.js';
@@ -11,7 +13,6 @@ export { getUnixTimestamp } from './getUnixTimestamp.js';
 export { getValueSign } from './getValueSign.js';
 export { isPositiveFloat } from './isPositiveFloat.js';
 export { removeNullValues } from './removeNullValues.js';
+export { SECONDS_PER_HOUR } from './secondsPerHour.js';
 export { shorthandNumber } from './shorthandNumber.js';
-export { sortAlphabetically } from './sortAlphabetically.js';
-export { sortHighToLow } from './sortHighToLow.js';
 export { truncate } from './truncate.js';
