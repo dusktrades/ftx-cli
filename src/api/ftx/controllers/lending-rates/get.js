@@ -24,7 +24,7 @@ function sortData(data, sortBy) {
 
   if (sortBy === 'estimated') {
     return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.estimated, b.estimated)
+      compareHighToLow(a.estimate, b.estimate)
     );
   }
 
