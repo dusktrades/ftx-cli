@@ -3,6 +3,7 @@ import cron from 'node-cron';
 
 import { Commands } from '../src/commands/index.js';
 import { CONFIG } from '../src/config/index.js';
+import { handleError } from './handleError.js';
 
 // Repeat at 5 minutes past every hour.
 const DEFAULT_CRON_EXPRESSION = '5 * * * *';
@@ -48,9 +49,13 @@ async function runCommand(command, inlineCommandOptions) {
   const options = getOptions(inlineCommandOptions);
   const runWithOptions = () => run(options);
 
-  await (options.global.repeat == null
-    ? runWithOptions()
-    : repeatRun(runWithOptions, options.global.repeat));
+  try {
+    await (options.global.repeat == null
+      ? runWithOptions()
+      : repeatRun(runWithOptions, options.global.repeat));
+  } catch (error) {
+    handleError(error, options.global.enableColours);
+  }
 }
 
 export { runCommand };

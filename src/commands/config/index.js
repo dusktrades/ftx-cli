@@ -40,7 +40,10 @@ function setOptions() {
 
 async function run(options) {
   setOptions();
-  Logger.info('Stored option preferences', options);
+
+  Logger.info('Stored option preferences', {
+    enableColours: options.global.enableColours,
+  });
 }
 
 const config = { run };

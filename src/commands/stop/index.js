@@ -3,18 +3,21 @@ import { Logger } from '../../common/index.js';
 import { offers } from '../offers/index.js';
 
 async function run(options) {
-  const { error } =
-    options.command.currency == null
-      ? await Ftx.lendingOffers.stopAll(options)
-      : await Ftx.lendingOffers.stop(options);
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
 
-  if (error != null) {
-    Logger.error(error, options);
+  await Ftx.lendingOffers.stop({
+    exchange: options.global.exchange,
+    credentials,
+    filters: { currencies: options.command.currency },
+  });
 
-    return;
-  }
-
-  Logger.info('Withdrew lending offer(s)', options);
+  Logger.info('Withdrew lending offer(s)', {
+    enableColours: options.global.enableColours,
+  });
 
   // Show updated offer list.
   await offers.run(options);

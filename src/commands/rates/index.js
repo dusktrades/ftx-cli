@@ -1,5 +1,5 @@
 import { Ftx } from '../../api/index.js';
-import { CliUi, Logger } from '../../common/index.js';
+import { CliUi } from '../../common/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
 
@@ -11,33 +11,28 @@ function createTable() {
   ]);
 }
 
-async function run(options) {
-  function composeTableEntry(entry) {
-    return [
-      entry.coin,
-      formatRates(entry.previous, 'lending', options.global.enableColours),
-      formatRates(entry.estimate, 'lending', options.global.enableColours),
-    ];
-  }
+function composeTableEntry(entry, enableColours) {
+  return [
+    entry.coin,
+    formatRates(entry.previous, 'lending', enableColours),
+    formatRates(entry.estimate, 'lending', enableColours),
+  ];
+}
 
-  const { data, error } = await Ftx.lendingRates.get(options, {
-    currencies: options.command.currency,
+async function run(options) {
+  const data = await Ftx.lendingRates.get({
+    exchange: options.global.exchange,
+    filters: {
+      currencies: options.command.currency,
+    },
+    sortBy: options.command.sort,
   });
 
-  if (error != null) {
-    Logger.error(error, options);
-
-    return;
-  }
-
-  if (data.length === 0) {
-    Logger.info('No lending rates found', options);
-
-    return;
-  }
-
   const table = createTable();
-  const tableData = composeTableData(data, composeTableEntry);
+
+  const tableData = composeTableData(data, (entry) =>
+    composeTableEntry(entry, options.global.enableColours)
+  );
 
   table.push(...tableData);
   CliUi.logTable(table);

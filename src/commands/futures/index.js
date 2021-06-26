@@ -1,10 +1,21 @@
 import chalk from 'chalk';
 
 import { Ftx } from '../../api/index.js';
-import { CliUi, Logger } from '../../common/index.js';
+import { CliUi } from '../../common/index.js';
 import { formatPercentageChange, shorthandNumber } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
+
+async function getData(options) {
+  return Ftx.futures.getStats({
+    exchange: options.global.exchange,
+    filters: {
+      currencies: options.command.currency,
+      type: options.command.type,
+    },
+    sortBy: options.command.sort,
+  });
+}
 
 function createTable() {
   return CliUi.createTable([
@@ -45,10 +56,10 @@ function getChangePercentageColour(changePercentage) {
   return 'white';
 }
 
-function formatChangePercentage(changePercentage, options) {
+function formatChangePercentage(changePercentage, enableColours) {
   const formattedChangePercentage = formatPercentageChange(changePercentage);
 
-  if (!options.global.enableColours) {
+  if (!enableColours) {
     return formattedChangePercentage;
   }
 
@@ -57,48 +68,44 @@ function formatChangePercentage(changePercentage, options) {
   return chalk[colour](formattedChangePercentage);
 }
 
-function formatChange(entry, options) {
+function formatChange(entry, enableColours) {
   return [entry.change1hPercentage, entry.change24hPercentage]
     .map((changePercentage) =>
-      formatChangePercentage(changePercentage, options)
+      formatChangePercentage(changePercentage, enableColours)
     )
     .join(' / ');
 }
 
-function formatFundingRates(fundingRate, options) {
+function formatFundingRates(fundingRate, enableColours) {
   if (fundingRate == null) {
     return '-';
   }
 
-  return formatRates(fundingRate, 'funding', options.global.enableColours);
+  return formatRates(fundingRate, 'funding', enableColours);
+}
+
+function composeTableEntry(entry, enableColours) {
+  return [
+    entry.name,
+    formatPrice(entry.lastPrice),
+    formatPrice(entry.markPrice),
+    formatChange(entry, enableColours),
+    `${shorthandNumber(entry.volume24h)} ${entry.underlying}`,
+    `$${shorthandNumber(entry.volumeUsd24h)}`,
+    `${shorthandNumber(entry.openInterest)} ${entry.underlying}`,
+    `$${shorthandNumber(entry.openInterestUsd)}`,
+    formatFundingRates(entry.previousFundingRate, enableColours),
+    formatFundingRates(entry.nextFundingRate, enableColours),
+  ];
 }
 
 async function run(options) {
-  function composeTableEntry(entry) {
-    return [
-      entry.name,
-      formatPrice(entry.lastPrice),
-      formatPrice(entry.markPrice),
-      formatChange(entry, options),
-      `${shorthandNumber(entry.volume24h)} ${entry.underlying}`,
-      `$${shorthandNumber(entry.volumeUsd24h)}`,
-      `${shorthandNumber(entry.openInterest)} ${entry.underlying}`,
-      `$${shorthandNumber(entry.openInterestUsd)}`,
-      formatFundingRates(entry.previousFundingRate, options),
-      formatFundingRates(entry.nextFundingRate, options),
-    ];
-  }
-
-  const { data, error } = await Ftx.futures.getStats(options);
-
-  if (error != null) {
-    Logger.error(error, options);
-
-    return;
-  }
-
+  const data = await getData(options);
   const table = createTable();
-  const tableData = composeTableData(data, composeTableEntry);
+
+  const tableData = composeTableData(data, (entry) =>
+    composeTableEntry(entry, options.global.enableColours)
+  );
 
   table.push(...tableData);
   CliUi.logTable(table);

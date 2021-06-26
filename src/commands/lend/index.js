@@ -3,19 +3,27 @@ import { Logger } from '../../common/index.js';
 import { offers } from '../offers/index.js';
 
 async function run(options) {
-  // TODO: Move branching like this to derived API controllers.
-  const { error } =
-    options.command.currency == null
-      ? await Ftx.lendingOffers.createAll(options)
-      : await Ftx.lendingOffers.create(options);
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
 
-  if (error != null) {
-    Logger.error(error, options);
+  const data = {
+    size: options.command.size,
+    minRate: options.command.minRate,
+  };
 
-    return;
-  }
+  await Ftx.lendingOffers.create({
+    exchange: options.global.exchange,
+    credentials,
+    data,
+    filters: { currencies: options.command.currency },
+  });
 
-  Logger.info('Created lending offer(s)', options);
+  Logger.info('Created lending offer(s)', {
+    enableColours: options.global.enableColours,
+  });
 
   // Show updated offer list.
   await offers.run(options);

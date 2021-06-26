@@ -1,0 +1,3 @@
+const SECONDS_PER_HOUR = 3600;
+
+export { SECONDS_PER_HOUR };

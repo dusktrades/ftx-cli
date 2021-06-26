@@ -36,13 +36,18 @@ async function run(options) {
    * login has failed if we don't receive these options.
    */
   if (!canAuthenticate(inlineGlobalOptions)) {
-    Logger.error('Please provide an API key and secret', options);
+    Logger.error('Please provide an API key and secret', {
+      enableColours: options.global.enableColours,
+    });
 
     return;
   }
 
   setCredentials(inlineGlobalOptions);
-  Logger.info('Stored API credentials', options);
+
+  Logger.info('Stored API credentials', {
+    enableColours: options.global.enableColours,
+  });
 }
 
 const login = { run };

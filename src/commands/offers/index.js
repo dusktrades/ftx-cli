@@ -1,5 +1,5 @@
 import { Ftx } from '../../api/index.js';
-import { CliUi, Logger } from '../../common/index.js';
+import { CliUi } from '../../common/index.js';
 import { formatCurrency } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
@@ -14,35 +14,35 @@ function createTable() {
   ]);
 }
 
-async function run(options) {
-  function composeTableEntry(entry) {
-    return [
-      entry.coin,
-      formatCurrency(entry.lendable),
-      formatCurrency(entry.offered),
-      formatCurrency(entry.locked),
-      formatRates(entry.minRate, 'lending', options.global.enableColours),
-    ];
-  }
+function composeTableEntry(entry, enableColours) {
+  return [
+    entry.coin,
+    formatCurrency(entry.lendable),
+    formatCurrency(entry.offered),
+    formatCurrency(entry.locked),
+    formatRates(entry.minRate, 'lending', enableColours),
+  ];
+}
 
-  const { data, error } = await Ftx.lendingOffers.get(options, {
-    active: true,
+async function run(options) {
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
+
+  const data = await Ftx.lendingOffers.get({
+    exchange: options.global.exchange,
+    credentials,
+    filters: { active: true },
+    sortBy: options.command.sort,
   });
 
-  if (error != null) {
-    Logger.error(error, options);
-
-    return;
-  }
-
-  if (data.length === 0) {
-    Logger.info('No lending offers found', options);
-
-    return;
-  }
-
   const table = createTable();
-  const tableData = composeTableData(data, composeTableEntry);
+
+  const tableData = composeTableData(data, (entry) =>
+    composeTableEntry(entry, options.global.enableColours)
+  );
 
   table.push(...tableData);
   CliUi.logTable(table);
