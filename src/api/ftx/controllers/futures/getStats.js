@@ -75,7 +75,7 @@ function composeEntry(futureEntry, previousFunding, incompleteStats, index) {
     openInterest,
     openInterestUsd: openInterest * futureEntry.last,
     previousFundingRate: previousFundingEntry?.rate,
-    nextFundingRate: incompleteStats.nextFundingRate,
+    nextFundingRate: incompleteStatsEntry.nextFundingRate,
   };
 }
 
