@@ -5,7 +5,7 @@ import { request } from '../request.js';
 async function getLendingInfo({ exchange, credentials }) {
   const endpoint = 'spot_margin/lending_info';
   const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ endpoint, credentials });
+  const headers = composeHeaders({ exchange, endpoint, credentials });
 
   return request({ url, headers });
 }

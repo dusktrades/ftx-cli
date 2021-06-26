@@ -12,7 +12,7 @@ function composeEndpoint(parameters) {
 async function getFundingRates({ exchange, parameters }) {
   const endpoint = composeEndpoint(parameters);
   const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders();
+  const headers = composeHeaders({ exchange });
 
   return request({ url, headers });
 }
