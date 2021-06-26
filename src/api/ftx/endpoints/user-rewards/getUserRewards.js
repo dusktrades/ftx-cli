@@ -5,7 +5,7 @@ import { request } from '../request.js';
 async function getUserRewards({ exchange, credentials }) {
   const endpoint = 'user_rewards';
   const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ endpoint, credentials });
+  const headers = composeHeaders({ exchange, endpoint, credentials });
 
   return request({ url, headers });
 }

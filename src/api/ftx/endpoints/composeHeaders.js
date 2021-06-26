@@ -43,6 +43,7 @@ function composeSignature(
 }
 
 function composeAuthenticatedHeaders({
+  exchange,
   endpoint,
   method,
   credentials,
@@ -53,6 +54,7 @@ function composeAuthenticatedHeaders({
     return COMMON_HEADERS;
   }
 
+  const prefix = exchange === 'ftx-us' ? 'FTXUS' : 'FTX';
   const timestamp = Date.now();
 
   const signature = composeSignature(
@@ -65,27 +67,22 @@ function composeAuthenticatedHeaders({
 
   return {
     ...COMMON_HEADERS,
-    'FTX-KEY': credentials.apiKey,
-    'FTX-TS': timestamp,
-    'FTX-SIGN': signature,
+    [`${prefix}-KEY`]: credentials.apiKey,
+    [`${prefix}-TS`]: timestamp,
+    [`${prefix}-SIGN`]: signature,
     ...(credentials.subaccount != null && {
-      'FTX-SUBACCOUNT': encodeURI(credentials.subaccount),
+      [`${prefix}-SUBACCOUNT`]: encodeURI(credentials.subaccount),
     }),
   };
 }
 
-function composeHeaders({ endpoint, method, credentials, requestBody } = {}) {
+function composeHeaders(options = {}) {
   // Credentials are passed for endpoints which require authentication headers.
-  if (credentials == null) {
+  if (options.credentials == null) {
     return COMMON_HEADERS;
   }
 
-  return composeAuthenticatedHeaders({
-    endpoint,
-    method,
-    credentials,
-    requestBody,
-  });
+  return composeAuthenticatedHeaders(options);
 }
 
 export { composeHeaders };

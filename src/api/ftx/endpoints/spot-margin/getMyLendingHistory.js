@@ -12,7 +12,7 @@ function composeEndpoint(parameters) {
 async function getMyLendingHistory({ exchange, credentials, parameters }) {
   const endpoint = composeEndpoint(parameters);
   const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ endpoint, credentials });
+  const headers = composeHeaders({ exchange, endpoint, credentials });
 
   return request({ url, headers });
 }

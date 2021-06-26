@@ -5,7 +5,7 @@ import { request } from '../request.js';
 async function getFutures({ exchange }) {
   const endpoint = 'futures';
   const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders();
+  const headers = composeHeaders({ exchange });
 
   return request({ url, headers });
 }

@@ -8,6 +8,7 @@ async function createLendingOffer({ exchange, credentials, requestBody }) {
   const method = 'post';
 
   const headers = composeHeaders({
+    exchange,
     endpoint,
     method,
     credentials,
