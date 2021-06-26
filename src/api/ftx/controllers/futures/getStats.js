@@ -60,9 +60,6 @@ function composeEntry(futureEntry, previousFunding, incompleteStats, index) {
 
   const incompleteStatsEntry = incompleteStats[index];
 
-  // Sometimes returns null.
-  const openInterest = incompleteStatsEntry.openInterest ?? 0;
-
   return {
     name: futureEntry.name,
     underlying: futureEntry.underlying,
@@ -72,8 +69,8 @@ function composeEntry(futureEntry, previousFunding, incompleteStats, index) {
     change24hPercentage: convertDecimalToPercentage(futureEntry.change24h),
     volume24h: futureEntry.volume,
     volumeUsd24h: futureEntry.volumeUsd24h,
-    openInterest,
-    openInterestUsd: openInterest * futureEntry.last,
+    openInterest: futureEntry.openInterest,
+    openInterestUsd: futureEntry.openInterestUsd,
     previousFundingRate: previousFundingEntry?.rate,
     nextFundingRate: incompleteStatsEntry.nextFundingRate,
   };
