@@ -7,7 +7,7 @@ import { parseOption } from './parseOption.js';
 import { runCommand } from './runCommand.js';
 
 function composeSortOption(choices) {
-  return new Option('--sort <sorting method>', 'Sorting method').choices(
+  return new Option('--sort <sorting method>', 'sorting method').choices(
     choices
   );
 }
