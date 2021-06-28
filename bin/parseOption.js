@@ -3,12 +3,21 @@ import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
 
+const FUTURE_TYPE_MAP = [
+  { parsed: 'perpetual', options: ['perpetual', 'perp'] },
+  { parsed: 'future', options: ['quarterly', 'dated'] },
+  { parsed: 'move', options: ['move'] },
+];
+
+const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
+
 function parseRepeat(value) {
   if (!cron.validate(value)) {
     throw new InvalidOptionArgumentError(
       'Not an accepted cron expression format.'
     );
   }
+
   return value;
 }
 
@@ -58,24 +67,33 @@ function parseMinRate(value) {
   return Number.parseFloat(value);
 }
 
-function parseFutureType(value) {
-  const choices = ['perp', 'perpetual', 'quarterly', 'dated', 'move'];
-
-  if (['perp', 'perpetual'].includes(value)) {
-    return 'perpetual';
-  }
-
-  if (['quarterly', 'dated'].includes(value)) {
-    return 'future';
-  }
-
-  if (value === 'move') {
-    return 'move';
-  }
-
-  throw new InvalidOptionArgumentError(
-    `Allowed choices are ${choices.join(', ')}.`
+function getParsedType(type) {
+  const futureTypeEntry = FUTURE_TYPE_MAP.find((entry) =>
+    entry.options.includes(type)
   );
+
+  return futureTypeEntry?.parsed;
+}
+
+function parseFutureType(value) {
+  const types = value.split(',');
+  const parsedValues = [];
+
+  for (const type of types) {
+    const parsedType = getParsedType(type);
+
+    if (parsedType == null) {
+      throw new InvalidOptionArgumentError(
+        `Allowed choices are ${FUTURE_TYPE_CHOICES.join(', ')}.`
+      );
+    }
+
+    if (!parsedValues.includes(parsedType)) {
+      parsedValues.push(parsedType);
+    }
+  }
+
+  return parsedValues;
 }
 
 const parseOption = {
