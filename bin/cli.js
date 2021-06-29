@@ -115,6 +115,15 @@ program
   .action((inlineCommandOptions) => runCommand('stop', inlineCommandOptions));
 
 program
+  .command('spot')
+  .description('display spot markets')
+  .option(...COMMAND_OPTIONS.CURRENCY)
+  .addOption(
+    composeSortOption(['name', 'price', 'change-1h', 'change-24h', 'volume'])
+  )
+  .action((inlineCommandOptions) => runCommand('spot', inlineCommandOptions));
+
+program
   .command('futures')
   .description('display futures stats')
   .option(...COMMAND_OPTIONS.CURRENCY)
