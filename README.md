@@ -332,7 +332,7 @@ ftx offers --subaccount Idle
 
 ### Repeating commands and auto-compounding
 
-Any command can easily be repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. The default schedule is 'at 5 minutes past every hour' because FTX variable lending rates and balances are updated hourly.
+Any command can easily be repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. The default schedule is 'at 59 minutes past every hour' because FTX variable lending rates and balances are updated hourly.
 
 ```sh
 # Auto-compound all lendable currencies with no minimum rate.

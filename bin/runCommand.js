@@ -5,8 +5,8 @@ import { Commands } from '../src/commands/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { handleError } from './handleError.js';
 
-// Repeat at 5 minutes past every hour.
-const DEFAULT_CRON_EXPRESSION = '5 * * * *';
+// Repeat at 55 minutes past every hour.
+const DEFAULT_CRON_EXPRESSION = '59 * * * *';
 
 function getGlobalOptions() {
   const inlineGlobalOptions = program.opts();
