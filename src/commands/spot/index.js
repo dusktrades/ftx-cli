@@ -11,6 +11,7 @@ async function getData(options) {
     exchange: options.global.exchange,
     filters: {
       currencies: options.command.currency,
+      type: options.command.type,
     },
     sortBy: options.command.sort,
   });

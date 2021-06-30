@@ -3,6 +3,15 @@ import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
 
+const SPOT_TYPE_MAP = [
+  { parsed: 'coin', options: ['coin'] },
+  { parsed: 'leveraged-token', options: ['lev', 'leveraged-token'] },
+  { parsed: 'volatility-token', options: ['vol', 'volatility-token'] },
+  { parsed: 'equity-token', options: ['stock', 'equity-token'] },
+];
+
+const SPOT_TYPE_CHOICES = SPOT_TYPE_MAP.flatMap((entry) => entry.options);
+
 function parseRepeat(value) {
   if (!cron.validate(value)) {
     throw new InvalidOptionArgumentError(
@@ -58,6 +67,35 @@ function parseMinRate(value) {
   return Number.parseFloat(value);
 }
 
+function getParsedSpotType(type) {
+  const spotTypeEntry = SPOT_TYPE_MAP.find((entry) =>
+    entry.options.includes(type)
+  );
+
+  return spotTypeEntry?.parsed;
+}
+
+function parseSpotType(value) {
+  const types = value.split(',');
+  const parsedValues = [];
+
+  for (const type of types) {
+    const parsedType = getParsedSpotType(type);
+
+    if (parsedType == null) {
+      throw new InvalidOptionArgumentError(
+        `Allowed choices are ${SPOT_TYPE_CHOICES.join(', ')}.`
+      );
+    }
+
+    if (!parsedValues.includes(parsedType)) {
+      parsedValues.push(parsedType);
+    }
+  }
+
+  return parsedValues;
+}
+
 function parseFutureType(value) {
   const choices = ['perp', 'perpetual', 'quarterly', 'dated', 'move'];
 
@@ -83,6 +121,7 @@ const parseOption = {
   currency: parseCurrency,
   size: parseSize,
   minRate: parseMinRate,
+  spotType: parseSpotType,
   futureType: parseFutureType,
 };
 

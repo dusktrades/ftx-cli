@@ -1,3 +1,5 @@
+import { EmptyResultsError } from '../../../../common/errors/index.js';
+
 import {
   compareAToZ,
   compareHighToLow,
@@ -7,6 +9,50 @@ import {
 import { markets } from '../../endpoints/index.js';
 import { allowCurrency } from '../allowCurrency.js';
 
+const LEVERAGED_TOKEN_TYPES = ['BULL', 'HALF', 'HEDGE', 'BEAR'];
+const VOLATILITY_TOKEN_TYPES = ['BVOL', 'IBVOL'];
+
+function isLeveragedToken(entry) {
+  return LEVERAGED_TOKEN_TYPES.some((tokenType) =>
+    entry.baseCurrency.includes(tokenType)
+  );
+}
+
+function isVolatilityToken(entry) {
+  return VOLATILITY_TOKEN_TYPES.some((tokenType) =>
+    entry.baseCurrency.includes(tokenType)
+  );
+}
+
+function isEquityToken(entry) {
+  return Boolean(entry.tokenizedEquity);
+}
+
+function isCoin(entry) {
+  return ![
+    isLeveragedToken(entry),
+    isVolatilityToken(entry),
+    isEquityToken(entry),
+  ].includes(true);
+}
+
+const TOKEN_TYPE_VALIDATORS = {
+  coin: isCoin,
+  'leveraged-token': isLeveragedToken,
+  'volatility-token': isVolatilityToken,
+  'equity-token': isEquityToken,
+};
+
+function allowType(allowedTypes, entry) {
+  if (allowedTypes == null) {
+    return true;
+  }
+
+  return allowedTypes.some((allowedType) =>
+    TOKEN_TYPE_VALIDATORS[allowedType](entry)
+  );
+}
+
 function filterData(data, filters) {
   if (filters == null) {
     return data;
@@ -15,7 +61,8 @@ function filterData(data, filters) {
   return data.filter(
     (entry) =>
       entry.type === 'spot' &&
-      allowCurrency(filters.currencies, entry.baseCurrency)
+      allowCurrency(filters.currencies, entry.baseCurrency) &&
+      allowType(filters.type, entry)
   );
 }
 
@@ -67,6 +114,10 @@ function sortData(data, sortBy) {
 function processData(data, filters, sortBy) {
   const filteredData = filterData(data, filters);
   const composedData = composeData(filteredData);
+
+  if (composedData.length === 0) {
+    throw new EmptyResultsError('No spot markets found');
+  }
 
   return sortData(composedData, sortBy);
 }

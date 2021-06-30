@@ -41,6 +41,9 @@ const COMMAND_OPTIONS = {
     'minimum yearly lending rate (%)',
     parseOption.minRate,
   ],
+  SPOT_TYPE: new Option('-t, --type <type>', 'spot type').argParser(
+    parseOption.spotType
+  ),
   FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
     parseOption.futureType
   ),
@@ -118,6 +121,7 @@ program
   .command('spot')
   .description('display spot markets')
   .option(...COMMAND_OPTIONS.CURRENCY)
+  .addOption(COMMAND_OPTIONS.SPOT_TYPE)
   .addOption(
     composeSortOption(['name', 'price', 'change-1h', 'change-24h', 'volume'])
   )
