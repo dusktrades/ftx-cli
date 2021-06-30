@@ -53,6 +53,16 @@ function allowType(allowedTypes, entry) {
   );
 }
 
+function allowTokenLeverage(allowedTokenLeverages, baseCurrency) {
+  if (allowedTokenLeverages == null) {
+    return true;
+  }
+
+  return allowedTokenLeverages.some((allowedTokenLeverage) =>
+    baseCurrency.includes(allowedTokenLeverage)
+  );
+}
+
 function filterData(data, filters) {
   if (filters == null) {
     return data;
@@ -62,7 +72,9 @@ function filterData(data, filters) {
     (entry) =>
       entry.type === 'spot' &&
       allowCurrency(filters.currencies, entry.baseCurrency) &&
-      allowType(filters.type, entry)
+      allowType(filters.type, entry) &&
+      allowCurrency(filters.quoteCurrencies, entry.quoteCurrency) &&
+      allowTokenLeverage(filters.tokenLeverage, entry.baseCurrency)
   );
 }
 

@@ -12,6 +12,17 @@ const SPOT_TYPE_MAP = [
 
 const SPOT_TYPE_CHOICES = SPOT_TYPE_MAP.flatMap((entry) => entry.options);
 
+const TOKEN_LEVERAGE_MAP = [
+  { parsed: 'BULL', options: ['3x', 'bull'] },
+  { parsed: 'HALF', options: ['0.5x', 'half'] },
+  { parsed: 'HEDGE', options: ['-1x', 'hedge'] },
+  { parsed: 'BEAR', options: ['-3x', 'bear'] },
+];
+
+const TOKEN_LEVERAGE_CHOICES = TOKEN_LEVERAGE_MAP.flatMap(
+  (entry) => entry.options
+);
+
 function parseRepeat(value) {
   if (!cron.validate(value)) {
     throw new InvalidOptionArgumentError(
@@ -96,6 +107,36 @@ function parseSpotType(value) {
   return parsedValues;
 }
 
+// TODO: Refactor and reuse common option parsers.
+function getParsedTokenLeverage(option) {
+  const spotTypeEntry = TOKEN_LEVERAGE_MAP.find((entry) =>
+    entry.options.includes(option)
+  );
+
+  return spotTypeEntry?.parsed;
+}
+
+function parseTokenLeverage(value) {
+  const options = value.split(',');
+  const parsedOptions = [];
+
+  for (const option of options) {
+    const parsedOption = getParsedTokenLeverage(option);
+
+    if (parsedOption == null) {
+      throw new InvalidOptionArgumentError(
+        `Allowed choices are ${TOKEN_LEVERAGE_CHOICES.join(', ')}.`
+      );
+    }
+
+    if (!parsedOptions.includes(parsedOption)) {
+      parsedOptions.push(parsedOption);
+    }
+  }
+
+  return parsedOptions;
+}
+
 function parseFutureType(value) {
   const choices = ['perp', 'perpetual', 'quarterly', 'dated', 'move'];
 
@@ -122,6 +163,7 @@ const parseOption = {
   size: parseSize,
   minRate: parseMinRate,
   spotType: parseSpotType,
+  tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
 };
 

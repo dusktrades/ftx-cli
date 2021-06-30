@@ -41,9 +41,22 @@ const COMMAND_OPTIONS = {
     'minimum yearly lending rate (%)',
     parseOption.minRate,
   ],
+
+  // TODO: Convert to regular spread option instead of custom constructor.
   SPOT_TYPE: new Option('-t, --type <type>', 'spot type').argParser(
     parseOption.spotType
   ),
+  QUOTE_CURRENCY: [
+    '-q, --quote-currency <currency>',
+    'currency symbol(s)',
+    parseOption.currency,
+  ],
+  TOKEN_LEVERAGE: [
+    '--token-leverage <leverage>',
+    'token leverage name or multiplier',
+    parseOption.tokenLeverage,
+  ],
+
   FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
     parseOption.futureType
   ),
@@ -53,6 +66,8 @@ program.version(CONFIG.PACKAGE.version, '-v, --version');
 
 program.addHelpText(
   'after',
+
+  // TODO: Change to newline instead of template string.
   `
 GitHub: https://github.com/dusktrades/ftx-cli`
 );
@@ -122,6 +137,8 @@ program
   .description('display spot markets')
   .option(...COMMAND_OPTIONS.CURRENCY)
   .addOption(COMMAND_OPTIONS.SPOT_TYPE)
+  .option(...COMMAND_OPTIONS.QUOTE_CURRENCY)
+  .option(...COMMAND_OPTIONS.TOKEN_LEVERAGE)
   .addOption(
     composeSortOption(['name', 'price', 'change-1h', 'change-24h', 'volume'])
   )
