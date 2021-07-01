@@ -1,13 +1,5 @@
 import { futures } from '../../endpoints/index.js';
-import { allowCurrency } from '../allowCurrency.js';
-
-function allowType(allowedType, type) {
-  if (allowedType == null) {
-    return true;
-  }
-
-  return type === allowedType;
-}
+import { allowValue } from '../allowValue.js';
 
 function filterData(data, filters) {
   if (filters == null) {
@@ -16,8 +8,8 @@ function filterData(data, filters) {
 
   return data.filter(
     (entry) =>
-      allowCurrency(filters.currencies, entry.underlying) &&
-      allowType(filters.type, entry.type)
+      allowValue(filters.currencies, entry.underlying) &&
+      allowValue(filters.type, entry.type)
   );
 }
 

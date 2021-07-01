@@ -1,7 +1,7 @@
 import { EmptyResultsError } from '../../../../common/errors/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
-import { allowCurrency } from '../allowCurrency.js';
+import { allowValue } from '../allowValue.js';
 
 function allowActive(filter = false, entry) {
   if (!filter) {
@@ -34,7 +34,7 @@ function filterData(data, filters) {
 
   return data.filter(
     (entry) =>
-      allowCurrency(filters.currencies, entry.coin) &&
+      allowValue(filters.currencies, entry.coin) &&
       allowActive(filters.active, entry) &&
       allowLendable(filters.lendable, entry.lendable) &&
       allowOffered(filters.offered, entry.offered)
