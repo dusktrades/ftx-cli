@@ -5,6 +5,7 @@ import { isPositiveFloat } from '../src/util/index.js';
 
 const SPOT_TYPE_MAP = [
   { parsed: 'coin', options: ['coin'] },
+  { parsed: 'fiat', options: ['fiat'] },
   { parsed: 'leveraged-token', options: ['lev', 'leveraged-token'] },
   { parsed: 'volatility-token', options: ['vol', 'volatility-token'] },
   { parsed: 'equity-token', options: ['stock', 'equity-token'] },

@@ -9,8 +9,23 @@ import {
 import { markets } from '../../endpoints/index.js';
 import { allowCurrency } from '../allowCurrency.js';
 
-const LEVERAGED_TOKEN_TYPES = ['BULL', 'HALF', 'HEDGE', 'BEAR'];
+const FIAT_CURRENCIES = new Set([
+  'BRZ',
+  'CAD',
+  'EUR',
+  'GBP',
+  'SGD',
+  'TRYB',
+  'USD',
+  'USDT',
+]);
+
+const LEVERAGED_TOKEN_TYPES = ['BEAR', 'BULL', 'HALF', 'HEDGE'];
 const VOLATILITY_TOKEN_TYPES = ['BVOL', 'IBVOL'];
+
+function isFiat(entry) {
+  return FIAT_CURRENCIES.has(entry.baseCurrency);
+}
 
 function isLeveragedToken(entry) {
   return LEVERAGED_TOKEN_TYPES.some((tokenType) =>
@@ -30,6 +45,7 @@ function isEquityToken(entry) {
 
 function isCoin(entry) {
   return ![
+    isFiat(entry),
     isLeveragedToken(entry),
     isVolatilityToken(entry),
     isEquityToken(entry),
@@ -38,6 +54,7 @@ function isCoin(entry) {
 
 const TOKEN_TYPE_VALIDATORS = {
   coin: isCoin,
+  fiat: isFiat,
   'leveraged-token': isLeveragedToken,
   'volatility-token': isVolatilityToken,
   'equity-token': isEquityToken,
