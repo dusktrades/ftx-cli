@@ -48,7 +48,7 @@ const COMMAND_OPTIONS = {
   ),
   QUOTE_CURRENCY: [
     '-q, --quote-currency <currency>',
-    'currency symbol(s)',
+    'quote currency symbol(s)',
     parseOption.currency,
   ],
   TOKEN_LEVERAGE: [

@@ -14,10 +14,10 @@ const SPOT_TYPE_MAP = [
 const SPOT_TYPE_CHOICES = SPOT_TYPE_MAP.flatMap((entry) => entry.options);
 
 const TOKEN_LEVERAGE_MAP = [
+  { parsed: 'BEAR', options: ['-3x', 'bear'] },
   { parsed: 'BULL', options: ['3x', 'bull'] },
   { parsed: 'HALF', options: ['0.5x', 'half'] },
   { parsed: 'HEDGE', options: ['-1x', 'hedge'] },
-  { parsed: 'BEAR', options: ['-3x', 'bear'] },
 ];
 
 const TOKEN_LEVERAGE_CHOICES = TOKEN_LEVERAGE_MAP.flatMap(
