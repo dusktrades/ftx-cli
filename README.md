@@ -28,6 +28,7 @@
   - [Offers](#offers)
   - [Lend](#lend)
   - [Stop](#stop)
+  - [Spot](#spot)
   - [Futures](#futures)
 - [Examples](#examples)
   - [Using subaccounts](#using-subaccounts)
@@ -278,6 +279,38 @@ ftx stop --currency usd,usdt
 
 > ⚠️ Funds will stay locked by FTX for up to 1 hour after withdrawing your offer.
 
+### Spot
+
+Display spot stats.
+
+| Option                            | Description                       | Default             | Notes                                                                                                                                                    |
+| --------------------------------- | --------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-c, --currency <currency>`       | Currency symbol(s)                | All currencies      | Supports comma-separated list                                                                                                                            |
+| `-t, --type <type>`               | Spot type                         | All spot types      | Supports comma-separated list<br><br>Options:<br>`coin`<br>`fiat`<br>`leveraged-token` (`lev`)<br>`volatility-token` (`vol`)<br>`equity-token` (`stock`) |
+| `-q, --quote-currency <currency>` | Quote currency symbol(s)          | All currencies      | Supports comma-separated list                                                                                                                            |
+| `--token-leverage <leverage>`     | Token leverage name or multiplier | All token leverages | Supports comma-separated list<br><br>Options:<br>`bull` (`3x`)<br>`half` (`0.5x`)<br>`hedge` (`-1x`)<br>`bear` (`-3x`)                                   |
+| `--sort <sorting method>`         | Sorting method                    | `name`              | Options:<br>`name`<br>`price`<br>`change-1h`<br>`change-24h`<br>`volume`                                                                                 |
+
+```sh
+# Display stats for all spot markets.
+ftx spot
+
+# Display stats for all BTC and ETH spot markets.
+ftx spot --currency btc,eth
+
+# Display stats for all fiat spot markets.
+ftx spot --type fiat
+
+# Display stats for all tokenised equity spot markets, sorted by 1 hour change.
+ftx spot --type equity-token --sort change-1h
+
+# Display stats for all leveraged and volatility token spot markets, sorted by volume.
+ftx spot --type leveraged-token,volatility-token --sort volume
+
+# Display stats for BEAR (-3x) leveraged token USDT spot markets.
+ftx spot --quote-currency usdt --token-leverage bear
+```
+
 ### Futures
 
 Display futures stats.
@@ -285,7 +318,7 @@ Display futures stats.
 | Option                      | Description        | Default          | Notes                                                                                                                                                                                  |
 | --------------------------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                                                                                          |
-| `-t, --type <type>`         | Future type        | All future types | Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                                                           |
+| `-t, --type <type>`         | Future type        | All future types | Supports comma-separated list<br /><br />Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                  |
 | `--sort <sorting method>`   | Sorting method     | `name`           | Options:<br />`name`<br />`last-price`<br />`mark-price`<br />`change-1h`<br />`change-24h`<br />`volume`<br />`open-interest` (`oi`)<br />`previous-funding`<br />`estimated-funding` |
 
 ```sh
@@ -301,8 +334,8 @@ ftx futures --type perpetual
 # Display stats for all perpetual futures, sorted by estimated next funding rate.
 ftx futures --type perpetual --sort estimated-funding
 
-# Display stats for BTC quarterly futures, sorted by open interest.
-ftx futures --currency btc --type quarterly --sort open-interest
+# Display stats for BTC quarterly and move futures, sorted by open interest.
+ftx futures --currency btc --type quarterly,move --sort open-interest
 ```
 
 > ⚠️ This command is currently intensive on the FTX API due to the amount of data required. You can reduce load by using the `currency` and `type` filters, and by avoiding repeating the command too quickly.

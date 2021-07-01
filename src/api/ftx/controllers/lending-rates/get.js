@@ -1,14 +1,14 @@
 import { EmptyResultsError } from '../../../../common/errors/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
-import { allowCurrency } from '../allowCurrency.js';
+import { allowValue } from '../allowValue.js';
 
 function filterData(data, filters) {
   if (filters == null) {
     return data;
   }
 
-  return data.filter((entry) => allowCurrency(filters.currencies, entry.coin));
+  return data.filter((entry) => allowValue(filters.currencies, entry.coin));
 }
 
 function sortData(data, sortBy) {
