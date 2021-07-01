@@ -3,12 +3,17 @@ import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
 
+/**
+ * Optional value is only parsed immediately if provided, so default values are
+ * considered at a later stage (prior to running the command).
+ */
 function parseRepeat(value) {
   if (!cron.validate(value)) {
     throw new InvalidOptionArgumentError(
       'Not an accepted cron expression format.'
     );
   }
+
   return value;
 }
 
