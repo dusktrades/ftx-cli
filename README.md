@@ -46,7 +46,7 @@
 👤 **Multiple logins:** allows switching between API credentials and subaccounts\
 📊 **Better metrics:** displays all the metrics provided by FTX and more\
 🔁 **Repeat commands:** compounds lending offers automatically via inbuilt command scheduler\
-⏲️ **Custom schedules:** repeats commands hourly or using custom cron expressions\
+⏲️ **Custom schedules:** repeats commands using custom cron expressions\
 🔐 **Self-hosted:** retains your control over your API credentials\
 ⚙️ **Close to the metal:** remains faithful to FTX terminology, options, and errors
 
@@ -129,7 +129,7 @@ You can inline these options with any command to modify its behaviour. Inline op
 | `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
 | `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
-| `-z, --repeat [cron expression]` | Repeat the command with optional cron schedule                                                         | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
+| `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
 | `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
 
 ### Login
@@ -332,16 +332,21 @@ ftx offers --subaccount Idle
 
 ### Repeating commands and auto-compounding
 
-Any command can easily be repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. The default schedule is 'at 5 minutes past every hour' because FTX variable lending rates and balances are updated hourly.
+Any command can be easily repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. If you need help with cron expression syntax, we recommend reading the [node-cron documentation](https://github.com/node-cron/node-cron#readme) and using [crontab guru](https://crontab.guru/).
+
+| Command | Default repeat schedule                        | Notes                                                                                     |
+| ------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `lend`  | `59 * * * *` ('At 59 minutes past every hour') | Optimised for auto-compounding (FTX lending rates and locked balances are updated hourly) |
+| Others  | `* * * * *` ('At every minute')                |                                                                                           |
 
 ```sh
 # Auto-compound all lendable currencies with no minimum rate.
 ftx lend --repeat
 
-# Auto-compound all USD at a minimum rate of 2.5% per year.
+# Auto-compound all USD at a minimum rate of 1% per year.
 ftx lend --currency usd --min-rate 1 --repeat
 
-# Withdraw all offers at 09:00 every day.
+# Withdraw all offers at 09:00 AM every day.
 ftx stop --repeat "0 9 * * *"
 ```
 
