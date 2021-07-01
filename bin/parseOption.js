@@ -32,6 +32,10 @@ const FUTURE_TYPE_MAP = [
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
 
+/**
+ * Optional value is only parsed immediately if provided, so default values are
+ * considered at a later stage (prior to running the command).
+ */
 function parseRepeat(value) {
   if (!cron.validate(value)) {
     throw new InvalidOptionArgumentError(

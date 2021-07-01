@@ -5,19 +5,19 @@ import { Commands } from '../src/commands/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { handleError } from './handleError.js';
 
-// Repeat at 5 minutes past every hour.
-const DEFAULT_CRON_EXPRESSION = '5 * * * *';
+// Repeat at XX:XX:00; used if no user/command-provided schedule.
+const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
 
 function getGlobalOptions() {
   const inlineGlobalOptions = program.opts();
 
   // Give inlined options priority over stored versions.
   return {
-    ...inlineGlobalOptions,
     exchange: inlineGlobalOptions.exchange ?? CONFIG.USER.get('EXCHANGE'),
     key: inlineGlobalOptions.key ?? CONFIG.USER.get('API_KEY'),
     secret: inlineGlobalOptions.secret ?? CONFIG.USER.get('API_SECRET'),
     subaccount: inlineGlobalOptions.subaccount ?? CONFIG.USER.get('SUBACCOUNT'),
+    repeat: inlineGlobalOptions.repeat,
     enableColours:
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
   };
@@ -30,13 +30,9 @@ function getOptions(inlineCommandOptions) {
   };
 }
 
-function getCronExpression(repeat) {
-  return repeat === true ? DEFAULT_CRON_EXPRESSION : repeat;
-}
-
-async function repeatRun(runWithOptions, repeat) {
+async function repeatRun(runWithOptions, cronExpression) {
   // Schedule repeat runs.
-  cron.schedule(getCronExpression(repeat), async () => {
+  cron.schedule(cronExpression, async () => {
     await runWithOptions();
   });
 
@@ -45,14 +41,28 @@ async function repeatRun(runWithOptions, repeat) {
 }
 
 async function runCommand(command, inlineCommandOptions) {
-  const { run } = Commands[command];
+  const {
+    run,
+    DEFAULT_REPEAT_CRON_EXPRESSION = FALLBACK_REPEAT_CRON_EXPRESSION,
+  } = Commands[command];
+
   const options = getOptions(inlineCommandOptions);
   const runWithOptions = () => run(options);
 
   try {
-    await (options.global.repeat == null
-      ? runWithOptions()
-      : repeatRun(runWithOptions, options.global.repeat));
+    if (options.global.repeat == null) {
+      await runWithOptions();
+
+      return;
+    }
+
+    if (options.global.repeat === true) {
+      await repeatRun(runWithOptions, DEFAULT_REPEAT_CRON_EXPRESSION);
+
+      return;
+    }
+
+    await repeatRun(runWithOptions, options.global.repeat);
   } catch (error) {
     handleError(error, options.global.enableColours);
   }
