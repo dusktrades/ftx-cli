@@ -318,7 +318,7 @@ Display futures stats.
 | Option                      | Description        | Default          | Notes                                                                                                                                                                                  |
 | --------------------------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                                                                                          |
-| `-t, --type <type>`         | Future type        | All future types | Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                                                           |
+| `-t, --type <type>`         | Future type        | All future types | Supports comma-separated list<br /><br />Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                  |
 | `--sort <sorting method>`   | Sorting method     | `name`           | Options:<br />`name`<br />`last-price`<br />`mark-price`<br />`change-1h`<br />`change-24h`<br />`volume`<br />`open-interest` (`oi`)<br />`previous-funding`<br />`estimated-funding` |
 
 ```sh
@@ -334,8 +334,8 @@ ftx futures --type perpetual
 # Display stats for all perpetual futures, sorted by estimated next funding rate.
 ftx futures --type perpetual --sort estimated-funding
 
-# Display stats for BTC quarterly futures, sorted by open interest.
-ftx futures --currency btc --type quarterly --sort open-interest
+# Display stats for BTC quarterly and move futures, sorted by open interest.
+ftx futures --currency btc --type quarterly,move --sort open-interest
 ```
 
 > ⚠️ This command is currently intensive on the FTX API due to the amount of data required. You can reduce load by using the `currency` and `type` filters, and by avoiding repeating the command too quickly.

@@ -7,7 +7,7 @@ import {
 } from '../../../../util/index.js';
 
 import { markets } from '../../endpoints/index.js';
-import { allowCurrency } from '../allowCurrency.js';
+import { allowValue } from '../allowValue.js';
 
 const FIAT_CURRENCIES = new Set([
   'BRZ',
@@ -88,9 +88,9 @@ function filterData(data, filters) {
   return data.filter(
     (entry) =>
       entry.type === 'spot' &&
-      allowCurrency(filters.currencies, entry.baseCurrency) &&
+      allowValue(filters.currencies, entry.baseCurrency) &&
       allowType(filters.type, entry) &&
-      allowCurrency(filters.quoteCurrencies, entry.quoteCurrency) &&
+      allowValue(filters.quoteCurrencies, entry.quoteCurrency) &&
       allowTokenLeverage(filters.tokenLeverage, entry.baseCurrency)
   );
 }
