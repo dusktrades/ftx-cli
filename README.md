@@ -73,20 +73,20 @@ npx ftx-cli rates
 
 ### Global package (recommended)
 
-The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli).
+The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli). By default, you will be notified when an update is available.
 
 ```sh
-npm install --global ftx-cli
+npm install -g ftx-cli
 ```
 
 ### Build from source
 
-You can also download (or clone) and install the package manually.
+You can also download/clone and install the package manually. You will be in charge of downloading/pulling and installing the latest source when an update is available.
 
 ```sh
 git clone https://github.com/dusktrades/ftx-cli
 cd ftx-cli
-npm install --global
+npm install -g
 ```
 
 ![Divider](docs/images/divider.png)
@@ -132,6 +132,7 @@ You can inline these options with any command to modify its behaviour. Inline op
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
 | `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
 | `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
+| `--update-notifications`         | Enable update notifications                                                                            | `true`        | Disable: `--no-update-notifications`                                            |
 
 ### Login
 
@@ -163,10 +164,11 @@ ftx logout
 
 Store option preferences locally. This lets you customise the default behaviour of the package so you don't need to continuously repeat the same options.
 
-| Option                      | Description                                                                                            | Default | Notes                    |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------------ |
-| `-e, --exchange <exchange>` | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`   | Options: `ftx`, `ftx-us` |
-| `--colour`                  | Enable coloured output                                                                                 | `true`  | Disable: `--no-colour`   |
+| Option                      | Description                                                                                            | Default | Notes                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------------------------ |
+| `-e, --exchange <exchange>` | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`   | Options: `ftx`, `ftx-us`             |
+| `--colour`                  | Enable coloured output                                                                                 | `true`  | Disable: `--no-colour`               |
+| `--update-notifications`    | Enable update notifications                                                                            | `true`  | Disable: `--no-update-notifications` |
 
 ```sh
 # Store preference to use FTX US.
@@ -174,6 +176,9 @@ ftx config --exchange ftx-us
 
 # Store preference to disable coloured output.
 ftx config --no-colour
+
+# Store preference to disable update notifications.
+ftx config --no-update-notifications
 ```
 
 ### Rates
