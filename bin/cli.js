@@ -60,6 +60,11 @@ const COMMAND_OPTIONS = {
   FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
     parseOption.futureType
   ),
+
+  MARKET: ['-m, --market <market>', 'market symbol', parseOption.market],
+  SIDE: ['--side <side>', 'order side', parseOption.side],
+  ORDER_TYPE: ['-o, --order-type <type>', 'order type', parseOption.orderType],
+  PRICE: ['-p, --price <price>', 'limit price', parseOption.price],
 };
 
 program.version(CONFIG.PACKAGE.version, '-v, --version');
@@ -166,5 +171,15 @@ program
   .action((inlineCommandOptions) =>
     runCommand('futures', inlineCommandOptions)
   );
+
+program
+  .command('trade')
+  .description('place order')
+  .option(...COMMAND_OPTIONS.MARKET)
+  .option(...COMMAND_OPTIONS.SIDE)
+  .option(...COMMAND_OPTIONS.ORDER_TYPE)
+  .option(...COMMAND_OPTIONS.PRICE)
+  .option(...COMMAND_OPTIONS.SIZE)
+  .action((inlineCommandOptions) => runCommand('trade', inlineCommandOptions));
 
 program.parseAsync(process.argv);

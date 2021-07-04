@@ -32,6 +32,20 @@ const FUTURE_TYPE_MAP = [
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
 
+const SIDE_MAP = [
+  { parsed: 'buy', options: ['b', 'buy'] },
+  { parsed: 'sell', options: ['s', 'sell'] },
+];
+
+const SIDE_CHOICES = SIDE_MAP.flatMap((entry) => entry.options);
+
+const ORDER_TYPE_MAP = [
+  { parsed: 'market', options: ['m', 'market'] },
+  { parsed: 'limit', options: ['l', 'limit'] },
+];
+
+const ORDER_TYPE_CHOICES = ORDER_TYPE_MAP.flatMap((entry) => entry.options);
+
 /**
  * Optional value is only parsed immediately if provided, so default values are
  * considered at a later stage (prior to running the command).
@@ -180,6 +194,48 @@ function parseFutureType(value) {
   return parsedValues;
 }
 
+function parseMarket(value) {
+  return value.toUpperCase();
+}
+
+function getParsedSide(side) {
+  const sideEntry = SIDE_MAP.find((entry) => entry.options.includes(side));
+
+  return sideEntry?.parsed;
+}
+
+function parseSide(value) {
+  const parsedSide = getParsedSide(value);
+
+  if (parsedSide == null) {
+    throw new InvalidOptionArgumentError(
+      `Allowed choices are ${SIDE_CHOICES.join(', ')}.`
+    );
+  }
+
+  return parsedSide;
+}
+
+function getParsedOrderType(orderType) {
+  const orderTypeEntry = ORDER_TYPE_MAP.find((entry) =>
+    entry.options.includes(orderType)
+  );
+
+  return orderTypeEntry?.parsed;
+}
+
+function parseOrderType(value) {
+  const parsedOrderType = getParsedOrderType(value);
+
+  if (parsedOrderType == null) {
+    throw new InvalidOptionArgumentError(
+      `Allowed choices are ${ORDER_TYPE_CHOICES.join(', ')}.`
+    );
+  }
+
+  return parsedOrderType;
+}
+
 const parseOption = {
   repeat: parseRepeat,
   currency: parseCurrency,
@@ -188,6 +244,9 @@ const parseOption = {
   spotType: parseSpotType,
   tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
+  market: parseMarket,
+  side: parseSide,
+  orderType: parseOrderType,
 };
 
 export { parseOption };

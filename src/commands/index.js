@@ -8,6 +8,7 @@ import { offers } from './offers/index.js';
 import { rates } from './rates/index.js';
 import { spot } from './spot/index.js';
 import { stop } from './stop/index.js';
+import { trade } from './trade/index.js';
 
 const Commands = {
   config,
@@ -20,6 +21,7 @@ const Commands = {
   rates,
   spot,
   stop,
+  trade,
 };
 
 export { Commands };
