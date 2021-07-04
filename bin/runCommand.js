@@ -4,6 +4,7 @@ import cron from 'node-cron';
 import { Commands } from '../src/commands/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { handleError } from './handleError.js';
+import { notifyUpdate } from './notifyUpdate.js';
 
 // Repeat at XX:XX:00; used if no user/command-provided schedule.
 const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
@@ -20,6 +21,9 @@ function getGlobalOptions() {
     repeat: inlineGlobalOptions.repeat,
     enableColours:
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
+    enableUpdateNotifications:
+      inlineGlobalOptions.updateNotifications ??
+      CONFIG.USER.get('ENABLE_UPDATE_NOTIFICATIONS'),
   };
 }
 
@@ -50,6 +54,10 @@ async function runCommand(command, inlineCommandOptions) {
   const runWithOptions = () => run(options);
 
   try {
+    if (options.global.enableUpdateNotifications) {
+      notifyUpdate(options.global.enableColours);
+    }
+
     if (options.global.repeat == null) {
       await runWithOptions();
 

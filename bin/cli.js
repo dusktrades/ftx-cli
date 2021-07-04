@@ -27,6 +27,14 @@ const GLOBAL_OPTIONS = {
   ],
   ENABLE_COLOURS: ['--colour', 'enable coloured output'],
   DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
+  ENABLE_UPDATE_NOTIFICATIONS: [
+    '--update-notifications',
+    'enable update notifications',
+  ],
+  DISABLE_UPDATE_NOTIFICATIONS: [
+    '--no-update-notifications',
+    'disable update notifications',
+  ],
 };
 
 const COMMAND_OPTIONS = {
@@ -79,7 +87,9 @@ program
   .option(...GLOBAL_OPTIONS.SUBACCOUNT)
   .option(...GLOBAL_OPTIONS.REPEAT)
   .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS);
+  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS)
+  .option(...GLOBAL_OPTIONS.ENABLE_UPDATE_NOTIFICATIONS)
+  .option(...GLOBAL_OPTIONS.DISABLE_UPDATE_NOTIFICATIONS);
 
 program
   .command('login')

@@ -6,6 +6,10 @@ import { CONFIG } from '../../config/index.js';
 const CONFIG_OPTIONS = [
   { OPTION_KEY: 'exchange', CONFIG_KEY: 'EXCHANGE' },
   { OPTION_KEY: 'colour', CONFIG_KEY: 'ENABLE_COLOURS' },
+  {
+    OPTION_KEY: 'updateNotifications',
+    CONFIG_KEY: 'ENABLE_UPDATE_NOTIFICATIONS',
+  },
 ];
 
 function setOption(key, value) {
