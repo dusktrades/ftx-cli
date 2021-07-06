@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { InvalidOptionArgumentError } from 'commander';
 import cron from 'node-cron';
 
@@ -236,6 +237,16 @@ function parseOrderType(value) {
   return parsedOrderType;
 }
 
+function parseOrderCount(value) {
+  const orderCount = new BigNumber(value);
+
+  if (!orderCount.isInteger() || orderCount.isLessThanOrEqualTo(0)) {
+    throw new InvalidOptionArgumentError('Not an accepted order count format.');
+  }
+
+  return orderCount;
+}
+
 const parseOption = {
   repeat: parseRepeat,
   currency: parseCurrency,
@@ -247,6 +258,7 @@ const parseOption = {
   market: parseMarket,
   side: parseSide,
   orderType: parseOrderType,
+  orderCount: parseOrderCount,
 };
 
 export { parseOption };

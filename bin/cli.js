@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import BigNumber from 'bignumber.js';
 import { Option, program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
@@ -29,6 +30,8 @@ const GLOBAL_OPTIONS = {
   DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
 };
 
+const TYPE_FLAGS = '-t, --type <type>';
+
 const COMMAND_OPTIONS = {
   CURRENCY: [
     '-c, --currency <currency>',
@@ -43,7 +46,7 @@ const COMMAND_OPTIONS = {
   ],
 
   // TODO: Convert to regular spread option instead of custom constructor.
-  SPOT_TYPE: new Option('-t, --type <type>', 'spot type').argParser(
+  SPOT_TYPE: new Option(TYPE_FLAGS, 'spot type').argParser(
     parseOption.spotType
   ),
   QUOTE_CURRENCY: [
@@ -57,14 +60,20 @@ const COMMAND_OPTIONS = {
     parseOption.tokenLeverage,
   ],
 
-  FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
+  FUTURE_TYPE: new Option(TYPE_FLAGS, 'future type').argParser(
     parseOption.futureType
   ),
 
   MARKET: ['-m, --market <market>', 'market symbol', parseOption.market],
   SIDE: ['--side <side>', 'order side', parseOption.side],
-  ORDER_TYPE: ['-o, --order-type <type>', 'order type', parseOption.orderType],
-  PRICE: ['-p, --price <price>', 'limit price', parseOption.price],
+  ORDER_TYPE: [TYPE_FLAGS, 'order type', parseOption.orderType],
+  PRICE: ['-p, --price <price>', 'limit price', parseOption.size],
+  ORDER_COUNT: [
+    '--count <count>',
+    'order count',
+    parseOption.orderCount,
+    new BigNumber(1),
+  ],
 };
 
 program.version(CONFIG.PACKAGE.version, '-v, --version');
@@ -175,11 +184,12 @@ program
 program
   .command('trade')
   .description('place order')
-  .option(...COMMAND_OPTIONS.MARKET)
-  .option(...COMMAND_OPTIONS.SIDE)
-  .option(...COMMAND_OPTIONS.ORDER_TYPE)
+  .requiredOption(...COMMAND_OPTIONS.MARKET)
+  .requiredOption(...COMMAND_OPTIONS.SIDE)
+  .requiredOption(...COMMAND_OPTIONS.ORDER_TYPE)
   .option(...COMMAND_OPTIONS.PRICE)
-  .option(...COMMAND_OPTIONS.SIZE)
+  .requiredOption(...COMMAND_OPTIONS.SIZE)
+  .option(...COMMAND_OPTIONS.ORDER_COUNT)
   .action((inlineCommandOptions) => runCommand('trade', inlineCommandOptions));
 
 program.parseAsync(process.argv);

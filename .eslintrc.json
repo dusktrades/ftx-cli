@@ -33,8 +33,10 @@
     "import/extensions": ["error", "always", { "ignorePackages": true }],
     "import/namespace": "error",
     "import/no-default-export": "error",
+    "import/no-unresolved": ["error", { "ignore": ["^p-queue$"] }],
     "import/prefer-default-export": "off",
 
+    "node/no-missing-import": ["error", { "allowModules": ["p-queue"] }],
     "node/no-unsupported-features/es-syntax": "off",
 
     "sonarjs/prefer-immediate-return": "error",

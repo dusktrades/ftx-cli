@@ -46,7 +46,8 @@
     "commander": "^7.2.0",
     "conf": "^10.0.1",
     "got": "^11.8.2",
-    "node-cron": "^3.0.0"
+    "node-cron": "^3.0.0",
+    "p-queue": "^7.1.0"
   },
   "devDependencies": {
     "eslint": "^7.28.0",

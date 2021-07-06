@@ -83,6 +83,7 @@ async function get({ exchange, credentials, filters, sortBy }) {
   // Lending info endpoint gives more detail than lending offers endpoint.
   const data = await spotMargin.getLendingInfo({ exchange, credentials });
 
+  // TODO: Move check to post-filter so useless placeholder offers don't count.
   if (data.length === 0) {
     throw new EmptyResultsError('No lending offers found');
   }
