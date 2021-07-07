@@ -67,7 +67,7 @@ const COMMAND_OPTIONS = {
   MARKET: ['-m, --market <market>', 'market symbol', parseOption.market],
   SIDE: ['--side <side>', 'order side', parseOption.side],
   ORDER_TYPE: [TYPE_FLAGS, 'order type', parseOption.orderType],
-  PRICE: ['-p, --price <price>', 'limit price', parseOption.size],
+  PRICE: ['-p, --price <price>', 'limit price', parseOption.price],
   ORDER_COUNT: [
     '--count <count>',
     'order count',

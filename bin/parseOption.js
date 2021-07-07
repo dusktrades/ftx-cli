@@ -237,6 +237,23 @@ function parseOrderType(value) {
   return parsedOrderType;
 }
 
+function parsePrice(value) {
+  // Simple price input.
+  if (!value.includes('-')) {
+    return new BigNumber(parseSize(value));
+  }
+
+  // Price range input.
+  const values = value
+    .split('-')
+    .map((singleValue) => new BigNumber(parseSize(singleValue)));
+
+  return {
+    from: BigNumber.min(...values),
+    to: BigNumber.max(...values),
+  };
+}
+
 function parseOrderCount(value) {
   const orderCount = new BigNumber(value);
 
@@ -258,6 +275,7 @@ const parseOption = {
   market: parseMarket,
   side: parseSide,
   orderType: parseOrderType,
+  price: parsePrice,
   orderCount: parseOrderCount,
 };
 

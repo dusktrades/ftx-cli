@@ -9,10 +9,11 @@ function processPrice(data) {
     return null;
   }
 
-  return data.price;
+  return data.price.toNumber();
 }
 
 function processSize(data) {
+  // TODO: Parse input to BigNumber instead of in controller.
   return new BigNumber(data.size).dividedBy(data.orderCount).toNumber();
 }
 
@@ -32,11 +33,39 @@ function composeRequest(exchange, credentials, data) {
   return orders.placeOrder({ exchange, credentials, requestBody });
 }
 
+function calculateStep(data) {
+  const difference = data.price.to.minus(data.price.from);
+  const additionalOrderCount = data.orderCount.minus(new BigNumber(1));
+
+  if (additionalOrderCount.isZero()) {
+    return new BigNumber(0);
+  }
+
+  return difference.dividedBy(additionalOrderCount);
+}
+
 function composeRequests(exchange, credentials, data) {
-  const composeRequestFunction = () =>
+  const composeSimpleRequest = () =>
     composeRequest(exchange, credentials, data);
 
-  return Array.from({ length: data.orderCount }, () => composeRequestFunction);
+  // Simple price.
+  if (data.price.from == null) {
+    return Array.from({ length: data.orderCount }, () => composeSimpleRequest);
+  }
+
+  // Price range.
+  const step = calculateStep(data);
+
+  return Array.from({ length: data.orderCount }, (_, orderIndex) => {
+    const offset = step.multipliedBy(orderIndex);
+
+    const processedData = {
+      ...data,
+      price: data.price.from.plus(offset),
+    };
+
+    return () => composeRequest(exchange, credentials, processedData);
+  });
 }
 
 async function place({ exchange, credentials, data }) {
