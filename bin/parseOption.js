@@ -249,7 +249,7 @@ function parseSimplePrice(value) {
 
 function parsePriceRange(value) {
   const values = value
-    .split('-')
+    .split(':')
     .map((simplePrice) => parseSimplePrice(simplePrice));
 
   return {
@@ -259,11 +259,11 @@ function parsePriceRange(value) {
 }
 
 function parsePrice(value) {
-  if (!value.includes('-')) {
-    return parseSimplePrice(value);
+  if (value.includes(':')) {
+    return parsePriceRange(value);
   }
 
-  return parsePriceRange(value);
+  return parseSimplePrice(value);
 }
 
 function parseOrderCount(value) {
