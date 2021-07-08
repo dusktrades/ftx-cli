@@ -28,8 +28,12 @@ const GLOBAL_OPTIONS = {
   ],
   ENABLE_COLOURS: ['--colour', 'enable coloured output'],
   DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
-  ENABLE_POST_ONLY: ['--post-only', 'enable post-only mode'],
-  DISABLE_POST_ONLY: ['--no-post-only', 'disable post-only mode'],
+  ENABLE_POST_ONLY: ['--post-only', 'enable Post-Only mode'],
+  DISABLE_POST_ONLY: ['--no-post-only', 'disable Post-Only mode'],
+  ENABLE_IOC: ['--ioc', 'enable Immediate-or-Cancel (IOC) mode'],
+  DISABLE_IOC: ['--no-ioc', 'disable Immediate-or-Cancel (IOC) mode'],
+  ENABLE_REDUCE_ONLY: ['--reduce-only', 'enable Reduce-Only mode'],
+  DISABLE_REDUCE_ONLY: ['--no-reduce-only', 'disable Reduce-Only mode'],
 };
 
 const TYPE_FLAGS = '-t, --type <type>';
@@ -97,7 +101,11 @@ program
   .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
   .option(...GLOBAL_OPTIONS.DISABLE_COLOURS)
   .option(...GLOBAL_OPTIONS.ENABLE_POST_ONLY)
-  .option(...GLOBAL_OPTIONS.DISABLE_POST_ONLY);
+  .option(...GLOBAL_OPTIONS.DISABLE_POST_ONLY)
+  .option(...GLOBAL_OPTIONS.ENABLE_IOC)
+  .option(...GLOBAL_OPTIONS.DISABLE_IOC)
+  .option(...GLOBAL_OPTIONS.ENABLE_REDUCE_ONLY)
+  .option(...GLOBAL_OPTIONS.DISABLE_REDUCE_ONLY);
 
 program
   .command('login')

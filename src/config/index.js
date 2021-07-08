@@ -9,7 +9,9 @@ const USER = new Conf({
   projectSuffix: '',
   defaults: {
     ENABLE_COLOURS: true,
+    ENABLE_IOC: false,
     ENABLE_POST_ONLY: true,
+    ENABLE_REDUCE_ONLY: false,
     EXCHANGE: 'ftx',
   },
 });

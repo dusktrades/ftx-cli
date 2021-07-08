@@ -22,6 +22,9 @@ function getGlobalOptions() {
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
     enablePostOnly:
       inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
+    enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
+    enableReduceOnly:
+      inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
   };
 }
 

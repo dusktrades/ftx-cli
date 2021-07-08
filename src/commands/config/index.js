@@ -6,6 +6,9 @@ import { CONFIG } from '../../config/index.js';
 const CONFIG_OPTIONS = [
   { OPTION_KEY: 'exchange', CONFIG_KEY: 'EXCHANGE' },
   { OPTION_KEY: 'colour', CONFIG_KEY: 'ENABLE_COLOURS' },
+  { OPTION_KEY: 'postOnly', CONFIG_KEY: 'ENABLE_POST_ONLY' },
+  { OPTION_KEY: 'ioc', CONFIG_KEY: 'ENABLE_IOC' },
+  { OPTION_KEY: 'reduceOnly', CONFIG_KEY: 'ENABLE_REDUCE_ONLY' },
 ];
 
 function setOption(key, value) {
