@@ -15,6 +15,7 @@ async function run(options) {
     price: options.command.price,
     size: options.command.size,
     orderCount: options.command.count,
+    enablePostOnly: options.global.enablePostOnly,
   };
 
   await Ftx.orders.place({

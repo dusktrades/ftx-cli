@@ -20,6 +20,8 @@ function getGlobalOptions() {
     repeat: inlineGlobalOptions.repeat,
     enableColours:
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
+    enablePostOnly:
+      inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
   };
 }
 

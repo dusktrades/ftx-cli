@@ -17,6 +17,15 @@ function processSize(data) {
   return new BigNumber(data.size).dividedBy(data.orderCount).toNumber();
 }
 
+function processPostOnly(data) {
+  // Market orders can't be post-only.
+  if (data.type === 'market') {
+    return false;
+  }
+
+  return data.enablePostOnly;
+}
+
 function composeRequestBody(data) {
   return {
     market: data.market,
@@ -24,6 +33,7 @@ function composeRequestBody(data) {
     type: data.type,
     price: processPrice(data),
     size: processSize(data),
+    postOnly: processPostOnly(data),
   };
 }
 
@@ -31,6 +41,13 @@ function composeRequest(exchange, credentials, data) {
   const requestBody = composeRequestBody(data);
 
   return orders.placeOrder({ exchange, credentials, requestBody });
+}
+
+function composeSimpleRequests(exchange, credentials, data) {
+  const composeSimpleRequest = () =>
+    composeRequest(exchange, credentials, data);
+
+  return Array.from({ length: data.orderCount }, () => composeSimpleRequest);
 }
 
 function calculateStep(data) {
@@ -44,16 +61,21 @@ function calculateStep(data) {
   return difference.dividedBy(additionalOrderCount);
 }
 
-function composeRequests(exchange, credentials, data) {
-  const composeSimpleRequest = () =>
-    composeRequest(exchange, credentials, data);
-
-  // Simple price.
-  if (data.price.from == null) {
-    return Array.from({ length: data.orderCount }, () => composeSimpleRequest);
+/**
+ * Calculate price based on order side so we can prioritise placing orders
+ * closer to the spread.
+ */
+function calculatePrice(data, offset) {
+  // Sell orders: prioritise low to high.
+  if (data.side === 'sell') {
+    return data.price.from.plus(offset);
   }
 
-  // Price range.
+  // Buy orders: prioritise high to low.
+  return data.price.to.minus(offset);
+}
+
+function composeScaledRequests(exchange, credentials, data) {
   const step = calculateStep(data);
 
   return Array.from({ length: data.orderCount }, (_, orderIndex) => {
@@ -61,11 +83,19 @@ function composeRequests(exchange, credentials, data) {
 
     const processedData = {
       ...data,
-      price: data.price.from.plus(offset),
+      price: calculatePrice(data, offset),
     };
 
     return () => composeRequest(exchange, credentials, processedData);
   });
+}
+
+function composeRequests(exchange, credentials, data) {
+  if (data.price?.from == null) {
+    return composeSimpleRequests(exchange, credentials, data);
+  }
+
+  return composeScaledRequests(exchange, credentials, data);
 }
 
 async function place({ exchange, credentials, data }) {

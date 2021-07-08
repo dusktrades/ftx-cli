@@ -237,21 +237,33 @@ function parseOrderType(value) {
   return parsedOrderType;
 }
 
-function parsePrice(value) {
-  // Simple price input.
-  if (!value.includes('-')) {
-    return new BigNumber(parseSize(value));
+function parseSimplePrice(value) {
+  const parsedPrice = new BigNumber(parseSize(value));
+
+  if (parsedPrice.isZero()) {
+    throw new InvalidOptionArgumentError('Not an accepted price format.');
   }
 
-  // Price range input.
+  return parsedPrice;
+}
+
+function parsePriceRange(value) {
   const values = value
     .split('-')
-    .map((singleValue) => new BigNumber(parseSize(singleValue)));
+    .map((simplePrice) => parseSimplePrice(simplePrice));
 
   return {
     from: BigNumber.min(...values),
     to: BigNumber.max(...values),
   };
+}
+
+function parsePrice(value) {
+  if (!value.includes('-')) {
+    return parseSimplePrice(value);
+  }
+
+  return parsePriceRange(value);
 }
 
 function parseOrderCount(value) {

@@ -28,6 +28,8 @@ const GLOBAL_OPTIONS = {
   ],
   ENABLE_COLOURS: ['--colour', 'enable coloured output'],
   DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
+  ENABLE_POST_ONLY: ['--post-only', 'enable post-only mode'],
+  DISABLE_POST_ONLY: ['--no-post-only', 'disable post-only mode'],
 };
 
 const TYPE_FLAGS = '-t, --type <type>';
@@ -93,7 +95,9 @@ program
   .option(...GLOBAL_OPTIONS.SUBACCOUNT)
   .option(...GLOBAL_OPTIONS.REPEAT)
   .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS);
+  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS)
+  .option(...GLOBAL_OPTIONS.ENABLE_POST_ONLY)
+  .option(...GLOBAL_OPTIONS.DISABLE_POST_ONLY);
 
 program
   .command('login')
