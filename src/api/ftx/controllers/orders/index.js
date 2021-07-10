@@ -1,4 +1,4 @@
-import { place } from './place.js';
+import { place } from './place/index.js';
 
 const orders = { place };
 

@@ -43,6 +43,11 @@ const SIDE_CHOICES = SIDE_MAP.flatMap((entry) => entry.options);
 const ORDER_TYPE_MAP = [
   { parsed: 'market', options: ['m', 'market'] },
   { parsed: 'limit', options: ['l', 'limit'] },
+  { parsed: 'stop-market', options: ['sm', 'stop-market'] },
+  { parsed: 'stop-limit', options: ['sl', 'stop-limit'] },
+  { parsed: 'trailing-stop', options: ['ts', 'trailing-stop'] },
+  { parsed: 'take-profit-market', options: ['tpm', 'take-profit-market'] },
+  { parsed: 'take-profit-limit', options: ['tpl', 'take-profit-limit'] },
 ];
 
 const ORDER_TYPE_CHOICES = ORDER_TYPE_MAP.flatMap((entry) => entry.options);
