@@ -1,4 +1,3 @@
-import { queues } from '../../../queues/index.js';
 import { composeRegularRequests } from './regular/index.js';
 import { composeTriggerRequests } from './trigger/index.js';
 
@@ -14,18 +13,18 @@ function isTriggerOrder(type) {
   return TRIGGER_ORDER_TYPES.has(type);
 }
 
-function composeRequests(exchange, credentials, data) {
+async function queueRequests({ exchange, credentials, data }) {
   if (isTriggerOrder(data.type)) {
-    return composeTriggerRequests(exchange, credentials, data);
+    await composeTriggerRequests(exchange, credentials, data);
+
+    return;
   }
 
-  return composeRegularRequests(exchange, credentials, data);
+  await composeRegularRequests(exchange, credentials, data);
 }
 
-async function place({ exchange, credentials, data }) {
-  const requests = composeRequests(exchange, credentials, data);
-
-  return queues.orders.addAll(requests);
+async function place(options) {
+  await queueRequests(options);
 }
 
 export { place };

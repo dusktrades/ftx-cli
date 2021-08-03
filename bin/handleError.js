@@ -2,14 +2,15 @@ import {
   ApiError,
   EmptyResultsError,
   HttpError,
+  RateLimitError,
 } from '../src/common/errors/index.js';
 
 import { Logger } from '../src/common/logger/index.js';
 
-const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError];
+const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError, RateLimitError];
 
 function isErrorHandled(error) {
-  return HANDLED_ERRORS.some((errorType) => error instanceof errorType);
+  return HANDLED_ERRORS.some((handledError) => error instanceof handledError);
 }
 
 function handleError(error, enableColours) {

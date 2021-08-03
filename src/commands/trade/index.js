@@ -20,15 +20,23 @@ async function run(options) {
     enableReduceOnly: options.global.enableReduceOnly,
   };
 
-  await Ftx.orders.place({
-    exchange: options.global.exchange,
-    credentials,
-    data,
-  });
+  try {
+    await Ftx.orders.place({
+      exchange: options.global.exchange,
+      credentials,
+      data,
+    });
 
-  Logger.info('Placed order(s)', {
-    enableColours: options.global.enableColours,
-  });
+    Logger.info('Placed order(s)', {
+      enableColours: options.global.enableColours,
+    });
+  } catch (error) {
+    Logger.error('One or more orders failed to be placed', {
+      enableColours: options.global.enableColours,
+    });
+
+    throw error;
+  }
 }
 
 const trade = { run };

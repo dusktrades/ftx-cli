@@ -67,7 +67,7 @@ function composeRequestBody(data) {
 function composeRequest(exchange, credentials, data) {
   const requestBody = composeRequestBody(data);
 
-  return orders.placeOrder({ exchange, credentials, requestBody });
+  return () => orders.placeOrder({ exchange, credentials, requestBody });
 }
 
 export { composeRequest };

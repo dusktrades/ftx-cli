@@ -61,7 +61,7 @@ function composeRequestBody(data) {
 function composeRequest(exchange, credentials, data) {
   const requestBody = composeRequestBody(data);
 
-  return orders.placeTriggerOrder({ exchange, credentials, requestBody });
+  return () => orders.placeTriggerOrder({ exchange, credentials, requestBody });
 }
 
 export { composeRequest };

@@ -35,42 +35,43 @@ function getOptions(inlineCommandOptions) {
   };
 }
 
-async function repeatRun(runWithOptions, cronExpression) {
+async function repeatRun(run, options, cronExpression) {
   // Schedule repeat runs.
   cron.schedule(cronExpression, async () => {
-    await runWithOptions();
+    await run(options);
   });
 
   // Execute initial run.
-  await runWithOptions();
+  await run(options);
 }
 
-async function runCommand(command, inlineCommandOptions) {
+async function runFunction(command, options) {
   const {
     run,
     DEFAULT_REPEAT_CRON_EXPRESSION = FALLBACK_REPEAT_CRON_EXPRESSION,
   } = Commands[command];
 
-  const options = getOptions(inlineCommandOptions);
-  const runWithOptions = () => run(options);
+  if (options.global.repeat == null) {
+    await run(options);
 
-  try {
-    if (options.global.repeat == null) {
-      await runWithOptions();
-
-      return;
-    }
-
-    if (options.global.repeat === true) {
-      await repeatRun(runWithOptions, DEFAULT_REPEAT_CRON_EXPRESSION);
-
-      return;
-    }
-
-    await repeatRun(runWithOptions, options.global.repeat);
-  } catch (error) {
-    handleError(error, options.global.enableColours);
+    return;
   }
+
+  if (options.global.repeat === true) {
+    await repeatRun(run, options, DEFAULT_REPEAT_CRON_EXPRESSION);
+
+    return;
+  }
+
+  await repeatRun(run, options, options.global.repeat);
+}
+
+async function runCommand(command, inlineCommandOptions) {
+  const options = getOptions(inlineCommandOptions);
+
+  await runFunction(command, options).catch((error) => {
+    handleError(error, options.global.enableColours);
+  });
 }
 
 export { runCommand };

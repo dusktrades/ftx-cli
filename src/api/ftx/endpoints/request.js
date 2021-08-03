@@ -1,6 +1,10 @@
 import got from 'got';
 
-import { ApiError, HttpError } from '../../../common/errors/index.js';
+import {
+  ApiError,
+  HttpError,
+  RateLimitError,
+} from '../../../common/errors/index.js';
 
 function composeOptions(headers, requestBody) {
   return {
@@ -27,22 +31,32 @@ function getErrorMessage(error) {
   return parsedResponseBody.error;
 }
 
+function handleError(error) {
+  const message = getErrorMessage(error);
+
+  if (message == null) {
+    // Unexpected error unhandled by API.
+    throw new HttpError(error);
+  }
+
+  if (error?.response?.statusCode === 429) {
+    // Rate limit error handled by API.
+    throw new RateLimitError(message);
+  }
+
+  // Generic error handled by API.
+  throw new ApiError(message);
+}
+
 async function request({ url, method = 'get', headers, requestBody }) {
+  const options = composeOptions(headers, requestBody);
+
   try {
-    const options = composeOptions(headers, requestBody);
     const response = await got[method](url, options).json();
 
     return response.result;
   } catch (error) {
-    const message = getErrorMessage(error);
-
-    if (message == null) {
-      // Error is unexpected and not handled by API.
-      throw new HttpError(error);
-    }
-
-    // Error is handled by API.
-    throw new ApiError(message);
+    return handleError(error);
   }
 }
 
