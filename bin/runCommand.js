@@ -25,6 +25,7 @@ function getGlobalOptions() {
     enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
     enableReduceOnly:
       inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
+    enableRetry: inlineGlobalOptions.retry ?? CONFIG.USER.get('ENABLE_RETRY'),
   };
 }
 

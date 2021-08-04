@@ -34,6 +34,8 @@ const GLOBAL_OPTIONS = {
   DISABLE_IOC: ['--no-ioc', 'disable Immediate-or-Cancel (IOC) mode'],
   ENABLE_REDUCE_ONLY: ['--reduce-only', 'enable Reduce-Only mode'],
   DISABLE_REDUCE_ONLY: ['--no-reduce-only', 'disable Reduce-Only mode'],
+  ENABLE_RETRY: ['--retry', 'enable Retry-Until-Filled mode'],
+  DISABLE_RETRY: ['--no-retry', 'disable Retry-Until-Filled mode'],
 };
 
 const TYPE_FLAGS = '-t, --type <type>';
@@ -74,6 +76,12 @@ const COMMAND_OPTIONS = {
   SIDE: ['--side <side>', 'order side', parseOption.side],
   ORDER_TYPE: [TYPE_FLAGS, 'order type', parseOption.orderType],
   PRICE: ['-p, --price <price>', 'limit price', parseOption.price],
+  TRIGGER_PRICE: [
+    '--trigger-price <price>',
+    'trigger price',
+    parseOption.price,
+  ],
+  TRAIL_VALUE: ['--trail-value <value>', 'trail value', parseOption.trailValue],
   ORDER_COUNT: [
     '--count <count>',
     'order count',
@@ -105,7 +113,9 @@ program
   .option(...GLOBAL_OPTIONS.ENABLE_IOC)
   .option(...GLOBAL_OPTIONS.DISABLE_IOC)
   .option(...GLOBAL_OPTIONS.ENABLE_REDUCE_ONLY)
-  .option(...GLOBAL_OPTIONS.DISABLE_REDUCE_ONLY);
+  .option(...GLOBAL_OPTIONS.DISABLE_REDUCE_ONLY)
+  .option(...GLOBAL_OPTIONS.ENABLE_RETRY)
+  .option(...GLOBAL_OPTIONS.DISABLE_RETRY);
 
 program
   .command('login')
@@ -201,6 +211,8 @@ program
   .requiredOption(...COMMAND_OPTIONS.ORDER_TYPE)
   .option(...COMMAND_OPTIONS.PRICE)
   .requiredOption(...COMMAND_OPTIONS.SIZE)
+  .option(...COMMAND_OPTIONS.TRIGGER_PRICE)
+  .option(...COMMAND_OPTIONS.TRAIL_VALUE)
   .option(...COMMAND_OPTIONS.ORDER_COUNT)
   .action((inlineCommandOptions) => runCommand('trade', inlineCommandOptions));
 

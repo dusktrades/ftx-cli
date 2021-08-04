@@ -271,6 +271,16 @@ function parsePrice(value) {
   return parseSimplePrice(value);
 }
 
+function parseTrailValue(value) {
+  const trailValue = new BigNumber(value);
+
+  if (trailValue.isNaN()) {
+    throw new InvalidOptionArgumentError('Not an accepted trail value format.');
+  }
+
+  return trailValue;
+}
+
 function parseOrderCount(value) {
   const orderCount = new BigNumber(value);
 
@@ -293,6 +303,7 @@ const parseOption = {
   side: parseSide,
   orderType: parseOrderType,
   price: parsePrice,
+  trailValue: parseTrailValue,
   orderCount: parseOrderCount,
 };
 

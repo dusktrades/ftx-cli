@@ -64,10 +64,10 @@ function composeRequestBody(data) {
   };
 }
 
-function composeRequest(exchange, credentials, data) {
+function composeRegularRequest(exchange, credentials, data) {
   const requestBody = composeRequestBody(data);
 
   return () => orders.placeOrder({ exchange, credentials, requestBody });
 }
 
-export { composeRequest };
+export { composeRegularRequest };

@@ -14,10 +14,13 @@ async function run(options) {
     type: options.command.type,
     price: options.command.price,
     size: options.command.size,
+    triggerPrice: options.command.triggerPrice,
+    trailValue: options.command.trailValue,
     orderCount: options.command.count,
     enablePostOnly: options.global.enablePostOnly,
     enableIoc: options.global.enableIoc,
     enableReduceOnly: options.global.enableReduceOnly,
+    enableRetry: options.global.enableRetry,
   };
 
   try {
