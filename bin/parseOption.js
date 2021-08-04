@@ -3,6 +3,7 @@ import { InvalidOptionArgumentError } from 'commander';
 import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
+import { parsers } from './parsers/index.js';
 
 const SPOT_TYPE_MAP = [
   { parsed: 'coin', options: ['coin'] },
@@ -68,38 +69,6 @@ function parseRepeat(value) {
 
 function parseCurrency(value) {
   return value.split(',').map((entry) => entry.toUpperCase());
-}
-
-function parseThousandString(value) {
-  const [multiplier] = value.split(/[kK]/);
-
-  return Number.parseFloat(multiplier) * 1000;
-}
-
-function parseMillionString(value) {
-  const [multiplier] = value.split(/[mM]/);
-
-  return Number.parseFloat(multiplier) * 1_000_000;
-}
-
-function parseSize(value) {
-  const thousandMatch = value.match(/^\d+(?:\.\d+)?[kK]$/);
-
-  if (thousandMatch != null) {
-    return parseThousandString(thousandMatch[0]);
-  }
-
-  const millionMatch = value.match(/^\d+(?:\.\d+)?[mM]$/);
-
-  if (millionMatch != null) {
-    return parseMillionString(millionMatch[0]);
-  }
-
-  if (!isPositiveFloat(value)) {
-    throw new InvalidOptionArgumentError('Not an accepted size format.');
-  }
-
-  return Number.parseFloat(value);
 }
 
 function parseMinRate(value) {
@@ -242,35 +211,6 @@ function parseOrderType(value) {
   return parsedOrderType;
 }
 
-function parseSimplePrice(value) {
-  const parsedPrice = new BigNumber(parseSize(value));
-
-  if (parsedPrice.isZero()) {
-    throw new InvalidOptionArgumentError('Not an accepted price format.');
-  }
-
-  return parsedPrice;
-}
-
-function parsePriceRange(value) {
-  const values = value
-    .split(':')
-    .map((simplePrice) => parseSimplePrice(simplePrice));
-
-  return {
-    from: BigNumber.min(...values),
-    to: BigNumber.max(...values),
-  };
-}
-
-function parsePrice(value) {
-  if (value.includes(':')) {
-    return parsePriceRange(value);
-  }
-
-  return parseSimplePrice(value);
-}
-
 function parseTrailValue(value) {
   const trailValue = new BigNumber(value);
 
@@ -294,7 +234,7 @@ function parseOrderCount(value) {
 const parseOption = {
   repeat: parseRepeat,
   currency: parseCurrency,
-  size: parseSize,
+  size: parsers.size,
   minRate: parseMinRate,
   spotType: parseSpotType,
   tokenLeverage: parseTokenLeverage,
@@ -302,7 +242,7 @@ const parseOption = {
   market: parseMarket,
   side: parseSide,
   orderType: parseOrderType,
-  price: parsePrice,
+  price: parsers.price,
   trailValue: parseTrailValue,
   orderCount: parseOrderCount,
 };
