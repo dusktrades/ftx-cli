@@ -221,16 +221,6 @@ function parseTrailValue(value) {
   return trailValue;
 }
 
-function parseOrderCount(value) {
-  const orderCount = new BigNumber(value);
-
-  if (!orderCount.isInteger() || orderCount.isLessThanOrEqualTo(0)) {
-    throw new InvalidOptionArgumentError('Not an accepted order count format.');
-  }
-
-  return orderCount;
-}
-
 const parseOption = {
   repeat: parseRepeat,
   currency: parseCurrency,
@@ -244,7 +234,7 @@ const parseOption = {
   orderType: parseOrderType,
   price: parsers.price,
   trailValue: parseTrailValue,
-  orderCount: parseOrderCount,
+  orderCount: parsers.orderCount,
 };
 
 export { parseOption };
