@@ -11,7 +11,6 @@ export { formatPercentageChange } from './formatPercentageChange.js';
 export { formatUsd } from './formatUsd.js';
 export { getUnixTimestamp } from './getUnixTimestamp.js';
 export { getValueSign } from './getValueSign.js';
-export { isPositiveFloat } from './isPositiveFloat.js';
 export { removeNullValues } from './removeNullValues.js';
 export { SECONDS_PER_HOUR } from './secondsPerHour.js';
 export { shorthandNumber } from './shorthandNumber.js';

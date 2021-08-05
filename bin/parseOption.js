@@ -1,6 +1,5 @@
 import { InvalidOptionArgumentError } from 'commander';
 
-import { isPositiveFloat } from '../src/util/index.js';
 import { parsers } from './parsers/index.js';
 
 const SPOT_TYPE_MAP = [
@@ -31,16 +30,6 @@ const FUTURE_TYPE_MAP = [
 ];
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
-
-function parseMinRate(value) {
-  if (!isPositiveFloat(value)) {
-    throw new InvalidOptionArgumentError(
-      'Not an accepted minimum rate format.'
-    );
-  }
-
-  return Number.parseFloat(value);
-}
 
 function getParsedSpotType(type) {
   const spotTypeEntry = SPOT_TYPE_MAP.find((entry) =>
@@ -134,7 +123,7 @@ const parseOption = {
   repeat: parsers.repeat,
   currency: parsers.currency,
   size: parsers.size,
-  minRate: parseMinRate,
+  minRate: parsers.minRate,
   spotType: parseSpotType,
   tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
