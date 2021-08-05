@@ -32,10 +32,6 @@ const FUTURE_TYPE_MAP = [
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
 
-function parseCurrency(value) {
-  return value.split(',').map((entry) => entry.toUpperCase());
-}
-
 function parseMinRate(value) {
   if (!isPositiveFloat(value)) {
     throw new InvalidOptionArgumentError(
@@ -136,7 +132,7 @@ function parseFutureType(value) {
 
 const parseOption = {
   repeat: parsers.repeat,
-  currency: parseCurrency,
+  currency: parsers.currency,
   size: parsers.size,
   minRate: parseMinRate,
   spotType: parseSpotType,
