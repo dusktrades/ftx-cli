@@ -9,6 +9,7 @@ import { parseRepeat } from './parseRepeat.js';
 import { parseSide } from './parseSide.js';
 import { parseSize } from './parseSize.js';
 import { parseSpotType } from './parseSpotType.js';
+import { parseTokenLeverage } from './parseTokenLeverage.js';
 import { parseTrailValue } from './parseTrailValue.js';
 
 const options = {
@@ -23,6 +24,7 @@ const options = {
   side: parseSide,
   size: parseSize,
   spotType: parseSpotType,
+  tokenLeverage: parseTokenLeverage,
   trailValue: parseTrailValue,
 };
 
