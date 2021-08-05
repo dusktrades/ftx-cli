@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { InvalidOptionArgumentError } from 'commander';
 
 import { isPositiveFloat } from '../src/util/index.js';
@@ -135,16 +134,6 @@ function parseFutureType(value) {
   return parsedValues;
 }
 
-function parseTrailValue(value) {
-  const trailValue = new BigNumber(value);
-
-  if (trailValue.isNaN()) {
-    throw new InvalidOptionArgumentError('Not an accepted trail value format.');
-  }
-
-  return trailValue;
-}
-
 const parseOption = {
   repeat: parsers.repeat,
   currency: parseCurrency,
@@ -157,7 +146,7 @@ const parseOption = {
   side: parsers.side,
   orderType: parsers.orderType,
   price: parsers.price,
-  trailValue: parseTrailValue,
+  trailValue: parsers.trailValue,
   orderCount: parsers.orderCount,
 };
 

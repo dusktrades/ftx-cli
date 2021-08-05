@@ -5,6 +5,7 @@ import { parsePrice } from './parsePrice.js';
 import { parseRepeat } from './parseRepeat.js';
 import { parseSide } from './parseSide.js';
 import { parseSize } from './parseSize.js';
+import { parseTrailValue } from './parseTrailValue.js';
 
 const options = {
   market: parseMarket,
@@ -14,6 +15,7 @@ const options = {
   repeat: parseRepeat,
   side: parseSide,
   size: parseSize,
+  trailValue: parseTrailValue,
 };
 
 export { options };
