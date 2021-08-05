@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-import BigNumber from 'bignumber.js';
 import { Option, program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
-import { parseOption } from './parseOption.js';
+import { OPTIONS } from './options/index.js';
 import { runCommand } from './runCommand.js';
 
 function composeSortOption(choices) {
@@ -13,109 +12,29 @@ function composeSortOption(choices) {
   );
 }
 
-const GLOBAL_OPTIONS = {
-  EXCHANGE: new Option(
-    '-e, --exchange <exchange>',
-    'FTX exchange platform'
-  ).choices(['ftx', 'ftx-us']),
-  API_KEY: ['-k, --key <key>', 'FTX API key'],
-  API_SECRET: ['-x, --secret <secret>', 'FTX API secret'],
-  SUBACCOUNT: ['-a, --subaccount <subaccount>', 'FTX subaccount name'],
-  REPEAT: [
-    '-z, --repeat [cron expression]',
-    'repeat the command with optional schedule',
-    parseOption.repeat,
-  ],
-  ENABLE_COLOURS: ['--colour', 'enable coloured output'],
-  DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
-  ENABLE_POST_ONLY: ['--post-only', 'enable Post-Only mode'],
-  DISABLE_POST_ONLY: ['--no-post-only', 'disable Post-Only mode'],
-  ENABLE_IOC: ['--ioc', 'enable Immediate-or-Cancel (IOC) mode'],
-  DISABLE_IOC: ['--no-ioc', 'disable Immediate-or-Cancel (IOC) mode'],
-  ENABLE_REDUCE_ONLY: ['--reduce-only', 'enable Reduce-Only mode'],
-  DISABLE_REDUCE_ONLY: ['--no-reduce-only', 'disable Reduce-Only mode'],
-  ENABLE_RETRY: ['--retry', 'enable Retry-Until-Filled mode'],
-  DISABLE_RETRY: ['--no-retry', 'disable Retry-Until-Filled mode'],
-};
-
-const TYPE_FLAGS = '-t, --type <type>';
-
-const COMMAND_OPTIONS = {
-  CURRENCY: [
-    '-c, --currency <currency>',
-    'currency symbol(s)',
-    parseOption.currency,
-  ],
-  SIZE: ['-s, --size <size>', 'currency amount', parseOption.size],
-  MIN_RATE: [
-    '-r, --min-rate <rate>',
-    'minimum yearly lending rate (%)',
-    parseOption.minRate,
-  ],
-
-  // TODO: Convert to regular spread option instead of custom constructor.
-  SPOT_TYPE: new Option(TYPE_FLAGS, 'spot type').argParser(
-    parseOption.spotType
-  ),
-  QUOTE_CURRENCY: [
-    '-q, --quote-currency <currency>',
-    'quote currency symbol(s)',
-    parseOption.quoteCurrency,
-  ],
-  TOKEN_LEVERAGE: [
-    '--token-leverage <leverage>',
-    'token leverage name or multiplier',
-    parseOption.tokenLeverage,
-  ],
-
-  FUTURE_TYPE: new Option(TYPE_FLAGS, 'future type').argParser(
-    parseOption.futureType
-  ),
-
-  MARKET: ['-m, --market <market>', 'market symbol', parseOption.market],
-  SIDE: ['--side <side>', 'order side', parseOption.side],
-  ORDER_TYPE: [TYPE_FLAGS, 'order type', parseOption.orderType],
-  PRICE: ['-p, --price <price>', 'limit price', parseOption.price],
-  TRIGGER_PRICE: [
-    '--trigger-price <price>',
-    'trigger price',
-    parseOption.triggerPrice,
-  ],
-  TRAIL_VALUE: ['--trail-value <value>', 'trail value', parseOption.trailValue],
-  ORDER_COUNT: [
-    '--count <count>',
-    'order count',
-    parseOption.orderCount,
-    new BigNumber(1),
-  ],
-};
-
 program.version(CONFIG.PACKAGE.version, '-v, --version');
 
 program.addHelpText(
   'after',
-
-  // TODO: Change to newline instead of template string.
-  `
-GitHub: https://github.com/dusktrades/ftx-cli`
+  '\nGitHub: https://github.com/dusktrades/ftx-cli#readme'
 );
 
 program
-  .addOption(GLOBAL_OPTIONS.EXCHANGE)
-  .option(...GLOBAL_OPTIONS.API_KEY)
-  .option(...GLOBAL_OPTIONS.API_SECRET)
-  .option(...GLOBAL_OPTIONS.SUBACCOUNT)
-  .option(...GLOBAL_OPTIONS.REPEAT)
-  .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.ENABLE_POST_ONLY)
-  .option(...GLOBAL_OPTIONS.DISABLE_POST_ONLY)
-  .option(...GLOBAL_OPTIONS.ENABLE_IOC)
-  .option(...GLOBAL_OPTIONS.DISABLE_IOC)
-  .option(...GLOBAL_OPTIONS.ENABLE_REDUCE_ONLY)
-  .option(...GLOBAL_OPTIONS.DISABLE_REDUCE_ONLY)
-  .option(...GLOBAL_OPTIONS.ENABLE_RETRY)
-  .option(...GLOBAL_OPTIONS.DISABLE_RETRY);
+  .addOption(OPTIONS.GLOBAL.EXCHANGE)
+  .option(...OPTIONS.GLOBAL.API_KEY)
+  .option(...OPTIONS.GLOBAL.API_SECRET)
+  .option(...OPTIONS.GLOBAL.SUBACCOUNT)
+  .option(...OPTIONS.GLOBAL.REPEAT)
+  .option(...OPTIONS.GLOBAL.ENABLE_COLOURS)
+  .option(...OPTIONS.GLOBAL.DISABLE_COLOURS)
+  .option(...OPTIONS.GLOBAL.ENABLE_POST_ONLY)
+  .option(...OPTIONS.GLOBAL.DISABLE_POST_ONLY)
+  .option(...OPTIONS.GLOBAL.ENABLE_IOC)
+  .option(...OPTIONS.GLOBAL.DISABLE_IOC)
+  .option(...OPTIONS.GLOBAL.ENABLE_REDUCE_ONLY)
+  .option(...OPTIONS.GLOBAL.DISABLE_REDUCE_ONLY)
+  .option(...OPTIONS.GLOBAL.ENABLE_RETRY)
+  .option(...OPTIONS.GLOBAL.DISABLE_RETRY);
 
 program
   .command('login')
@@ -135,7 +54,7 @@ program
 program
   .command('rates')
   .description('display lending rates')
-  .option(...COMMAND_OPTIONS.CURRENCY)
+  .option(...OPTIONS.COMMANDS.CURRENCY)
   .addOption(composeSortOption(['currency', 'previous', 'estimated']))
   .action((inlineCommandOptions) => runCommand('rates', inlineCommandOptions));
 
@@ -157,24 +76,24 @@ program
 program
   .command('lend')
   .description('create lending offer(s)')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .option(...COMMAND_OPTIONS.SIZE)
-  .option(...COMMAND_OPTIONS.MIN_RATE)
+  .option(...OPTIONS.COMMANDS.CURRENCY)
+  .option(...OPTIONS.COMMANDS.SIZE)
+  .option(...OPTIONS.COMMANDS.MIN_RATE)
   .action((inlineCommandOptions) => runCommand('lend', inlineCommandOptions));
 
 program
   .command('stop')
   .description('withdraw lending offer(s)')
-  .option(...COMMAND_OPTIONS.CURRENCY)
+  .option(...OPTIONS.COMMANDS.CURRENCY)
   .action((inlineCommandOptions) => runCommand('stop', inlineCommandOptions));
 
 program
   .command('spot')
   .description('display spot markets')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .addOption(COMMAND_OPTIONS.SPOT_TYPE)
-  .option(...COMMAND_OPTIONS.QUOTE_CURRENCY)
-  .option(...COMMAND_OPTIONS.TOKEN_LEVERAGE)
+  .option(...OPTIONS.COMMANDS.CURRENCY)
+  .option(...OPTIONS.COMMANDS.SPOT_TYPE)
+  .option(...OPTIONS.COMMANDS.QUOTE_CURRENCY)
+  .option(...OPTIONS.COMMANDS.TOKEN_LEVERAGE)
   .addOption(
     composeSortOption(['name', 'price', 'change-1h', 'change-24h', 'volume'])
   )
@@ -183,8 +102,8 @@ program
 program
   .command('futures')
   .description('display futures stats')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .addOption(COMMAND_OPTIONS.FUTURE_TYPE)
+  .option(...OPTIONS.COMMANDS.CURRENCY)
+  .option(...OPTIONS.COMMANDS.FUTURE_TYPE)
   .addOption(
     composeSortOption([
       'name',
@@ -206,14 +125,14 @@ program
 program
   .command('trade')
   .description('place order')
-  .requiredOption(...COMMAND_OPTIONS.MARKET)
-  .requiredOption(...COMMAND_OPTIONS.SIDE)
-  .requiredOption(...COMMAND_OPTIONS.ORDER_TYPE)
-  .option(...COMMAND_OPTIONS.PRICE)
-  .requiredOption(...COMMAND_OPTIONS.SIZE)
-  .option(...COMMAND_OPTIONS.TRIGGER_PRICE)
-  .option(...COMMAND_OPTIONS.TRAIL_VALUE)
-  .option(...COMMAND_OPTIONS.ORDER_COUNT)
+  .requiredOption(...OPTIONS.COMMANDS.MARKET)
+  .requiredOption(...OPTIONS.COMMANDS.SIDE)
+  .requiredOption(...OPTIONS.COMMANDS.ORDER_TYPE)
+  .requiredOption(...OPTIONS.COMMANDS.SIZE)
+  .option(...OPTIONS.COMMANDS.PRICE)
+  .option(...OPTIONS.COMMANDS.TRIGGER_PRICE)
+  .option(...OPTIONS.COMMANDS.TRAIL_VALUE)
+  .option(...OPTIONS.COMMANDS.ORDER_COUNT)
   .action((inlineCommandOptions) => runCommand('trade', inlineCommandOptions));
 
 program.parseAsync(process.argv);

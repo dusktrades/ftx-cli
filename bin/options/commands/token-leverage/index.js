@@ -1,4 +1,4 @@
-import { parseChoiceList } from '../helpers/parseChoiceList.js';
+import { parseChoiceList } from '../../helpers/parseChoiceList.js';
 
 const TOKEN_LEVERAGES = [
   { parsed: 'BULL', options: ['3x', 'bull'] },
@@ -9,7 +9,7 @@ const TOKEN_LEVERAGES = [
 
 const ALLOWED_OPTIONS = TOKEN_LEVERAGES.flatMap((entry) => entry.options);
 
-function parseTokenLeverage(tokenLeverage) {
+function parse(tokenLeverage) {
   return parseChoiceList(
     tokenLeverage,
     TOKEN_LEVERAGES,
@@ -17,4 +17,10 @@ function parseTokenLeverage(tokenLeverage) {
   );
 }
 
-export { parseTokenLeverage };
+const TOKEN_LEVERAGE = [
+  '--token-leverage <leverage>',
+  'token leverage name(s) or multiplier(s)',
+  parse,
+];
+
+export { TOKEN_LEVERAGE };

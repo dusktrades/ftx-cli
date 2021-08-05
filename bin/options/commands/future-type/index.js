@@ -1,4 +1,4 @@
-import { parseChoiceList } from '../helpers/parseChoiceList.js';
+import { parseChoiceList } from '../../helpers/index.js';
 
 const FUTURE_TYPES = [
   { parsed: 'perpetual', options: ['perp', 'perpetual'] },
@@ -8,7 +8,7 @@ const FUTURE_TYPES = [
 
 const ALLOWED_OPTIONS = FUTURE_TYPES.flatMap((entry) => entry.options);
 
-function parseFutureType(futureType) {
+function parse(futureType) {
   return parseChoiceList(
     futureType,
     FUTURE_TYPES,
@@ -16,4 +16,6 @@ function parseFutureType(futureType) {
   );
 }
 
-export { parseFutureType };
+const FUTURE_TYPE = ['-t, --type <type>', 'future type(s)', parse];
+
+export { FUTURE_TYPE };

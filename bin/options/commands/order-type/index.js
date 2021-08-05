@@ -1,4 +1,4 @@
-import { parseChoice } from '../helpers/parseChoice.js';
+import { parseChoice } from '../../helpers/parseChoice.js';
 
 const ORDER_TYPES = [
   { parsed: 'market', options: ['m', 'market'] },
@@ -12,7 +12,7 @@ const ORDER_TYPES = [
 
 const ALLOWED_OPTIONS = ORDER_TYPES.flatMap((entry) => entry.options);
 
-function parseOrderType(orderType) {
+function parse(orderType) {
   return parseChoice(
     orderType,
     ORDER_TYPES,
@@ -20,4 +20,6 @@ function parseOrderType(orderType) {
   );
 }
 
-export { parseOrderType };
+const ORDER_TYPE = ['-t, --type <type>', 'order type', parse];
+
+export { ORDER_TYPE };

@@ -1,9 +1,13 @@
-import { options } from './options/index.js';
+import { COMMANDS } from './commands/index.js';
+import { GLOBAL } from './global/index.js';
 
 /**
  * Option parsers are static; only values provided as part of user input are
  * parsed, meaning defaults for optional values are not handled here.
  */
-const parsers = options;
+const OPTIONS = {
+  COMMANDS,
+  GLOBAL,
+};
 
-export { parsers };
+export { OPTIONS };

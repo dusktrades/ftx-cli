@@ -1,4 +1,4 @@
-import { parseChoiceList } from '../helpers/parseChoiceList.js';
+import { parseChoiceList } from '../../helpers/parseChoiceList.js';
 
 const SPOT_TYPES = [
   { parsed: 'coin', options: ['coin'] },
@@ -10,7 +10,7 @@ const SPOT_TYPES = [
 
 const ALLOWED_OPTIONS = SPOT_TYPES.flatMap((entry) => entry.options);
 
-function parseSpotType(spotType) {
+function parse(spotType) {
   return parseChoiceList(
     spotType,
     SPOT_TYPES,
@@ -18,4 +18,6 @@ function parseSpotType(spotType) {
   );
 }
 
-export { parseSpotType };
+const SPOT_TYPE = ['-t, --type <type>', 'spot type(s)', parse];
+
+export { SPOT_TYPE };

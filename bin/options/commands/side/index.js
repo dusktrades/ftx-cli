@@ -1,4 +1,4 @@
-import { parseChoice } from '../helpers/parseChoice.js';
+import { parseChoice } from '../../helpers/parseChoice.js';
 
 const SIDES = [
   { parsed: 'buy', options: ['b', 'buy'] },
@@ -7,7 +7,7 @@ const SIDES = [
 
 const ALLOWED_OPTIONS = SIDES.flatMap((entry) => entry.options);
 
-function parseSide(side) {
+function parse(side) {
   return parseChoice(
     side,
     SIDES,
@@ -15,4 +15,6 @@ function parseSide(side) {
   );
 }
 
-export { parseSide };
+const SIDE = ['--side <side>', 'order side', parse];
+
+export { SIDE };

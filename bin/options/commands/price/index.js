@@ -1,6 +1,6 @@
-import { parseNumber, parseNumberRange } from '../helpers/index.js';
+import { parseNumber, parseNumberRange } from '../../helpers/index.js';
 
-function parsePrice(price) {
+function parse(price) {
   const parser = price.includes(':') ? parseNumberRange : parseNumber;
 
   return parser(
@@ -13,4 +13,6 @@ function parsePrice(price) {
   );
 }
 
-export { parsePrice };
+const PRICE = ['-p, --price <price>', 'limit price or price range', parse];
+
+export { PRICE };
