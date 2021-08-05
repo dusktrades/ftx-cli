@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { InvalidOptionArgumentError } from 'commander';
-import cron from 'node-cron';
 
 import { isPositiveFloat } from '../src/util/index.js';
 import { parsers } from './parsers/index.js';
@@ -52,20 +51,6 @@ const ORDER_TYPE_MAP = [
 ];
 
 const ORDER_TYPE_CHOICES = ORDER_TYPE_MAP.flatMap((entry) => entry.options);
-
-/**
- * Optional value is only parsed immediately if provided, so default values are
- * considered at a later stage (prior to running the command).
- */
-function parseRepeat(value) {
-  if (!cron.validate(value)) {
-    throw new InvalidOptionArgumentError(
-      'Not an accepted cron expression format.'
-    );
-  }
-
-  return value;
-}
 
 function parseCurrency(value) {
   return value.split(',').map((entry) => entry.toUpperCase());
@@ -222,7 +207,7 @@ function parseTrailValue(value) {
 }
 
 const parseOption = {
-  repeat: parseRepeat,
+  repeat: parsers.repeat,
   currency: parseCurrency,
   size: parsers.size,
   minRate: parseMinRate,
