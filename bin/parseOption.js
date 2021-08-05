@@ -154,10 +154,6 @@ function parseFutureType(value) {
   return parsedValues;
 }
 
-function parseMarket(value) {
-  return value.toUpperCase();
-}
-
 function getParsedSide(side) {
   const sideEntry = SIDE_MAP.find((entry) => entry.options.includes(side));
 
@@ -214,7 +210,7 @@ const parseOption = {
   spotType: parseSpotType,
   tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
-  market: parseMarket,
+  market: parsers.market,
   side: parseSide,
   orderType: parseOrderType,
   price: parsers.price,
