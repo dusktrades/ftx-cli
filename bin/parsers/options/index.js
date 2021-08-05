@@ -1,4 +1,5 @@
 import { parseCurrency } from './parseCurrency.js';
+import { parseFutureType } from './parseFutureType.js';
 import { parseMarket } from './parseMarket.js';
 import { parseMinRate } from './parseMinRate.js';
 import { parseOrderCount } from './parseOrderCount.js';
@@ -12,6 +13,7 @@ import { parseTrailValue } from './parseTrailValue.js';
 
 const options = {
   currency: parseCurrency,
+  futureType: parseFutureType,
   market: parseMarket,
   minRate: parseMinRate,
   orderCount: parseOrderCount,

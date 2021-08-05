@@ -13,14 +13,6 @@ const TOKEN_LEVERAGE_CHOICES = TOKEN_LEVERAGE_MAP.flatMap(
   (entry) => entry.options
 );
 
-const FUTURE_TYPE_MAP = [
-  { parsed: 'perpetual', options: ['perpetual', 'perp'] },
-  { parsed: 'future', options: ['quarterly', 'dated'] },
-  { parsed: 'move', options: ['move'] },
-];
-
-const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
-
 // TODO: Refactor and reuse common option parsers.
 function getParsedTokenLeverage(option) {
   const spotTypeEntry = TOKEN_LEVERAGE_MAP.find((entry) =>
@@ -51,35 +43,6 @@ function parseTokenLeverage(value) {
   return parsedOptions;
 }
 
-function getParsedFutureType(type) {
-  const futureTypeEntry = FUTURE_TYPE_MAP.find((entry) =>
-    entry.options.includes(type)
-  );
-
-  return futureTypeEntry?.parsed;
-}
-
-function parseFutureType(value) {
-  const types = value.split(',');
-  const parsedValues = [];
-
-  for (const type of types) {
-    const parsedType = getParsedFutureType(type);
-
-    if (parsedType == null) {
-      throw new InvalidOptionArgumentError(
-        `Allowed choices are ${FUTURE_TYPE_CHOICES.join(', ')}.`
-      );
-    }
-
-    if (!parsedValues.includes(parsedType)) {
-      parsedValues.push(parsedType);
-    }
-  }
-
-  return parsedValues;
-}
-
 const parseOption = {
   repeat: parsers.repeat,
   currency: parsers.currency,
@@ -87,7 +50,7 @@ const parseOption = {
   minRate: parsers.minRate,
   spotType: parsers.spotType,
   tokenLeverage: parseTokenLeverage,
-  futureType: parseFutureType,
+  futureType: parsers.futureType,
   market: parsers.market,
   side: parsers.side,
   orderType: parsers.orderType,
