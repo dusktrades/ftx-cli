@@ -60,7 +60,7 @@ const COMMAND_OPTIONS = {
   QUOTE_CURRENCY: [
     '-q, --quote-currency <currency>',
     'quote currency symbol(s)',
-    parseOption.currency,
+    parseOption.quoteCurrency,
   ],
   TOKEN_LEVERAGE: [
     '--token-leverage <leverage>',

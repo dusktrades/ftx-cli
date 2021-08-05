@@ -5,6 +5,7 @@ import { parseMinRate } from './parseMinRate.js';
 import { parseOrderCount } from './parseOrderCount.js';
 import { parseOrderType } from './parseOrderType.js';
 import { parsePrice } from './parsePrice.js';
+import { parseQuoteCurrency } from './parseQuoteCurrency.js';
 import { parseRepeat } from './parseRepeat.js';
 import { parseSide } from './parseSide.js';
 import { parseSize } from './parseSize.js';
@@ -20,6 +21,7 @@ const options = {
   orderCount: parseOrderCount,
   orderType: parseOrderType,
   price: parsePrice,
+  quoteCurrency: parseQuoteCurrency,
   repeat: parseRepeat,
   side: parseSide,
   size: parseSize,
