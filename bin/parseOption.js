@@ -33,18 +33,6 @@ const FUTURE_TYPE_MAP = [
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
 
-const ORDER_TYPE_MAP = [
-  { parsed: 'market', options: ['m', 'market'] },
-  { parsed: 'limit', options: ['l', 'limit'] },
-  { parsed: 'stop-market', options: ['sm', 'stop-market'] },
-  { parsed: 'stop-limit', options: ['sl', 'stop-limit'] },
-  { parsed: 'trailing-stop', options: ['ts', 'trailing-stop'] },
-  { parsed: 'take-profit-market', options: ['tpm', 'take-profit-market'] },
-  { parsed: 'take-profit-limit', options: ['tpl', 'take-profit-limit'] },
-];
-
-const ORDER_TYPE_CHOICES = ORDER_TYPE_MAP.flatMap((entry) => entry.options);
-
 function parseCurrency(value) {
   return value.split(',').map((entry) => entry.toUpperCase());
 }
@@ -147,26 +135,6 @@ function parseFutureType(value) {
   return parsedValues;
 }
 
-function getParsedOrderType(orderType) {
-  const orderTypeEntry = ORDER_TYPE_MAP.find((entry) =>
-    entry.options.includes(orderType)
-  );
-
-  return orderTypeEntry?.parsed;
-}
-
-function parseOrderType(value) {
-  const parsedOrderType = getParsedOrderType(value);
-
-  if (parsedOrderType == null) {
-    throw new InvalidOptionArgumentError(
-      `Allowed choices are ${ORDER_TYPE_CHOICES.join(', ')}.`
-    );
-  }
-
-  return parsedOrderType;
-}
-
 function parseTrailValue(value) {
   const trailValue = new BigNumber(value);
 
@@ -187,7 +155,7 @@ const parseOption = {
   futureType: parseFutureType,
   market: parsers.market,
   side: parsers.side,
-  orderType: parseOrderType,
+  orderType: parsers.orderType,
   price: parsers.price,
   trailValue: parseTrailValue,
   orderCount: parsers.orderCount,
