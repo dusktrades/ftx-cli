@@ -12,6 +12,7 @@ import { parseSize } from './parseSize.js';
 import { parseSpotType } from './parseSpotType.js';
 import { parseTokenLeverage } from './parseTokenLeverage.js';
 import { parseTrailValue } from './parseTrailValue.js';
+import { parseTriggerPrice } from './parseTriggerPrice.js';
 
 const options = {
   currency: parseCurrency,
@@ -28,6 +29,7 @@ const options = {
   spotType: parseSpotType,
   tokenLeverage: parseTokenLeverage,
   trailValue: parseTrailValue,
+  triggerPrice: parseTriggerPrice,
 };
 
 export { options };

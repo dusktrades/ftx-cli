@@ -15,6 +15,7 @@ const parseOption = {
   spotType: parsers.spotType,
   tokenLeverage: parsers.tokenLeverage,
   trailValue: parsers.trailValue,
+  triggerPrice: parsers.triggerPrice,
 };
 
 export { parseOption };

@@ -79,7 +79,7 @@ const COMMAND_OPTIONS = {
   TRIGGER_PRICE: [
     '--trigger-price <price>',
     'trigger price',
-    parseOption.price,
+    parseOption.triggerPrice,
   ],
   TRAIL_VALUE: ['--trail-value <value>', 'trail value', parseOption.trailValue],
   ORDER_COUNT: [
