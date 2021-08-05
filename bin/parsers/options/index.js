@@ -7,6 +7,7 @@ import { parsePrice } from './parsePrice.js';
 import { parseRepeat } from './parseRepeat.js';
 import { parseSide } from './parseSide.js';
 import { parseSize } from './parseSize.js';
+import { parseSpotType } from './parseSpotType.js';
 import { parseTrailValue } from './parseTrailValue.js';
 
 const options = {
@@ -19,6 +20,7 @@ const options = {
   repeat: parseRepeat,
   side: parseSide,
   size: parseSize,
+  spotType: parseSpotType,
   trailValue: parseTrailValue,
 };
 

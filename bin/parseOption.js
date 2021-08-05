@@ -2,16 +2,6 @@ import { InvalidOptionArgumentError } from 'commander';
 
 import { parsers } from './parsers/index.js';
 
-const SPOT_TYPE_MAP = [
-  { parsed: 'coin', options: ['coin'] },
-  { parsed: 'fiat', options: ['fiat'] },
-  { parsed: 'leveraged-token', options: ['lev', 'leveraged-token'] },
-  { parsed: 'volatility-token', options: ['vol', 'volatility-token'] },
-  { parsed: 'equity-token', options: ['stock', 'equity-token'] },
-];
-
-const SPOT_TYPE_CHOICES = SPOT_TYPE_MAP.flatMap((entry) => entry.options);
-
 const TOKEN_LEVERAGE_MAP = [
   { parsed: 'BEAR', options: ['-3x', 'bear'] },
   { parsed: 'BULL', options: ['3x', 'bull'] },
@@ -30,35 +20,6 @@ const FUTURE_TYPE_MAP = [
 ];
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
-
-function getParsedSpotType(type) {
-  const spotTypeEntry = SPOT_TYPE_MAP.find((entry) =>
-    entry.options.includes(type)
-  );
-
-  return spotTypeEntry?.parsed;
-}
-
-function parseSpotType(value) {
-  const types = value.split(',');
-  const parsedValues = [];
-
-  for (const type of types) {
-    const parsedType = getParsedSpotType(type);
-
-    if (parsedType == null) {
-      throw new InvalidOptionArgumentError(
-        `Allowed choices are ${SPOT_TYPE_CHOICES.join(', ')}.`
-      );
-    }
-
-    if (!parsedValues.includes(parsedType)) {
-      parsedValues.push(parsedType);
-    }
-  }
-
-  return parsedValues;
-}
 
 // TODO: Refactor and reuse common option parsers.
 function getParsedTokenLeverage(option) {
@@ -124,7 +85,7 @@ const parseOption = {
   currency: parsers.currency,
   size: parsers.size,
   minRate: parsers.minRate,
-  spotType: parseSpotType,
+  spotType: parsers.spotType,
   tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
   market: parsers.market,
