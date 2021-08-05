@@ -5,7 +5,7 @@ function parsePrice(price) {
 
   return parser(
     price,
-    'Price must be a number, or range of numbers, greater than 0.',
+    'Price must be a number, or range of numbers, greater than zero.',
     {
       allowNegative: false,
       allowZero: false,
