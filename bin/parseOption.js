@@ -33,13 +33,6 @@ const FUTURE_TYPE_MAP = [
 
 const FUTURE_TYPE_CHOICES = FUTURE_TYPE_MAP.flatMap((entry) => entry.options);
 
-const SIDE_MAP = [
-  { parsed: 'buy', options: ['b', 'buy'] },
-  { parsed: 'sell', options: ['s', 'sell'] },
-];
-
-const SIDE_CHOICES = SIDE_MAP.flatMap((entry) => entry.options);
-
 const ORDER_TYPE_MAP = [
   { parsed: 'market', options: ['m', 'market'] },
   { parsed: 'limit', options: ['l', 'limit'] },
@@ -154,24 +147,6 @@ function parseFutureType(value) {
   return parsedValues;
 }
 
-function getParsedSide(side) {
-  const sideEntry = SIDE_MAP.find((entry) => entry.options.includes(side));
-
-  return sideEntry?.parsed;
-}
-
-function parseSide(value) {
-  const parsedSide = getParsedSide(value);
-
-  if (parsedSide == null) {
-    throw new InvalidOptionArgumentError(
-      `Allowed choices are ${SIDE_CHOICES.join(', ')}.`
-    );
-  }
-
-  return parsedSide;
-}
-
 function getParsedOrderType(orderType) {
   const orderTypeEntry = ORDER_TYPE_MAP.find((entry) =>
     entry.options.includes(orderType)
@@ -211,7 +186,7 @@ const parseOption = {
   tokenLeverage: parseTokenLeverage,
   futureType: parseFutureType,
   market: parsers.market,
-  side: parseSide,
+  side: parsers.side,
   orderType: parseOrderType,
   price: parsers.price,
   trailValue: parseTrailValue,
