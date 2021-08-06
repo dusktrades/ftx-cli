@@ -1,4 +1,4 @@
-import { parseNumber } from '../../helpers/parseNumber.js';
+import { composeOption, parseNumber } from '../../helpers/index.js';
 
 function parse(minRate) {
   return parseNumber(
@@ -8,10 +8,12 @@ function parse(minRate) {
   );
 }
 
-const MIN_RATE = [
-  '-r, --min-rate <rate>',
-  'minimum yearly lending rate (%)',
-  parse,
-];
+const CONFIG = {
+  FLAGS: '-r, --min-rate <rate>',
+  DESCRIPTION: 'minimum yearly lending rate (%)',
+  PARSER: parse,
+};
+
+const MIN_RATE = composeOption(CONFIG);
 
 export { MIN_RATE };

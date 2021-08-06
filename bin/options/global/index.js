@@ -1,26 +1,38 @@
-import { Option } from 'commander';
-
+import { API_KEY } from './api-key/index.js';
+import { API_SECRET } from './api-secret/index.js';
+import { COLOUR } from './colour/index.js';
+import { EXCHANGE } from './exchange/index.js';
+import { IOC } from './ioc/index.js';
+import { POST_ONLY } from './post-only/index.js';
+import { REDUCE_ONLY } from './reduce-only/index.js';
 import { REPEAT } from './repeat/index.js';
+import { RETRY } from './retry/index.js';
+import { SUBACCOUNT } from './subaccount/index.js';
 
-const GLOBAL = {
-  EXCHANGE: new Option(
-    '-e, --exchange <exchange>',
-    'FTX exchange platform'
-  ).choices(['ftx', 'ftx-us']),
-  API_KEY: ['-k, --key <key>', 'FTX API key'],
-  API_SECRET: ['-x, --secret <secret>', 'FTX API secret'],
-  SUBACCOUNT: ['-a, --subaccount <subaccount>', 'FTX subaccount name'],
+// The order here is the order options will appear in help outputs.
+const GLOBAL = [
+  // Exchange/account options.
+  EXCHANGE,
+  API_KEY,
+  API_SECRET,
+  SUBACCOUNT,
+
+  // Behaviour options.
   REPEAT,
-  ENABLE_COLOURS: ['--colour', 'enable coloured output'],
-  DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
-  ENABLE_POST_ONLY: ['--post-only', 'enable Post-Only mode'],
-  DISABLE_POST_ONLY: ['--no-post-only', 'disable Post-Only mode'],
-  ENABLE_IOC: ['--ioc', 'enable Immediate-or-Cancel (IOC) mode'],
-  DISABLE_IOC: ['--no-ioc', 'disable Immediate-or-Cancel (IOC) mode'],
-  ENABLE_REDUCE_ONLY: ['--reduce-only', 'enable Reduce-Only mode'],
-  DISABLE_REDUCE_ONLY: ['--no-reduce-only', 'disable Reduce-Only mode'],
-  ENABLE_RETRY: ['--retry', 'enable Retry-Until-Filled mode'],
-  DISABLE_RETRY: ['--no-retry', 'disable Retry-Until-Filled mode'],
-};
+
+  // Trading options.
+  IOC.ENABLE,
+  IOC.DISABLE,
+  POST_ONLY.ENABLE,
+  POST_ONLY.DISABLE,
+  REDUCE_ONLY.ENABLE,
+  REDUCE_ONLY.DISABLE,
+  RETRY.ENABLE,
+  RETRY.DISABLE,
+
+  // UI customisation options.
+  COLOUR.ENABLE,
+  COLOUR.DISABLE,
+];
 
 export { GLOBAL };

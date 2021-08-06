@@ -1,7 +1,15 @@
+import { composeOption } from '../../helpers/index.js';
+
 function parse(market) {
   return market.toUpperCase();
 }
 
-const MARKET = ['-m, --market <market>', 'market symbol', parse];
+const CONFIG = {
+  FLAGS: '-m, --market <market>',
+  DESCRIPTION: 'market symbol',
+  PARSER: parse,
+};
+
+const MARKET = composeOption(CONFIG);
 
 export { MARKET };

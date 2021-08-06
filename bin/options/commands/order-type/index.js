@@ -1,4 +1,4 @@
-import { parseChoice } from '../../helpers/parseChoice.js';
+import { composeOption, parseChoice } from '../../helpers/index.js';
 
 const ORDER_TYPES = [
   { parsed: 'market', options: ['m', 'market'] },
@@ -20,6 +20,12 @@ function parse(orderType) {
   );
 }
 
-const ORDER_TYPE = ['-t, --type <type>', 'order type', parse];
+const CONFIG = {
+  FLAGS: '-t, --type <type>',
+  DESCRIPTION: 'order type',
+  PARSER: parse,
+};
+
+const ORDER_TYPE = composeOption(CONFIG);
 
 export { ORDER_TYPE };

@@ -1,9 +1,11 @@
-import { parseCurrency } from '../../helpers/index.js';
+import { composeOption, parseCurrency } from '../../helpers/index.js';
 
-const QUOTE_CURRENCY = [
-  '-q, --quote-currency <currency>',
-  'quote currency symbol(s)',
-  parseCurrency,
-];
+const CONFIG = {
+  FLAGS: '-q, --quote-currency <currency>',
+  DESCRIPTION: 'quote currency symbol(s)',
+  PARSER: parseCurrency,
+};
+
+const QUOTE_CURRENCY = composeOption(CONFIG);
 
 export { QUOTE_CURRENCY };

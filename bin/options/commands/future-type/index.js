@@ -1,4 +1,4 @@
-import { parseChoiceList } from '../../helpers/index.js';
+import { composeOption, parseChoiceList } from '../../helpers/index.js';
 
 const FUTURE_TYPES = [
   { parsed: 'perpetual', options: ['perp', 'perpetual'] },
@@ -16,6 +16,12 @@ function parse(futureType) {
   );
 }
 
-const FUTURE_TYPE = ['-t, --type <type>', 'future type(s)', parse];
+const CONFIG = {
+  FLAGS: '-t, --type <type>',
+  DESCRIPTION: 'future type(s)',
+  PARSER: parse,
+};
+
+const FUTURE_TYPE = composeOption(CONFIG);
 
 export { FUTURE_TYPE };

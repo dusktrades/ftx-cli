@@ -1,4 +1,4 @@
-import { parseNumber } from '../../helpers/index.js';
+import { composeOption, parseNumber } from '../../helpers/index.js';
 
 function parse(size) {
   return parseNumber(size, 'Size must be a number greater than zero.', {
@@ -7,6 +7,12 @@ function parse(size) {
   });
 }
 
-const SIZE = ['-s, --size <size>', 'currency amount', parse];
+const CONFIG = {
+  FLAGS: '-s, --size <size>',
+  DESCRIPTION: 'currency amount',
+  PARSER: parse,
+};
+
+const SIZE = composeOption(CONFIG);
 
 export { SIZE };

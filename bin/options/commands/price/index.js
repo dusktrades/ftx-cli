@@ -1,4 +1,8 @@
-import { parseNumber, parseNumberRange } from '../../helpers/index.js';
+import {
+  composeOption,
+  parseNumber,
+  parseNumberRange,
+} from '../../helpers/index.js';
 
 function parse(price) {
   const parser = price.includes(':') ? parseNumberRange : parseNumber;
@@ -13,6 +17,12 @@ function parse(price) {
   );
 }
 
-const PRICE = ['-p, --price <price>', 'limit price or price range', parse];
+const CONFIG = {
+  FLAGS: '-p, --price <price>',
+  DESCRIPTION: 'limit price or price range',
+  PARSER: parse,
+};
+
+const PRICE = composeOption(CONFIG);
 
 export { PRICE };
