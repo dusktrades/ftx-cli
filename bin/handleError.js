@@ -9,7 +9,7 @@ import { Logger } from '../src/common/logger/index.js';
 
 const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError, RateLimitError];
 
-function isErrorHandled(error) {
+function isHandled(error) {
   return HANDLED_ERRORS.some((handledError) => error instanceof handledError);
 }
 
@@ -18,7 +18,7 @@ function handleError(error, enableColours) {
    * A handled error occurred. We should have an error message so user can learn
    * how to solve the issue.
    */
-  if (isErrorHandled(error)) {
+  if (isHandled(error)) {
     Logger.error(error.message, { enableColours });
 
     return;

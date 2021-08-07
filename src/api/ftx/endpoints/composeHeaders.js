@@ -11,6 +11,10 @@ const COMMON_HEADERS = {
   'X-Requested-With': 'XMLHttpRequest',
 };
 
+function composePrefix(exchange) {
+  return exchange === 'ftx-us' ? 'FTXUS' : 'FTX';
+}
+
 function encodeRequestBody(requestBody) {
   if (requestBody == null) {
     return '';
@@ -19,7 +23,7 @@ function encodeRequestBody(requestBody) {
   return JSON.stringify(requestBody);
 }
 
-function composePayload(timestamp, endpoint, method = 'get', requestBody) {
+function composePayload(timestamp, endpoint, method, requestBody) {
   const normalisedMethod = method.toUpperCase();
   const path = `/api/${endpoint}`;
   const encodedRequestBody = encodeRequestBody(requestBody);
@@ -54,7 +58,7 @@ function composeAuthenticatedHeaders({
     return COMMON_HEADERS;
   }
 
-  const prefix = exchange === 'ftx-us' ? 'FTXUS' : 'FTX';
+  const prefix = composePrefix(exchange);
   const timestamp = Date.now();
 
   const signature = composeSignature(
@@ -76,7 +80,7 @@ function composeAuthenticatedHeaders({
   };
 }
 
-function composeHeaders(options = {}) {
+function composeHeaders(options) {
   // Credentials are passed for endpoints which require authentication headers.
   if (options.credentials == null) {
     return COMMON_HEADERS;

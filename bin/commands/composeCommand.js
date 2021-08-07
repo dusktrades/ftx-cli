@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 
+import { composeOption } from '../options/index.js';
 import { runCommand } from '../runCommand.js';
 
 function addOptions(command, optionConfigs) {
@@ -7,10 +8,8 @@ function addOptions(command, optionConfigs) {
     return;
   }
 
-  for (const optionConfig of optionConfigs) {
-    const option = optionConfig.IS_REQUIRED
-      ? optionConfig.OPTION.makeOptionMandatory()
-      : optionConfig.OPTION;
+  for (const { OPTION, IS_REQUIRED } of optionConfigs) {
+    const option = composeOption(OPTION, IS_REQUIRED);
 
     command.addOption(option);
   }

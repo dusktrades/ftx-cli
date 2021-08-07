@@ -1,13 +1,11 @@
-import { composeHeaders } from '../composeHeaders.js';
-import { composeUrl } from '../composeUrl.js';
 import { request } from '../request.js';
 
-async function getLendingRates({ exchange }) {
-  const endpoint = 'spot_margin/lending_rates';
-  const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ exchange });
-
-  return request({ url, headers });
+async function getLendingRates(options) {
+  return request({
+    ...options,
+    rawEndpoint: 'spot_margin/lending_rates',
+    method: 'get',
+  });
 }
 
 export { getLendingRates };

@@ -1,6 +1,4 @@
-import { composeOption } from '../../helpers/index.js';
-
-const CONFIG = {
+const COLOUR = {
   ENABLE: {
     FLAGS: '--colour',
     DESCRIPTION: 'enable coloured output',
@@ -9,11 +7,6 @@ const CONFIG = {
     FLAGS: '--no-colour',
     DESCRIPTION: 'disable coloured output',
   },
-};
-
-const COLOUR = {
-  ENABLE: composeOption(CONFIG.ENABLE),
-  DISABLE: composeOption(CONFIG.DISABLE),
 };
 
 export { COLOUR };

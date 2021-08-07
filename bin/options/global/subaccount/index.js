@@ -1,10 +1,6 @@
-import { composeOption } from '../../helpers/index.js';
-
-const CONFIG = {
+const SUBACCOUNT = {
   FLAGS: '-a, --subaccount <subaccount>',
   DESCRIPTION: 'FTX subaccount name',
 };
-
-const SUBACCOUNT = composeOption(CONFIG);
 
 export { SUBACCOUNT };

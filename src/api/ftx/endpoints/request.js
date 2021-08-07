@@ -6,53 +6,70 @@ import {
   RateLimitError,
 } from '../../../common/errors/index.js';
 
-function composeOptions(headers, requestBody) {
+import { CONFIG } from '../../../config/index.js';
+import { composeEndpoint } from './composeEndpoint.js';
+import { composeHeaders } from './composeHeaders.js';
+import { composeUrl } from './composeUrl.js';
+
+/**
+ * Tag POST requests with our External Referral Program name; required for
+ * order endpoints.
+ */
+function composeRequestBody(requestBody) {
   return {
-    headers,
-    ...(requestBody != null && { json: requestBody }),
+    ...requestBody,
+    externalReferralProgram: CONFIG.EXTERNAL_REFERRAL_PROGRAM_NAME,
   };
 }
 
-function parseErrorBody(error) {
-  if (error?.response?.body == null) {
-    return null;
-  }
+function composePostRequestOptions(options) {
+  const requestBody = composeRequestBody(options.requestBody);
 
-  return JSON.parse(error.response.body);
+  return {
+    headers: composeHeaders({ ...options, requestBody }),
+    json: requestBody,
+  };
 }
 
-function getErrorMessage(error) {
-  const parsedResponseBody = parseErrorBody(error);
-
-  if (parsedResponseBody == null) {
-    return null;
+function composeRequestOptions(options) {
+  if (options.method === 'post') {
+    return composePostRequestOptions(options);
   }
 
-  return parsedResponseBody.error;
+  return { headers: composeHeaders(options) };
+}
+
+/**
+ * Errors handled by the FTX API will include a response body with an `error`
+ * key (error message).
+ */
+function parseErrorMessage(error) {
+  return JSON.parse(error?.response?.body)?.error;
 }
 
 function handleError(error) {
-  const message = getErrorMessage(error);
+  const message = parseErrorMessage(error);
 
   if (message == null) {
-    // Unexpected error unhandled by API.
     throw new HttpError(error);
   }
 
-  if (error?.response?.statusCode === 429) {
-    // Rate limit error handled by API.
-    throw new RateLimitError(message);
-  }
-
-  // Generic error handled by API.
-  throw new ApiError(message);
+  throw error.response.statusCode === 429
+    ? new RateLimitError(message)
+    : new ApiError(message);
 }
 
-async function request({ url, method = 'get', headers, requestBody }) {
-  const options = composeOptions(headers, requestBody);
+async function request(options) {
+  const endpoint = composeEndpoint(
+    options.rawEndpoint,
+    options.queryParameters
+  );
+
+  const url = composeUrl(options.exchange, endpoint);
+  const requestOptions = composeRequestOptions({ ...options, endpoint });
 
   try {
-    const response = await got[method](url, options).json();
+    const response = await got[options.method](url, requestOptions).json();
 
     return response.result;
   } catch (error) {

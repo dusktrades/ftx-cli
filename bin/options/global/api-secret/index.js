@@ -1,10 +1,6 @@
-import { composeOption } from '../../helpers/index.js';
-
-const CONFIG = {
+const API_SECRET = {
   FLAGS: '-x, --secret <secret>',
   DESCRIPTION: 'FTX API secret',
 };
-
-const API_SECRET = composeOption(CONFIG);
 
 export { API_SECRET };

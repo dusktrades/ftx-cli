@@ -1,6 +1,6 @@
 import { Option } from 'commander';
 
-function composeOption(config) {
+function composeOption(config, isRequired = false) {
   // Flags and description are required.
   const option = new Option(config.FLAGS, config.DESCRIPTION);
 
@@ -22,6 +22,10 @@ function composeOption(config) {
 
   if (config.DEFAULT != null) {
     option.default(config.DEFAULT);
+  }
+
+  if (isRequired) {
+    option.makeOptionMandatory();
   }
 
   return option;

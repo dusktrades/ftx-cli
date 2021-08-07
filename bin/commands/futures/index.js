@@ -1,8 +1,7 @@
-import { composeSortOption } from '../../options/helpers/index.js';
+import { composeSortOptionConfig } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
-import { composeCommand } from '../composeCommand.js';
 
-const SORT_OPTION = composeSortOption([
+const SORT_OPTION = composeSortOptionConfig([
   'name',
   'last-price',
   'mark-price',
@@ -15,7 +14,7 @@ const SORT_OPTION = composeSortOption([
   'estimated-funding',
 ]);
 
-const CONFIG = {
+const FUTURES = {
   NAME: 'futures',
   DESCRIPTION: 'display futures markets',
   OPTIONS: [
@@ -24,7 +23,5 @@ const CONFIG = {
     { OPTION: SORT_OPTION },
   ],
 };
-
-const FUTURES = composeCommand(CONFIG);
 
 export { FUTURES };

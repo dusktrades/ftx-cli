@@ -1,20 +1,11 @@
-import { composeHeaders } from '../composeHeaders.js';
-import { composeQueryString } from '../composeQueryString.js';
-import { composeUrl } from '../composeUrl.js';
 import { request } from '../request.js';
 
-function composeEndpoint(parameters) {
-  const queryString = composeQueryString(parameters);
-
-  return `spot_margin/lending_history${queryString}`;
-}
-
-async function getMyLendingHistory({ exchange, credentials, parameters }) {
-  const endpoint = composeEndpoint(parameters);
-  const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ exchange, endpoint, credentials });
-
-  return request({ url, headers });
+async function getMyLendingHistory(options) {
+  return request({
+    ...options,
+    rawEndpoint: 'spot_margin/lending_history',
+    method: 'get',
+  });
 }
 
 export { getMyLendingHistory };

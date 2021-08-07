@@ -3,22 +3,36 @@
 import { program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
-import { COMMANDS } from './commands/index.js';
-import { OPTIONS } from './options/index.js';
+import { COMMANDS, composeCommand } from './commands/index.js';
+import { OPTIONS, composeOption } from './options/index.js';
 
-program.version(CONFIG.PACKAGE.version, '-v, --version');
+function addGlobalOptions() {
+  for (const optionConfig of OPTIONS.GLOBAL) {
+    const option = composeOption(optionConfig);
 
-program.addHelpText(
-  'after',
-  '\nGitHub: https://github.com/dusktrades/ftx-cli#readme'
-);
-
-for (const option of OPTIONS.GLOBAL) {
-  program.addOption(option);
+    program.addOption(option);
+  }
 }
 
-for (const command of COMMANDS) {
-  program.addCommand(command);
+function addCommands() {
+  for (const commandConfig of COMMANDS) {
+    const command = composeCommand(commandConfig);
+
+    program.addCommand(command);
+  }
 }
 
-program.parseAsync(process.argv);
+function initialise() {
+  program.version(CONFIG.PACKAGE.version, '-v, --version');
+
+  program.addHelpText(
+    'after',
+    '\nGitHub: https://github.com/dusktrades/ftx-cli#readme'
+  );
+
+  addGlobalOptions();
+  addCommands();
+  program.parseAsync(process.argv);
+}
+
+initialise();

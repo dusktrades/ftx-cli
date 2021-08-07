@@ -1,10 +1,6 @@
-import { composeCommand } from '../composeCommand.js';
-
-const CONFIG = {
+const LOGOUT = {
   NAME: 'logout',
   DESCRIPTION: 'remove stored FTX API credentials',
 };
-
-const LOGOUT = composeCommand(CONFIG);
 
 export { LOGOUT };

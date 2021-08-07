@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { composeOption, parseNumber } from '../../helpers/index.js';
+import { parseNumber } from '../../helpers/index.js';
 
 function parse(orderCount) {
   return parseNumber(
@@ -14,13 +14,11 @@ function parse(orderCount) {
   );
 }
 
-const CONFIG = {
+const ORDER_COUNT = {
   FLAGS: '--count <count>',
   DESCRIPTION: 'order count',
   PARSER: parse,
   DEFAULT: new BigNumber(1),
 };
-
-const ORDER_COUNT = composeOption(CONFIG);
 
 export { ORDER_COUNT };

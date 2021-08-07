@@ -1,4 +1,4 @@
-import { composeOption, parseNumber } from '../../helpers/index.js';
+import { parseNumber } from '../../helpers/index.js';
 
 function parse(triggerPrice) {
   return parseNumber(
@@ -11,12 +11,10 @@ function parse(triggerPrice) {
   );
 }
 
-const CONFIG = {
+const TRIGGER_PRICE = {
   FLAGS: '--trigger-price <price>',
   DESCRIPTION: 'trigger price',
   PARSER: parse,
 };
-
-const TRIGGER_PRICE = composeOption(CONFIG);
 
 export { TRIGGER_PRICE };

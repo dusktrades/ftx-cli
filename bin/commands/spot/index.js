@@ -1,8 +1,7 @@
-import { composeSortOption } from '../../options/helpers/index.js';
+import { composeSortOptionConfig } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
-import { composeCommand } from '../composeCommand.js';
 
-const SORT_OPTION = composeSortOption([
+const SORT_OPTION = composeSortOptionConfig([
   'name',
   'price',
   'change-1h',
@@ -10,7 +9,7 @@ const SORT_OPTION = composeSortOption([
   'volume',
 ]);
 
-const CONFIG = {
+const SPOT = {
   NAME: 'spot',
   DESCRIPTION: 'display spot markets',
   OPTIONS: [
@@ -21,7 +20,5 @@ const CONFIG = {
     { OPTION: SORT_OPTION },
   ],
 };
-
-const SPOT = composeCommand(CONFIG);
 
 export { SPOT };

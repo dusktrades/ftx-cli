@@ -11,7 +11,7 @@ import { get } from './get.js';
 import { getPreviousFunding } from './getPreviousFunding.js';
 
 function composeRequest(exchange, name) {
-  return futures.getFutureStats({ exchange, parameters: { name } });
+  return futures.getFutureStats({ exchange, pathParameters: { name } });
 }
 
 function composeRequests(exchange, futuresList) {

@@ -1,10 +1,6 @@
-import { composeCommand } from '../composeCommand.js';
-
-const CONFIG = {
+const LOGIN = {
   NAME: 'login',
   DESCRIPTION: 'store FTX API credentials locally',
 };
-
-const LOGIN = composeCommand(CONFIG);
 
 export { LOGIN };

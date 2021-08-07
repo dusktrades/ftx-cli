@@ -1,4 +1,4 @@
-import { composeOption, parseChoiceList } from '../../helpers/index.js';
+import { parseChoiceList } from '../../helpers/index.js';
 
 const SPOT_TYPES = [
   { parsed: 'coin', options: ['coin'] },
@@ -18,12 +18,10 @@ function parse(spotType) {
   );
 }
 
-const CONFIG = {
+const SPOT_TYPE = {
   FLAGS: '-t, --type <type>',
   DESCRIPTION: 'spot type(s)',
   PARSER: parse,
 };
-
-const SPOT_TYPE = composeOption(CONFIG);
 
 export { SPOT_TYPE };

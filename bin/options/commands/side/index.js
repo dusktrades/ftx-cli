@@ -1,4 +1,4 @@
-import { composeOption, parseChoice } from '../../helpers/index.js';
+import { parseChoice } from '../../helpers/index.js';
 
 const SIDES = [
   { parsed: 'buy', options: ['b', 'buy'] },
@@ -15,12 +15,10 @@ function parse(side) {
   );
 }
 
-const CONFIG = {
+const SIDE = {
   FLAGS: '--side <side>',
   DESCRIPTION: 'order side',
   PARSER: parse,
 };
-
-const SIDE = composeOption(CONFIG);
 
 export { SIDE };

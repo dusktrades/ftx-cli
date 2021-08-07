@@ -19,6 +19,7 @@ const USER = new Conf({
 const CONFIG = {
   PACKAGE,
   USER,
+  EXTERNAL_REFERRAL_PROGRAM_NAME: 'FTX CLI',
 };
 
 export { CONFIG };

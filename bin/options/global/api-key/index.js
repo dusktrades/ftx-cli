@@ -1,10 +1,6 @@
-import { composeOption } from '../../helpers/index.js';
-
-const CONFIG = {
+const API_KEY = {
   FLAGS: '-k, --key <key>',
   DESCRIPTION: 'FTX API key',
 };
-
-const API_KEY = composeOption(CONFIG);
 
 export { API_KEY };

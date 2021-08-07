@@ -9,6 +9,7 @@ import { RATES } from './rates/index.js';
 import { SPOT } from './spot/index.js';
 import { STOP } from './stop/index.js';
 import { TRADE } from './trade/index.js';
+import { composeCommand } from './composeCommand.js';
 
 /**
  * The order here is the order commands will appear in help outputs. Commands
@@ -37,4 +38,4 @@ const COMMANDS = [
   STOP,
 ];
 
-export { COMMANDS };
+export { COMMANDS, composeCommand };

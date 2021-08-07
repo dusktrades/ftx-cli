@@ -1,7 +1,6 @@
 import { OPTIONS } from '../../options/index.js';
-import { composeCommand } from '../composeCommand.js';
 
-const CONFIG = {
+const TRADE = {
   NAME: 'trade',
   DESCRIPTION: 'place order',
   OPTIONS: [
@@ -15,7 +14,5 @@ const CONFIG = {
     { OPTION: OPTIONS.COMMANDS.ORDER_COUNT },
   ],
 };
-
-const TRADE = composeCommand(CONFIG);
 
 export { TRADE };

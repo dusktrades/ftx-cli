@@ -1,7 +1,6 @@
-import { composeSortOption } from '../../options/helpers/index.js';
-import { composeCommand } from '../composeCommand.js';
+import { composeSortOptionConfig } from '../../options/helpers/index.js';
 
-const SORT_OPTION = composeSortOption([
+const SORT_OPTION = composeSortOptionConfig([
   'currency',
   'lendable',
   'offered',
@@ -9,12 +8,10 @@ const SORT_OPTION = composeSortOption([
   'min-rate',
 ]);
 
-const CONFIG = {
+const OFFERS = {
   NAME: 'offers',
   DESCRIPTION: 'display my open lending offers',
   OPTIONS: [{ OPTION: SORT_OPTION }],
 };
-
-const OFFERS = composeCommand(CONFIG);
 
 export { OFFERS };

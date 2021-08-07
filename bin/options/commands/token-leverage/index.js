@@ -1,4 +1,4 @@
-import { composeOption, parseChoiceList } from '../../helpers/index.js';
+import { parseChoiceList } from '../../helpers/index.js';
 
 const TOKEN_LEVERAGES = [
   { parsed: 'BULL', options: ['3x', 'bull'] },
@@ -17,12 +17,10 @@ function parse(tokenLeverage) {
   );
 }
 
-const CONFIG = {
+const TOKEN_LEVERAGE = {
   FLAGS: '--token-leverage <leverage>',
   DESCRIPTION: 'token leverage name(s) or multiplier(s)',
   PARSER: parse,
 };
-
-const TOKEN_LEVERAGE = composeOption(CONFIG);
 
 export { TOKEN_LEVERAGE };
