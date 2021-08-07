@@ -3,6 +3,8 @@ import { API_SECRET } from './api-secret/index.js';
 import { COLOUR } from './colour/index.js';
 import { EXCHANGE } from './exchange/index.js';
 import { IOC } from './ioc/index.js';
+import { ORDER_INTERVAL } from './order-interval/index.js';
+import { ORDER_QUOTA } from './order-quota/index.js';
 import { POST_ONLY } from './post-only/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { REPEAT } from './repeat/index.js';
@@ -29,6 +31,8 @@ const GLOBAL = [
   REDUCE_ONLY.DISABLE,
   RETRY.ENABLE,
   RETRY.DISABLE,
+  ORDER_INTERVAL,
+  ORDER_QUOTA,
 
   // UI customisation options.
   COLOUR.ENABLE,

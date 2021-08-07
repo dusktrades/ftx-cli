@@ -1,5 +1,4 @@
 import { RateLimitError } from '../../../../../common/errors/index.js';
-import { queues } from '../../../queues/index.js';
 
 function handleError(error, retryQueueOrderRequest) {
   if (error instanceof RateLimitError) {
@@ -7,15 +6,16 @@ function handleError(error, retryQueueOrderRequest) {
     return retryQueueOrderRequest();
   }
 
+  // Order failed due to some other reason; rethrow.
   throw error;
 }
 
-function queueOrderRequest(request, priority = 0) {
+function queueOrderRequest(request, queue, priority = 0) {
   function retryQueueOrderRequest() {
-    return queueOrderRequest(request, priority + 1);
+    return queueOrderRequest(request, queue, priority + 1);
   }
 
-  return queues.orders
+  return queue
     .add(request, { priority })
     .catch((error) => handleError(error, retryQueueOrderRequest));
 }

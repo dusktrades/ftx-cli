@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js';
 
+import { queues } from '../../../queues/index.js';
+import { composeRequest } from './composeRequest.js';
 import { queueOrderRequest } from './queueOrderRequest.js';
 import { settleOrderRequests } from './settleOrderRequests.js';
-import { composeRequest } from './composeRequest.js';
 
 const FILL_DIRECTIONS = {
   LOW_TO_HIGH: 'low_to_high',
@@ -70,7 +71,7 @@ function composeScaledRequest(exchange, credentials, data, step, orderIndex) {
   return composeRequest(exchange, credentials, processedData);
 }
 
-async function composeScaledRequests(exchange, credentials, data) {
+async function composeScaledRequests(exchange, credentials, data, queue) {
   const requests = [];
   const step = calculateStep(data);
 
@@ -87,13 +88,13 @@ async function composeScaledRequests(exchange, credentials, data) {
       orderIndex
     );
 
-    requests.push(queueOrderRequest(request));
+    requests.push(queueOrderRequest(request, queue));
   }
 
   await settleOrderRequests(requests);
 }
 
-async function composeSimpleRequests(exchange, credentials, data) {
+async function composeSimpleRequests(exchange, credentials, data, queue) {
   const requests = [];
   const request = composeRequest(exchange, credentials, data);
 
@@ -102,17 +103,22 @@ async function composeSimpleRequests(exchange, credentials, data) {
     orderIndex < data.orderCount.toNumber();
     orderIndex += 1
   ) {
-    requests.push(queueOrderRequest(request));
+    requests.push(queueOrderRequest(request, queue));
   }
 
   await settleOrderRequests(requests);
 }
 
 async function place({ exchange, credentials, data }) {
+  const queue = queues.orders.create(
+    data.orderRateLimitIntervalMs,
+    data.orderRateLimitIntervalQuota
+  );
+
   // Scaled order requests have a price range.
   await (data.price?.from != null
-    ? composeScaledRequests(exchange, credentials, data)
-    : composeSimpleRequests(exchange, credentials, data));
+    ? composeScaledRequests(exchange, credentials, data, queue)
+    : composeSimpleRequests(exchange, credentials, data, queue));
 }
 
 export { place };

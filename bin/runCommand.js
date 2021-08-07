@@ -20,12 +20,18 @@ function getGlobalOptions() {
     repeat: inlineGlobalOptions.repeat,
     enableColours:
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
+    enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
     enablePostOnly:
       inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
-    enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
     enableReduceOnly:
       inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
     enableRetry: inlineGlobalOptions.retry ?? CONFIG.USER.get('ENABLE_RETRY'),
+    orderRateLimitIntervalMs:
+      inlineGlobalOptions.orderInterval ??
+      CONFIG.USER.get('ORDER_RATE_LIMIT_INTERVAL_MS'),
+    orderRateLimitIntervalQuota:
+      inlineGlobalOptions.orderQuota ??
+      CONFIG.USER.get('ORDER_RATE_LIMIT_INTERVAL_QUOTA'),
   };
 }
 

@@ -17,10 +17,12 @@ async function run(options) {
     triggerPrice: options.command.triggerPrice,
     trailValue: options.command.trailValue,
     orderCount: options.command.count,
-    enablePostOnly: options.global.enablePostOnly,
     enableIoc: options.global.enableIoc,
+    enablePostOnly: options.global.enablePostOnly,
     enableReduceOnly: options.global.enableReduceOnly,
     enableRetry: options.global.enableRetry,
+    orderRateLimitIntervalMs: options.global.orderRateLimitIntervalMs,
+    orderRateLimitIntervalQuota: options.global.orderRateLimitIntervalQuota,
   };
 
   try {

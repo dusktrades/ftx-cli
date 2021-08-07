@@ -1,4 +1,4 @@
-import { orders } from './orders.js';
+import { orders } from './orders/index.js';
 
 const queues = { orders };
 
