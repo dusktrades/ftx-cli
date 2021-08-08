@@ -7,9 +7,9 @@
 
 ## Commands
 
-| Command           | Description |
-| ----------------- | ----------- |
-| [`trade`](#trade) | Place order |
+| Command           | Description | Authenticated |
+| ----------------- | ----------- | ------------- |
+| [`trade`](#trade) | Place order | 🔐            |
 
 ### Trade
 
