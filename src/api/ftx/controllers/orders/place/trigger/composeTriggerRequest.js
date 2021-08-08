@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { ApiError } from '../../../../../../common/errors/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
@@ -72,27 +70,34 @@ function normaliseTrailValue(trailValue, normalisedType) {
   return trailValue.toNumber();
 }
 
-function normaliseSize(data) {
-  // TODO: Parse input to BigNumber instead of in controller.
-  return new BigNumber(data.size).dividedBy(data.orderCount).toNumber();
+function normaliseSize({ size, orderCount }) {
+  return size.dividedBy(orderCount).toNumber();
 }
 
 function composeRequestBody(data) {
   const typeObject = TYPES[data.type];
+  const orderPrice = normalisePrice(data.price, typeObject.simpleType);
+
+  const triggerPrice = normaliseTriggerPrice(
+    data.triggerPrice,
+    typeObject.normalised
+  );
+
+  const trailValue = normaliseTrailValue(
+    data.trailValue,
+    typeObject.normalised
+  );
 
   return {
     market: data.market,
     side: data.side,
     type: typeObject.normalised,
-    triggerPrice: normaliseTriggerPrice(
-      data.triggerPrice,
-      typeObject.normalised
-    ),
-    orderPrice: normalisePrice(data.price, typeObject.simpleType),
-    trailValue: normaliseTrailValue(data.trailValue, typeObject.normalised),
     size: normaliseSize(data),
     reduceOnly: data.enableReduceOnly,
     retryUntilFilled: data.enableRetry,
+    ...(orderPrice != null && { orderPrice }),
+    ...(triggerPrice != null && { triggerPrice }),
+    ...(trailValue != null && { trailValue }),
   };
 }
 

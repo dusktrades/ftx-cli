@@ -17,17 +17,20 @@ const COMMON_REQUEST_OPTIONS = {
 
 /**
  * Tag POST requests with our External Referral Program name; required for
- * order endpoints.
+ * order endpoints. FTX US has a separate External Referral Program system,
+ * which we are not currently using.
  */
-function composeRequestBody(requestBody) {
+function composeRequestBody({ exchange, requestBody }) {
   return {
     ...requestBody,
-    externalReferralProgram: CONFIG.EXTERNAL_REFERRAL_PROGRAM_NAME,
+    ...(exchange === 'ftx' && {
+      externalReferralProgram: CONFIG.EXTERNAL_REFERRAL_PROGRAM_NAME,
+    }),
   };
 }
 
 function composePostRequestOptions(options) {
-  const requestBody = composeRequestBody(options.requestBody);
+  const requestBody = composeRequestBody(options);
 
   return {
     ...COMMON_REQUEST_OPTIONS,

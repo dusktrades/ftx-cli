@@ -24,6 +24,10 @@ async function run(options) {
     rateLimit: options.global.rateLimit,
   };
 
+  Logger.info('Processing order(s)', {
+    enableColours: options.global.enableColours,
+  });
+
   try {
     await Ftx.orders.place({
       exchange: options.global.exchange,
