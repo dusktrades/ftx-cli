@@ -17,21 +17,19 @@ function getGlobalOptions() {
     key: inlineGlobalOptions.key ?? CONFIG.USER.get('API_KEY'),
     secret: inlineGlobalOptions.secret ?? CONFIG.USER.get('API_SECRET'),
     subaccount: inlineGlobalOptions.subaccount ?? CONFIG.USER.get('SUBACCOUNT'),
+
     repeat: inlineGlobalOptions.repeat,
-    enableColours:
-      inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
+
     enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
     enablePostOnly:
       inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
     enableReduceOnly:
       inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
     enableRetry: inlineGlobalOptions.retry ?? CONFIG.USER.get('ENABLE_RETRY'),
-    orderRateLimitIntervalMs:
-      inlineGlobalOptions.orderInterval ??
-      CONFIG.USER.get('ORDER_RATE_LIMIT_INTERVAL_MS'),
-    orderRateLimitIntervalQuota:
-      inlineGlobalOptions.orderQuota ??
-      CONFIG.USER.get('ORDER_RATE_LIMIT_INTERVAL_QUOTA'),
+    rateLimit: inlineGlobalOptions.rateLimit ?? CONFIG.USER.get('RATE_LIMIT'),
+
+    enableColours:
+      inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
   };
 }
 

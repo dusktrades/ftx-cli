@@ -11,6 +11,10 @@ import { composeEndpoint } from './composeEndpoint.js';
 import { composeHeaders } from './composeHeaders.js';
 import { composeUrl } from './composeUrl.js';
 
+const COMMON_REQUEST_OPTIONS = {
+  timeout: { request: 2_147_483_647 },
+};
+
 /**
  * Tag POST requests with our External Referral Program name; required for
  * order endpoints.
@@ -26,6 +30,7 @@ function composePostRequestOptions(options) {
   const requestBody = composeRequestBody(options.requestBody);
 
   return {
+    ...COMMON_REQUEST_OPTIONS,
     headers: composeHeaders({ ...options, requestBody }),
     json: requestBody,
   };
@@ -36,7 +41,10 @@ function composeRequestOptions(options) {
     return composePostRequestOptions(options);
   }
 
-  return { headers: composeHeaders(options) };
+  return {
+    ...COMMON_REQUEST_OPTIONS,
+    headers: composeHeaders(options),
+  };
 }
 
 /**
@@ -44,7 +52,13 @@ function composeRequestOptions(options) {
  * key (error message).
  */
 function parseErrorMessage(error) {
-  return JSON.parse(error?.response?.body)?.error;
+  const responseBody = error?.response?.body;
+
+  if (responseBody == null) {
+    return null;
+  }
+
+  return JSON.parse(responseBody).error;
 }
 
 function handleError(error) {

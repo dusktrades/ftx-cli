@@ -21,8 +21,7 @@ async function run(options) {
     enablePostOnly: options.global.enablePostOnly,
     enableReduceOnly: options.global.enableReduceOnly,
     enableRetry: options.global.enableRetry,
-    orderRateLimitIntervalMs: options.global.orderRateLimitIntervalMs,
-    orderRateLimitIntervalQuota: options.global.orderRateLimitIntervalQuota,
+    rateLimit: options.global.rateLimit,
   };
 
   try {

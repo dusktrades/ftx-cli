@@ -110,10 +110,7 @@ async function composeSimpleRequests(exchange, credentials, data, queue) {
 }
 
 async function place({ exchange, credentials, data }) {
-  const queue = queues.orders.create(
-    data.orderRateLimitIntervalMs,
-    data.orderRateLimitIntervalQuota
-  );
+  const queue = queues.orders.create(data.rateLimit);
 
   // Scaled order requests have a price range.
   await (data.price?.from != null

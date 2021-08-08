@@ -17,10 +17,16 @@ import PQueue from 'p-queue';
  *
  * REF: https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX
  */
-function create(intervalMs, intervalQuota) {
+function create({ intervalLimit, intervalMs }) {
   const queue = new PQueue({
     interval: intervalMs,
-    intervalCap: intervalQuota,
+    intervalCap: intervalLimit,
+
+    /**
+     * If the next interval begins with pending promises, they will carry over
+     * and count towards its interval limit.
+     */
+    carryoverConcurrencyCount: true,
   });
 
   queue.on('error', () => {

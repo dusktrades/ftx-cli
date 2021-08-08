@@ -9,13 +9,15 @@ const USER = new Conf({
   projectSuffix: '',
   defaults: {
     EXCHANGE: 'ftx',
-    ENABLE_COLOURS: true,
     ENABLE_IOC: false,
     ENABLE_POST_ONLY: true,
     ENABLE_REDUCE_ONLY: false,
     ENABLE_RETRY: true,
-    ORDER_RATE_LIMIT_INTERVAL_MS: 200,
-    ORDER_RATE_LIMIT_INTERVAL_QUOTA: 6,
+    RATE_LIMIT: {
+      intervalLimit: 6,
+      intervalMs: 200,
+    },
+    ENABLE_COLOURS: true,
   },
 });
 
