@@ -45,6 +45,8 @@ ftx trade --market btc-perp --side buy --type market --size 10 --split 5 --durat
 ftx trade --market ftt/usd --side buy --type limit --size 40 --split 10 --duration 1m30s
 ```
 
+![Divider](../../images/divider.png)
+
 ## Scheduled order
 
 A scheduled order is an order which will attempt to be placed in full (i.e. without being split) at a given date and time (local timezone) or repeating schedule.
