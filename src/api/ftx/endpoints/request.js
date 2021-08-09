@@ -1,11 +1,6 @@
 import got from 'got';
 
-import {
-  ApiError,
-  HttpError,
-  RateLimitError,
-} from '../../../common/errors/index.js';
-
+import { ApiError, HttpError, RateLimitError } from '../../../common/index.js';
 import { CONFIG } from '../../../config/index.js';
 import { composeEndpoint } from './composeEndpoint.js';
 import { composeHeaders } from './composeHeaders.js';

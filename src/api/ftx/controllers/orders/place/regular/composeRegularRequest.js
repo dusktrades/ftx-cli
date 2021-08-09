@@ -1,4 +1,4 @@
-import { ApiError } from '../../../../../../common/errors/index.js';
+import { ApiError } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
 function normalisePrice({ type, price }) {

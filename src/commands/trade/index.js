@@ -17,6 +17,7 @@ async function run(options) {
     triggerPrice: options.command.triggerPrice,
     trailValue: options.command.trailValue,
     splitCount: options.command.split,
+    durationMilliseconds: options.command.duration,
     enableIoc: options.global.enableIoc,
     enablePostOnly: options.global.enablePostOnly,
     enableReduceOnly: options.global.enableReduceOnly,

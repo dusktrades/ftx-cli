@@ -1,4 +1,4 @@
-import { EmptyResultsError } from '../../../../common/errors/index.js';
+import { EmptyResultsError } from '../../../../common/index.js';
 
 import {
   compareAToZ,

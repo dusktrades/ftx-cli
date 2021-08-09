@@ -1,4 +1,5 @@
 import { CURRENCY } from './currency/index.js';
+import { DURATION } from './duration/index.js';
 import { FUTURE_TYPE } from './future-type/index.js';
 import { MARKET } from './market/index.js';
 import { MIN_RATE } from './min-rate/index.js';
@@ -15,6 +16,7 @@ import { TRIGGER_PRICE } from './trigger-price/index.js';
 
 const COMMANDS = {
   CURRENCY,
+  DURATION,
   FUTURE_TYPE,
   MARKET,
   MIN_RATE,

@@ -2,10 +2,9 @@ import {
   ApiError,
   EmptyResultsError,
   HttpError,
+  Logger,
   RateLimitError,
-} from '../src/common/errors/index.js';
-
-import { Logger } from '../src/common/logger/index.js';
+} from '../src/common/index.js';
 
 const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError, RateLimitError];
 
