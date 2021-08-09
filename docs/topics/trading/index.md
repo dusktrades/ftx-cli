@@ -13,7 +13,7 @@
 
 ### Trade
 
-**Usage:**
+#### Trade usage
 
 | Option                      | Description                                                                                                                                         | Required              | Notes                                                                                                                                                                                                                                |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -21,21 +21,22 @@
 | `--side <side>`             | Order side                                                                                                                                          | ✔️                    | Options:<br>`buy` (alias: `b`)<br>`sell` (alias: `s`)                                                                                                                                                                                |
 | `-t, --type <order type>`   | Order type                                                                                                                                          | ✔️                    | Options:<br>`market` (alias: `m`)<br>`limit` (alias: `l`)<br>`stop-market` (alias: `sm`)<br>`stop-limit` (alias: `sl`)<br>`trailing-stop` (alias: `ts`)<br>`take-profit-market` (alias: `tpm`)<br>`take-profit-limit` (alias: `tpl`) |
 | `-s, --size <size>`         | Total amount of underlying currency to execute                                                                                                      | ✔️                    |                                                                                                                                                                                                                                      |
-| `-p, --price <price>`       | Price or price range that limit orders will be executed at                                                                                          | ⚠️                    | Required for order types:<br>`limit`<br>`stop-limit`<br>`take-profit-limit`<br><br>Supports price range for [scaled orders](./split-and-scaled-order.md#scaled-order)                                                                |
+| `-p, --price <price>`       | Price or price range that limit orders will be executed at                                                                                          | ⚠️                    | Required for order types:<br>`limit`<br>`stop-limit`<br>`take-profit-limit`<br><br>Supports price range for [scaled orders](./split-scaled-twap-orders.md#scaled-order)                                                              |
 | `--trigger-price <price>`   | Price that triggers stop or take profit orders                                                                                                      | ⚠️                    | Required for order types:<br>`stop-market`<br>`stop-limit`<br>`take-profit-market`<br>`take-profit-limit`                                                                                                                            |
 | `--trail-value <value>`     | Distance the price must move in order to trigger `trailing-stop` orders; positive for `buy` orders and negative for `sell` orders                   | ⚠️                    | Required for order types:<br>`trailing-stop`                                                                                                                                                                                         |
-| `--split <count>`           | Number of orders to split the order size into                                                                                                       | ❌ (default: `1`)     | [Learn more about split orders](./split-and-scaled-orders.md#split-order)                                                                                                                                                            |
+| `--split <count>`           | Split count: number of orders to split the order size into                                                                                          | ❌ (default: `1`)     | [Learn more about split orders](./split-scaled-twap-orders.md#split-order)                                                                                                                                                           |
+| `--duration <duration>`     | Order placement duration: controls the interval between individual TWAP orders in conjunction with the split count                                  | ❌ (default: `0`)     | [Learn more about TWAP orders](./split-scaled-twap-orders.md#twap-order)                                                                                                                                                             |
 | `--ioc`                     | Enable Immediate-or-Cancel (IOC) mode: `limit` orders will only be executed as the taker                                                            | ❌ (default: `false`) | Disable: `--no-ioc`                                                                                                                                                                                                                  |
 | `--post-only`               | Enable Post-Only mode: `limit` orders will only be executed as the maker                                                                            | ❌ (default: `true`)  | Disable: `--no-post-only`                                                                                                                                                                                                            |
 | `--reduce-only`             | Enable Reduce-Only mode: orders will only reduce your position                                                                                      | ❌ (default: `false`) | Disable: `--no-reduce-only`                                                                                                                                                                                                          |
 | `--retry`                   | Enable Retry-Until-Filled mode: `stop-market`, `take-profit-market`, and `trailing-stop` orders will retry sending the triggered order until filled | ❌ (default: `true`)  | Disable: `--no-retry`                                                                                                                                                                                                                |
-| `--rate-limit <rate limit>` | Order placement request limit per interval (milliseconds)                                                                                           | ❌ (default: `6/200`) | [Learn more about rate limit overrides](./rate-limit-overrides.md)                                                                                                                                                                   |
+| `--rate-limit <rate limit>` | Order placement rate limit: request limit per interval (milliseconds)                                                                               | ❌ (default: `6/200`) | [Learn more about rate limit overrides](./rate-limit-overrides.md)                                                                                                                                                                   |
 
 > ℹ️ Market symbols are case-insensitive but must be formatted as they are on the FTX platform (e.g. `btc/usd`, `btc-perp`, `btc-move-0808`). You can find lists of available markets using the `spot` and `futures` commands.
 >
 > ℹ️ You can save your order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
 
-**Examples:**
+#### Trade examples
 
 ```sh
 # Place order: market buy 1 BTC/USD.
@@ -60,7 +61,7 @@ ftx trade --market srm/usdt --side buy --type take-profit-market --size 10 --tri
 ftx trade --market usdtbear/usd --side buy --type take-profit-limit --size 10.2k --price 3100 --trigger-price 3000
 ```
 
-**Resources:**
+#### Trade resources
 
 - [Advanced Order Types (Article)](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
 - [Reduce-only Orders (Article)](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
