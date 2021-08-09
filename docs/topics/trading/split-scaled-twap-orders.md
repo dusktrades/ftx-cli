@@ -68,7 +68,7 @@ ftx trade --market btc-perp --side sell --type take-profit-limit --size 5 --pric
 
 ## TWAP order
 
-A TWAP order is a split order paired with an placement duration. The split orders will be spread linearly across the placement duration (placement interval = placement duration / [split count - 1]).
+A TWAP order is a split order paired with a placement duration. The split orders will be spread linearly across the placement duration (placement interval = placement duration / [split count - 1]).
 
 Placement durations have the following format: `--duration XhYmZs`
 
