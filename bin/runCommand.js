@@ -11,7 +11,7 @@ const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
 function getGlobalOptions() {
   const inlineGlobalOptions = program.opts();
 
-  // Give inlined options priority over stored versions.
+  // Give inline options priority over stored config equivalents.
   return {
     exchange: inlineGlobalOptions.exchange ?? CONFIG.USER.get('EXCHANGE'),
     key: inlineGlobalOptions.key ?? CONFIG.USER.get('API_KEY'),

@@ -50,7 +50,7 @@ function normaliseTriggerPrice(triggerPrice, normalisedType) {
 
   if (triggerPrice == null) {
     throw new ApiError(
-      'Stop and Take Profit orders must specify trigger price'
+      'Stop and take profit orders must specify trigger price'
     );
   }
 
@@ -64,14 +64,14 @@ function normaliseTrailValue(trailValue, normalisedType) {
   }
 
   if (trailValue == null) {
-    throw new ApiError('Trailing Stop orders must specify trail value');
+    throw new ApiError('Trailing stop orders must specify trail value');
   }
 
   return trailValue.toNumber();
 }
 
-function normaliseSize({ size, orderCount }) {
-  return size.dividedBy(orderCount).toNumber();
+function normaliseSize({ size, splitCount }) {
+  return size.dividedBy(splitCount).toNumber();
 }
 
 function composeRequestBody(data) {

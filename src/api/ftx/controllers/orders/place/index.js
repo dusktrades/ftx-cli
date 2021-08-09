@@ -9,8 +9,8 @@ function calculateDifference({ from, to }) {
   return to.minus(from);
 }
 
-function calculateAdditionalOrderCount(orderCount) {
-  return orderCount.minus(new BigNumber(1));
+function calculateAdditionalSplitCount(splitCount) {
+  return splitCount.minus(new BigNumber(1));
 }
 
 function calculateStep(data) {
@@ -20,13 +20,13 @@ function calculateStep(data) {
     return new BigNumber(0);
   }
 
-  const additionalOrderCount = calculateAdditionalOrderCount(data.orderCount);
+  const additionalSplitCount = calculateAdditionalSplitCount(data.splitCount);
 
-  if (additionalOrderCount.isZero()) {
+  if (additionalSplitCount.isZero()) {
     return new BigNumber(0);
   }
 
-  return difference.dividedBy(additionalOrderCount);
+  return difference.dividedBy(additionalSplitCount);
 }
 
 function calculateOffset(step, orderIndex) {
@@ -54,7 +54,7 @@ async function composeScaledRequests(exchange, credentials, data, queue) {
 
   for (
     let orderIndex = 0;
-    orderIndex < data.orderCount.toNumber();
+    orderIndex < data.splitCount.toNumber();
     orderIndex += 1
   ) {
     const request = composeScaledRequest(
@@ -77,7 +77,7 @@ async function composeSimpleRequests(exchange, credentials, data, queue) {
 
   for (
     let orderIndex = 0;
-    orderIndex < data.orderCount.toNumber();
+    orderIndex < data.splitCount.toNumber();
     orderIndex += 1
   ) {
     requests.push(queueOrderRequest(request, queue));

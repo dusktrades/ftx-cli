@@ -16,7 +16,7 @@ async function run(options) {
     size: options.command.size,
     triggerPrice: options.command.triggerPrice,
     trailValue: options.command.trailValue,
-    orderCount: options.command.count,
+    splitCount: options.command.split,
     enableIoc: options.global.enableIoc,
     enablePostOnly: options.global.enablePostOnly,
     enableReduceOnly: options.global.enableReduceOnly,

@@ -2,10 +2,10 @@ import BigNumber from 'bignumber.js';
 
 import { parseNumber } from '../../helpers/index.js';
 
-function parse(orderCount) {
+function parse(splitCount) {
   return parseNumber(
-    orderCount,
-    'Order count must be an integer greater than zero.',
+    splitCount,
+    'Split must be an integer greater than zero.',
     {
       allowNegative: false,
       allowZero: false,
@@ -14,11 +14,11 @@ function parse(orderCount) {
   );
 }
 
-const ORDER_COUNT = {
-  FLAGS: '--count <count>',
-  DESCRIPTION: 'order count',
+const SPLIT = {
+  FLAGS: '--split <count>',
+  DESCRIPTION: 'split count',
   PARSER: parse,
   DEFAULT: new BigNumber(1),
 };
 
-export { ORDER_COUNT };
+export { SPLIT };

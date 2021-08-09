@@ -1,9 +1,9 @@
 import { ApiError } from '../../../../../../common/errors/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
-function normalisePrice(data) {
+function normalisePrice({ type, price }) {
   // Exchange decides price for market orders.
-  if (data.type === 'market') {
+  if (type === 'market') {
     return null;
   }
 
@@ -12,30 +12,30 @@ function normalisePrice(data) {
    * should assume they have forgotten it instead of falling back to the API
    * default of treating it as a market order.
    */
-  if (data.price == null) {
+  if (price == null) {
     throw new ApiError('Limit orders must specify price');
   }
 
-  return data.price.toNumber();
+  return price.toNumber();
 }
 
-function normaliseSize(data) {
-  return data.size.dividedBy(data.orderCount).toNumber();
+function normaliseSize({ size, splitCount }) {
+  return size.dividedBy(splitCount).toNumber();
 }
 
-function normaliseIoc(data) {
+function normaliseIoc({ type, enableIoc }) {
   // IOC mode only affects regular limit orders.
-  if (data.type === 'limit') {
-    return data.enableIoc;
+  if (type === 'limit') {
+    return enableIoc;
   }
 
   return null;
 }
 
-function normalisePostOnly(data) {
+function normalisePostOnly({ type, enablePostOnly }) {
   // Post-Only mode only affects regular limit orders.
-  if (data.type === 'limit') {
-    return data.enablePostOnly;
+  if (type === 'limit') {
+    return enablePostOnly;
   }
 
   return null;
