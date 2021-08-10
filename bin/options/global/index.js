@@ -8,6 +8,7 @@ import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { REPEAT } from './repeat/index.js';
 import { RETRY } from './retry/index.js';
+import { SCHEDULE } from './schedule/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
 
 // The order here is the order options will appear in help outputs.
@@ -19,6 +20,7 @@ const GLOBAL = [
   SUBACCOUNT,
 
   // Behaviour options.
+  SCHEDULE,
   REPEAT,
 
   // Trading options.

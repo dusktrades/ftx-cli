@@ -2,7 +2,9 @@ import { program } from 'commander';
 import cron from 'node-cron';
 
 import { Commands } from '../src/commands/index.js';
+import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
+import { sleep } from '../src/util/index.js';
 import { handleError } from './handleError.js';
 
 // Repeat at XX:XX:00; used if no user/command-provided schedule.
@@ -18,6 +20,7 @@ function getGlobalOptions() {
     secret: inlineGlobalOptions.secret ?? CONFIG.USER.get('API_SECRET'),
     subaccount: inlineGlobalOptions.subaccount ?? CONFIG.USER.get('SUBACCOUNT'),
 
+    schedule: inlineGlobalOptions.schedule,
     repeat: inlineGlobalOptions.repeat,
 
     enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
@@ -40,6 +43,23 @@ function getOptions(inlineCommandOptions) {
   };
 }
 
+async function scheduleCommand(run, options) {
+  Logger.info('Waiting for schedule trigger', {
+    enableColours: options.global.enableColours,
+  });
+
+  if (options.global.schedule.type === 'date') {
+    await sleep(options.global.schedule.millisecondsUntilDate);
+    await run(options);
+
+    return;
+  }
+
+  cron.schedule(options.global.schedule.cronExpression, () => {
+    run(options);
+  });
+}
+
 async function repeatRun(run, options, cronExpression) {
   // Schedule repeat runs.
   cron.schedule(cronExpression, async () => {
@@ -56,6 +76,13 @@ async function runFunction(command, options) {
     DEFAULT_REPEAT_CRON_EXPRESSION = FALLBACK_REPEAT_CRON_EXPRESSION,
   } = Commands[command];
 
+  if (options.global.schedule != null) {
+    await scheduleCommand(run, options);
+
+    return;
+  }
+
+  // TODO: Remove `repeat` option in favour of `schedule`.
   if (options.global.repeat == null) {
     await run(options);
 
@@ -74,9 +101,11 @@ async function runFunction(command, options) {
 async function runCommand(command, inlineCommandOptions) {
   const options = getOptions(inlineCommandOptions);
 
-  await runFunction(command, options).catch((error) => {
+  try {
+    await runFunction(command, options);
+  } catch (error) {
     handleError(error, options.global.enableColours);
-  });
+  }
 }
 
 export { runCommand };
