@@ -40,7 +40,7 @@ Compatible order types:
 - `stop-limit`
 - `take-profit-limit`
 
-Scaled orders can be used to minimise market impact and obtain a better average price when entering or exiting a position.
+Scaled orders can be used to minimise market impact or obtain a better average price when entering or exiting a position.
 
 When scaled orders need to be queued due to rate limits, they will be queued from the first price to the second price in the price range. This effect will be more apparent the slower the account's rate limit and the higher the number of orders being sent in quick succession.
 
@@ -72,7 +72,7 @@ A TWAP order is a split order paired with a placement duration. The split orders
 
 Placement durations have the following format: `--duration XhYmZs`
 
-TWAP orders can be used to minimise market impact.
+TWAP orders can be used to minimise market impact or increase the seriality/predictability of order placement sequence.
 
 ```sh
 # Overall order:
@@ -116,5 +116,7 @@ ftx trade --market ftt/usd --side buy --type limit --size 40 --split 10 --durati
 ## Notes
 
 It is possible for part of a split, scaled, or TWAP order to be rejected (e.g. connection loss, not enough margin). The current behaviour is to ignore rejected orders and continue, which may result in incomplete orders in some rare cases. We are looking into letting users customise this behaviour (e.g. prompt, ignore, cancel queued orders, cancel queued and placed orders).
+
+The sequence in which orders are placed cannot be guaranteed for split or scaled orders, as FTX CLI favours speed instead (i.e. sending orders in parallel as early as possible). TWAP orders can be used to increase seriality/predictability.
 
 FTX trading fees are charged per volume executed and not per trade executed, so multiple smaller orders will incur the same fees as if they were placed as a single large order.

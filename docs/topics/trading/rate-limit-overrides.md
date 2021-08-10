@@ -17,7 +17,7 @@ It is recommended that you only override the rate limit under certain circumstan
 
 ## Speed-critical strategies
 
-Overriding the rate limit with a setting that is faster than the rate limit linked to your FTX account(s) may result in increased order placement speed, however the network will be busier as it has to handle more request rejections/retries.
+Overriding the rate limit with a setting that is faster than the rate limit linked to your FTX account(s) may result in increased order placement speed in certain situations, as you are increasing the chances of filling your rate limit, however the network will be busier as it has to handle more request rejections/retries.
 
 ## Resources
 

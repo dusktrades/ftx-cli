@@ -34,17 +34,20 @@ async function run(options) {
       exchange: options.global.exchange,
       credentials,
       data,
-    });
-
-    Logger.info('Placed order(s)', {
       enableColours: options.global.enableColours,
     });
-  } catch (error) {
+
+    Logger.info('Order placement completed', {
+      enableColours: options.global.enableColours,
+    });
+  } catch {
+    /**
+     * Errors are handled at per-order level because complex orders may be
+     * partially accepted and/or have several different errors to report.
+     */
     Logger.error('One or more orders failed to be placed', {
       enableColours: options.global.enableColours,
     });
-
-    throw error;
   }
 }
 

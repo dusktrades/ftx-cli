@@ -45,6 +45,8 @@ function create({ intervalLimit, intervalMs }) {
      * Also add inline/config options to customise behaviour:
      *
      * - `ORDER_REJECTION_ACTION` [prompt (default)|ignore|cancel-queued|cancel-all]
+     *
+     * We should probably halt execution if the error is unhandled.
      */
   });
 

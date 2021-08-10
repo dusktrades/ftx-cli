@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { RateLimitError } from '../../../../../common/index.js';
+import { Logger, RateLimitError } from '../../../../../common/index.js';
 import { sleep } from '../../../../../util/index.js';
 import { queues } from '../../../queues/index.js';
 import { composeRequest } from './composeRequest.js';
@@ -67,42 +67,49 @@ function calculateOrderDelayMilliseconds(intervalMilliseconds, orderIndex) {
   return intervalMilliseconds.multipliedBy(orderIndex);
 }
 
-function handleOrderRequestError(error, retry) {
+function handleOrderRequestError(error, retry, enableColours) {
   if (error instanceof RateLimitError) {
     // Order failed due to exceeding rate limit; retry with increased priority.
     return retry();
   }
 
-  // Order failed due to some other reason; rethrow.
+  // Order failed due to some other reason; notify and rethrow.
+  Logger.error(`  Order failed: ${error.message}`, { enableColours });
+
   throw error;
 }
 
-function queueOrderRequest(request, queue, priority = 0) {
+function queueOrderRequest(request, queue, enableColours, priority = 0) {
   function retry() {
-    return queueOrderRequest(request, queue, priority + 1);
+    return queueOrderRequest(request, queue, enableColours, priority + 1);
   }
 
   return queue
     .add(request, { priority })
-    .catch((error) => handleOrderRequestError(error, retry));
+    .then(() => {
+      Logger.info('  Order placed', { enableColours });
+    })
+    .catch((error) => handleOrderRequestError(error, retry, enableColours));
 }
 
 async function controlOrderRequestTiming(
   request,
   queue,
-  orderDelayMilliseconds
+  orderDelayMilliseconds,
+  enableColours
 ) {
   if (orderDelayMilliseconds > 0) {
     await sleep(orderDelayMilliseconds);
   }
 
-  return queueOrderRequest(request, queue);
+  return queueOrderRequest(request, queue, enableColours);
 }
 
 async function composeScaledRequests(
   exchange,
   credentials,
   data,
+  enableColours,
   queue,
   intervalMilliseconds
 ) {
@@ -127,9 +134,14 @@ async function composeScaledRequests(
       orderIndex
     );
 
-    requests.push(
-      controlOrderRequestTiming(request, queue, orderDelayMilliseconds)
+    const timedRequest = controlOrderRequestTiming(
+      request,
+      queue,
+      orderDelayMilliseconds,
+      enableColours
     );
+
+    requests.push(timedRequest);
   }
 
   await settleOrderRequests(requests);
@@ -139,6 +151,7 @@ async function composeSimpleRequests(
   exchange,
   credentials,
   data,
+  enableColours,
   queue,
   intervalMilliseconds
 ) {
@@ -155,15 +168,20 @@ async function composeSimpleRequests(
       orderIndex
     );
 
-    requests.push(
-      controlOrderRequestTiming(request, queue, orderDelayMilliseconds)
+    const timedRequest = controlOrderRequestTiming(
+      request,
+      queue,
+      orderDelayMilliseconds,
+      enableColours
     );
+
+    requests.push(timedRequest);
   }
 
   await settleOrderRequests(requests);
 }
 
-async function place({ exchange, credentials, data }) {
+async function place({ exchange, credentials, data, enableColours }) {
   const queue = queues.orders.create(data.rateLimit);
   const intervalMilliseconds = calculateIntervalMilliseconds(data);
 
@@ -173,6 +191,7 @@ async function place({ exchange, credentials, data }) {
         exchange,
         credentials,
         data,
+        enableColours,
         queue,
         intervalMilliseconds
       )
@@ -180,6 +199,7 @@ async function place({ exchange, credentials, data }) {
         exchange,
         credentials,
         data,
+        enableColours,
         queue,
         intervalMilliseconds
       ));

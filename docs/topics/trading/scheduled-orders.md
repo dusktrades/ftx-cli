@@ -5,9 +5,9 @@ A scheduled order is an order which will attempt to be placed in full (i.e. with
 Schedules have the following formats:
 
 - Specific date and time: `--schedule YYYY-MM-DDThh:mm:ss`
-- Repeating schedule (cron expression): `--schedule "s m h D M Y"`
+- Repeating schedule (cron expression): `--schedule "* * * * * *"`
 
-Scheduled orders can be used to simulate complex timed-based order types (e.g. Time-of-Day) and repeating investing strategies (e.g. Dollar-Cost Averaging).
+Scheduled orders can be used to simulate complex timed-based order types (e.g. Time-of-Day) or repeating investing strategies (e.g. Dollar-Cost Averaging).
 
 ```sh
 # Market buy 1 BTC/USD on December 25, 2021 at 09:30:00 (local timezone).
