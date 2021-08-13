@@ -74,7 +74,7 @@ function handleOrderRequestError(error, retry, enableColours) {
   }
 
   // Order failed due to some other reason; notify and rethrow.
-  Logger.error(`  Order failed: ${error.message}`, { enableColours });
+  Logger.error(`  Failed order: ${error.message}`, { enableColours });
 
   throw error;
 }
@@ -87,7 +87,7 @@ function queueOrderRequest(request, queue, enableColours, priority = 0) {
   return queue
     .add(request, { priority })
     .then(() => {
-      Logger.info('  Order placed', { enableColours });
+      Logger.info('  Placed order', { enableColours });
     })
     .catch((error) => handleOrderRequestError(error, retry, enableColours));
 }

@@ -5,6 +5,7 @@ async function placeOrder(options) {
     ...options,
     rawEndpoint: 'orders',
     method: 'post',
+    enableExternalReferralProgram: true,
   });
 }
 

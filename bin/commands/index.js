@@ -1,3 +1,4 @@
+import { CANCEL } from './cancel/index.js';
 import { CONFIG } from './config/index.js';
 import { EARNINGS } from './earnings/index.js';
 import { FUTURES } from './futures/index.js';
@@ -29,6 +30,7 @@ const COMMANDS = [
 
   // Trading commands.
   TRADE,
+  CANCEL,
 
   // Lending commands.
   RATES,

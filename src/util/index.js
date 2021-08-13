@@ -1,3 +1,4 @@
+export { MAX_32_BIT_INTEGER } from './max32BitInteger.js';
 export { SECONDS_PER_HOUR } from './secondsPerHour.js';
 export { compareAToZ } from './compareAToZ.js';
 export { compareHighToLow } from './compareHighToLow.js';

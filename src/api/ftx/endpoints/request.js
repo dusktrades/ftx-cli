@@ -2,46 +2,44 @@ import got from 'got';
 
 import { ApiError, HttpError, RateLimitError } from '../../../common/index.js';
 import { CONFIG } from '../../../config/index.js';
+import { MAX_32_BIT_INTEGER } from '../../../util/index.js';
 import { composeEndpoint } from './composeEndpoint.js';
 import { composeHeaders } from './composeHeaders.js';
 import { composeUrl } from './composeUrl.js';
 
-const COMMON_REQUEST_OPTIONS = {
-  timeout: { request: 2_147_483_647 },
-};
-
 /**
- * Tag POST requests with our External Referral Program name; required for
- * order endpoints. FTX US has a separate External Referral Program system,
- * which we are not currently using.
+ * We should tag the request with our External Referral Program name if the
+ * endpoint requires/accepts it and the exchange is set to FTX. FTX US has a
+ * separate External Referral Program system which we are not currently using.
  */
-function composeRequestBody({ exchange, requestBody }) {
+function shouldTagRequest(enableExternalReferralProgram, exchange) {
+  return enableExternalReferralProgram && exchange === 'ftx';
+}
+
+function composeRequestBody({
+  requestBody,
+  enableExternalReferralProgram,
+  exchange,
+}) {
+  if (requestBody == null) {
+    return null;
+  }
+
   return {
     ...requestBody,
-    ...(exchange === 'ftx' && {
+    ...(shouldTagRequest(enableExternalReferralProgram, exchange) && {
       externalReferralProgram: CONFIG.EXTERNAL_REFERRAL_PROGRAM_NAME,
     }),
   };
 }
 
-function composePostRequestOptions(options) {
+function composeRequestOptions(options) {
   const requestBody = composeRequestBody(options);
 
   return {
-    ...COMMON_REQUEST_OPTIONS,
+    timeout: { request: MAX_32_BIT_INTEGER },
     headers: composeHeaders({ ...options, requestBody }),
-    json: requestBody,
-  };
-}
-
-function composeRequestOptions(options) {
-  if (options.method === 'post') {
-    return composePostRequestOptions(options);
-  }
-
-  return {
-    ...COMMON_REQUEST_OPTIONS,
-    headers: composeHeaders(options),
+    ...(requestBody != null && { json: requestBody }),
   };
 }
 

@@ -37,7 +37,7 @@ async function run(options) {
       enableColours: options.global.enableColours,
     });
 
-    Logger.info('Order placement completed', {
+    Logger.info('Placed order(s)', {
       enableColours: options.global.enableColours,
     });
   } catch {

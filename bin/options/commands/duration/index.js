@@ -26,6 +26,7 @@ function parseDurationPart(duration, regex) {
 
   return parseNumber(number, ERROR_MESSAGE, {
     allowNegative: false,
+    allowZero: false,
     allowFloat: false,
     allowShorthand: false,
   });

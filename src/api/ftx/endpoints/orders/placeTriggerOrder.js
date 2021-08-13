@@ -5,6 +5,7 @@ async function placeTriggerOrder(options) {
     ...options,
     rawEndpoint: 'conditional_orders',
     method: 'post',
+    enableExternalReferralProgram: true,
   });
 }
 

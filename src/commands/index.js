@@ -1,3 +1,4 @@
+import { cancel } from './cancel/index.js';
 import { config } from './config/index.js';
 import { earnings } from './earnings/index.js';
 import { futures } from './futures/index.js';
@@ -11,6 +12,7 @@ import { stop } from './stop/index.js';
 import { trade } from './trade/index.js';
 
 const Commands = {
+  cancel,
   config,
   earnings,
   futures,

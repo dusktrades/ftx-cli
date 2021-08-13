@@ -1,9 +1,9 @@
-import { parseCurrency } from '../../helpers/index.js';
+import { parseUppercaseList } from '../../helpers/index.js';
 
 const CURRENCY = {
   FLAGS: '-c, --currency <currency>',
   DESCRIPTION: 'currency symbol(s)',
-  PARSER: parseCurrency,
+  PARSER: parseUppercaseList,
 };
 
 export { CURRENCY };
