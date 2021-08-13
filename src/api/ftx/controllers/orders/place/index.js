@@ -141,6 +141,10 @@ async function composeScaledRequests(
       enableColours
     );
 
+    /**
+     * TODO: Compose requests on the fly; current method won't work with dynamic
+     * arguments such as prices relative to the market.
+     */
     requests.push(timedRequest);
   }
 

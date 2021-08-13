@@ -43,20 +43,27 @@ function getOptions(inlineCommandOptions) {
   };
 }
 
-async function scheduleCommand(run, options) {
+function logWaiting(options) {
   Logger.info('Waiting for schedule trigger', {
     enableColours: options.global.enableColours,
   });
+}
 
+async function scheduleCommand(run, options) {
   if (options.global.schedule.type === 'date') {
+    logWaiting(options);
     await sleep(options.global.schedule.millisecondsUntilDate);
     await run(options);
 
     return;
   }
 
+  logWaiting(options);
+
+  // TODO: Add method of ending schedule (e.g. `--schedule-end`).
   cron.schedule(options.global.schedule.cronExpression, () => {
     run(options);
+    logWaiting(options);
   });
 }
 
