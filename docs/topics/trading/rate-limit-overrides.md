@@ -21,4 +21,4 @@ Overriding the rate limit with a setting that is faster than the rate limit link
 
 ## Resources
 
-- [Ratelimits on FTX (Article)](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX)
+- [Article: Ratelimits on FTX](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX)
