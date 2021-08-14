@@ -68,7 +68,7 @@ ftx trade --market trump2024 --side buy --type trailing-stop --size 1 --trail-va
 # Place order: take profit market buy 10 SRM/USDT, triggering at $3.
 ftx trade --market srm/usdt --side buy --type take-profit-market --size 10 --trigger-price 3
 
-# Place order: take profit limit buy 10,200 USDTBEAR/USD at $3,100, triggering at $3,000
+# Place order: take profit limit buy 10,200 USDTBEAR/USD at $3,100, triggering at $3,000.
 ftx trade --market usdtbear/usd --side buy --type take-profit-limit --size 10.2k --price 3100 --trigger-price 3000
 ```
 
