@@ -17,13 +17,13 @@
 
 Place order(s) (authentication required).
 
-```sh
+```
 trade [options]
 ```
 
 ### `trade` options
 
-```sh
+```
 Required:
   -m, --market <market>      Market symbol (required).
   --side <side>              Order side (required) (choices: buy|b, sell|s).
@@ -76,13 +76,13 @@ ftx trade --market usdtbear/usd --side buy --type take-profit-limit --size 10.2k
 
 Cancel order(s) (authentication required).
 
-```sh
+```
 cancel [options]
 ```
 
 ### `cancel` options
 
-```sh
+```
 -m, --market <market>  Market symbol.
 --side <side>          Order side (choices: buy [alias: b], sell [alias: s]).
 ```
