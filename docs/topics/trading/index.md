@@ -13,8 +13,6 @@
 
 ![Divider](../../images/divider.png)
 
-![Divider](../../images/divider.png)
-
 ## `trade`
 
 Place order(s) (authentication required).
