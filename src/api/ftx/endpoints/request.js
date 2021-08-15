@@ -38,6 +38,7 @@ function composeRequestOptions(options) {
 
   return {
     timeout: { request: MAX_32_BIT_INTEGER },
+    retry: 0,
     headers: composeHeaders({ ...options, requestBody }),
     ...(requestBody != null && { json: requestBody }),
   };

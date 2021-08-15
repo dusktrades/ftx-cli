@@ -1,5 +1,9 @@
 {
-  "env": { "es2021": true, "node": true },
+  "env": {
+    "es2021": true,
+    "node": true,
+    "jest": true
+  },
   "extends": [
     "airbnb-base",
     "plugin:import/errors",

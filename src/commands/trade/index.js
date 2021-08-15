@@ -41,8 +41,10 @@ async function run(options) {
       enableColours: options.global.enableColours,
     });
   } catch {
+    process.exitCode = 1;
+
     /**
-     * Errors are handled at per-order level because complex orders may be
+     * Errors are also handled at per-order level because complex orders may be
      * partially accepted and/or have several different errors to report.
      */
     Logger.error('One or more orders failed to be placed', {

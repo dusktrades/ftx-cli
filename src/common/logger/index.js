@@ -15,11 +15,16 @@ function formatLevel(level, enableColours) {
   return chalk[level.colour](formattedLevel);
 }
 
+function getConsoleMethod(level) {
+  return level.text === 'error' ? 'error' : 'log';
+}
+
 function log(level, message, enableColours) {
   const formattedTimestamp = new Date().toISOString();
   const formattedLevel = formatLevel(level, enableColours);
+  const logMethod = getConsoleMethod(level);
 
-  console.log(`${formattedTimestamp}  ${formattedLevel}  ${message}`);
+  console[logMethod](`${formattedTimestamp}  ${formattedLevel}  ${message}`);
 }
 
 const Logger = {

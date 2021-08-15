@@ -3,6 +3,7 @@
 import { program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
+import { enableTestMode } from './enableTestMode.js';
 import { COMMANDS, composeCommand } from './commands/index.js';
 import { OPTIONS, composeOption } from './options/index.js';
 
@@ -32,6 +33,11 @@ function initialise() {
 
   addGlobalOptions();
   addCommands();
+
+  if (process.env.NODE_ENV === 'test') {
+    enableTestMode();
+  }
+
   program.parseAsync(process.argv);
 }
 
