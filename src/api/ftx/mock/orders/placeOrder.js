@@ -23,11 +23,20 @@ function isSuccessfulRequest(requestBody) {
     return false;
   }
 
-  if (requestBody.size <= 0) {
+  if (
+    typeof requestBody.size !== 'number' ||
+    Number.isNaN(requestBody.size) ||
+    requestBody.size <= 0
+  ) {
     return false;
   }
 
-  if (requestBody.type === 'limit' && requestBody.price <= 0) {
+  if (
+    requestBody.type === 'limit' &&
+    (typeof requestBody.size !== 'number' ||
+      Number.isNaN(requestBody.size) ||
+      requestBody.price <= 0)
+  ) {
     return false;
   }
 
