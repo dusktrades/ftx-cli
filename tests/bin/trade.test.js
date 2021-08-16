@@ -9,6 +9,10 @@ const TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME =
 const MISSING_OPTION_TEST_NAME = 'FAILS: Missing option';
 const MISSING_ARGUMENT_TEST_NAME = 'FAILS: Missing argument';
 const INVALID_ARGUMENT_TEST_NAME = 'FAILS: Invalid argument';
+const MISSING_PRICE_OPTION_TEST_NAME = 'FAILS: Missing price option';
+
+const MISSING_TRIGGER_PRICE_OPTION_TEST_NAME =
+  'FAILS: Missing trigger price option';
 
 function composeCommand(options) {
   return `node ./bin/cli.js trade ${options}`;
@@ -97,7 +101,7 @@ describe('Order type: Limit', () => {
     await expectPlaceSingleOrder(options);
   });
 
-  test('FAILS: Missing price option', async () => {
+  test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type limit --size 1';
     const command = composeCommand(options);
 
@@ -131,8 +135,192 @@ describe('Order type: Stop market', () => {
     await expectPlaceSingleOrder(options);
   });
 
-  test('FAILS: Missing trigger price option', async () => {
+  test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type stop-market --size 1';
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Stop and take profit orders must specify trigger price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Order type: Stop limit', () => {
+  test('SUCCEEDS: Basic stop limit order', async () => {
+    const options =
+      '--market btc-perp --side buy --type stop-limit --size 1 --price 10 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type sl --size 1 --price 10 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type stop-limit --size 1 --trigger-price 10';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Limit orders must specify price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type stop-limit --size 1 --price 10';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Stop and take profit orders must specify trigger price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Order type: Trailing stop', () => {
+  test('SUCCEEDS: Basic trailing stop order', async () => {
+    const options =
+      '--market btc-perp --side buy --type trailing-stop --size 1 --trail-value 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type ts --size 1 --trail-value 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test('FAILS: Missing trail value option', async () => {
+    const options =
+      '--market btc-perp --side buy --type trailing-stop --size 1';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Trailing stop orders must specify trail value/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Order type: Take profit market', () => {
+  test('SUCCEEDS: Basic take profit market order', async () => {
+    const options =
+      '--market btc-perp --side buy --type take-profit-market --size 1 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type tpm --size 1 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type take-profit-market --size 1';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Stop and take profit orders must specify trigger price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Order type: Take profit limit', () => {
+  test('SUCCEEDS: Basic take profit limit order', async () => {
+    const options =
+      '--market btc-perp --side buy --type take-profit-limit --size 1 --price 10 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type tpl --size 1 --price 10 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type take-profit-limit --size 1 --trigger-price 10';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Limit orders must specify price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type take-profit-limit --size 1 --price 10';
+
     const command = composeCommand(options);
 
     const expectedChild = {

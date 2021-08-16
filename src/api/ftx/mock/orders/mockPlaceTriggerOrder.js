@@ -16,7 +16,7 @@ function isValidType(type) {
 }
 
 function isValidRetryUntilFilled(retryUntilFilled) {
-  return typeof retryUntilFilled === 'boolean';
+  return retryUntilFilled == null || typeof retryUntilFilled === 'boolean';
 }
 
 function isValidOrderPrice(orderPrice) {
@@ -63,6 +63,18 @@ function isValidTrailValue({ type, trailValue }) {
   return !safeTrailValue.isNaN() && !safeTrailValue.isZero();
 }
 
+function areCombinationsValid({ orderPrice, retryUntilFilled }) {
+  /**
+   * Order price (limit orders) and Retry-Until-Filled mode (market orders)
+   * conflict and shouldn't be provided together.
+   */
+  if (orderPrice != null && retryUntilFilled != null) {
+    return false;
+  }
+
+  return true;
+}
+
 function isSuccessfulRequest(requestBody) {
   if (!isValidMarket(requestBody.market)) {
     return false;
@@ -101,6 +113,10 @@ function isSuccessfulRequest(requestBody) {
   }
 
   if (!isValidExternalReferralProgram(requestBody.externalReferralProgram)) {
+    return false;
+  }
+
+  if (!areCombinationsValid(requestBody)) {
     return false;
   }
 
