@@ -160,7 +160,7 @@ async function composeSimpleRequests(
   intervalMilliseconds
 ) {
   const requests = [];
-  const request = composeRequest(exchange, credentials, data);
+  const request = composeRequest(exchange, credentials, data, enableColours);
 
   for (
     let orderIndex = 0;

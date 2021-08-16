@@ -34,7 +34,7 @@ function initialise() {
   addGlobalOptions();
   addCommands();
 
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === 'test-child') {
     enableTestMode();
   }
 

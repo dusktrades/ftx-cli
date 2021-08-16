@@ -1,7 +1,7 @@
-import { ApiError } from '../../../../../../common/index.js';
+import { ApiError, Logger } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
-function normalisePrice({ type, price }) {
+function normalisePrice({ type, price }, enableColours) {
   // Exchange decides price for market orders.
   if (type === 'market') {
     return null;
@@ -13,6 +13,10 @@ function normalisePrice({ type, price }) {
    * default of treating it as a market order.
    */
   if (price == null) {
+    Logger.error('  Failed order: Limit orders must specify price', {
+      enableColours,
+    });
+
     throw new ApiError('Limit orders must specify price');
   }
 
@@ -41,7 +45,7 @@ function normalisePostOnly({ type, enablePostOnly }) {
   return null;
 }
 
-function composeRequestBody(data) {
+function composeRequestBody(data, enableColours) {
   /**
    * Case not handled properly by API: unclear why an error isn't returned,
    * since execution should be impossible.
@@ -58,15 +62,15 @@ function composeRequestBody(data) {
     side: data.side,
     type: data.type,
     size: normaliseSize(data),
-    price: normalisePrice(data),
+    price: normalisePrice(data, enableColours),
     reduceOnly: data.enableReduceOnly,
     ...(ioc != null && { ioc }),
     ...(postOnly != null && { postOnly }),
   };
 }
 
-function composeRegularRequest(exchange, credentials, data) {
-  const requestBody = composeRequestBody(data);
+function composeRegularRequest(exchange, credentials, data, enableColours) {
+  const requestBody = composeRequestBody(data, enableColours);
 
   return () => orders.placeOrder({ exchange, credentials, requestBody });
 }
