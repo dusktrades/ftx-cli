@@ -15,7 +15,7 @@ function isTriggerOrder(type) {
 
 function composeRequest(exchange, credentials, data, enableColours) {
   return isTriggerOrder(data.type)
-    ? composeTriggerRequest(exchange, credentials, data)
+    ? composeTriggerRequest(exchange, credentials, data, enableColours)
     : composeRegularRequest(exchange, credentials, data, enableColours);
 }
 

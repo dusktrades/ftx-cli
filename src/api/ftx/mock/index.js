@@ -1,7 +1,7 @@
-import { orders } from './orders/index.js';
+import { mockOrders } from './orders/index.js';
 
 function mockFtxApi() {
-  orders.placeOrder();
+  mockOrders();
 }
 
 export { mockFtxApi };

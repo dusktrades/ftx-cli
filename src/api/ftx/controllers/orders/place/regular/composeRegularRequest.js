@@ -13,11 +13,13 @@ function normalisePrice({ type, price }, enableColours) {
    * default of treating it as a market order.
    */
   if (price == null) {
-    Logger.error('  Failed order: Limit orders must specify price', {
+    const errorMessage = 'Limit orders must specify price';
+
+    Logger.error(`  Failed order: ${errorMessage}`, {
       enableColours,
     });
 
-    throw new ApiError('Limit orders must specify price');
+    throw new ApiError(errorMessage);
   }
 
   return price.toNumber();
@@ -51,7 +53,13 @@ function composeRequestBody(data, enableColours) {
    * since execution should be impossible.
    */
   if (data.enableIoc && data.enablePostOnly) {
-    throw new ApiError('Orders cannot be IOC and Post-Only');
+    const errorMessage = 'Orders cannot be IOC and Post-Only';
+
+    Logger.error(`  Failed order: ${errorMessage}`, {
+      enableColours,
+    });
+
+    throw new ApiError(errorMessage);
   }
 
   const ioc = normaliseIoc(data);

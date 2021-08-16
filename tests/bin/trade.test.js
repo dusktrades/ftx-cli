@@ -2,6 +2,10 @@ import { spawn } from 'child_process';
 import { createInterface } from 'readline';
 
 const SHORT_FLAG_TEST_NAME = 'SUCCEEDS: Short flag';
+
+const TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME =
+  'SUCCEEDS: Type option alias argument';
+
 const MISSING_OPTION_TEST_NAME = 'FAILS: Missing option';
 const MISSING_ARGUMENT_TEST_NAME = 'FAILS: Missing argument';
 const INVALID_ARGUMENT_TEST_NAME = 'FAILS: Invalid argument';
@@ -72,7 +76,7 @@ describe('Order type: Market', () => {
     await expectPlaceSingleOrder(options);
   });
 
-  test('SUCCEEDS: Type option alias argument', async () => {
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type m --size 1';
 
     await expectPlaceSingleOrder(options);
@@ -87,7 +91,7 @@ describe('Order type: Limit', () => {
     await expectPlaceSingleOrder(options);
   });
 
-  test('SUCCEEDS: Type option alias argument', async () => {
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type l --size 1 --price 10';
 
     await expectPlaceSingleOrder(options);
@@ -101,6 +105,40 @@ describe('Order type: Limit', () => {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
       stderrArray: [
         /.{24} {2}ERROR {4}Failed order: Limit orders must specify price/,
+        /.{24} {2}ERROR {2}One or more orders failed to be placed/,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Order type: Stop market', () => {
+  test('SUCCEEDS: Basic stop market order', async () => {
+    const options =
+      '--market btc-perp --side buy --type stop-market --size 1 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type sm --size 1 --trigger-price 10';
+
+    await expectPlaceSingleOrder(options);
+  });
+
+  test('FAILS: Missing trigger price option', async () => {
+    const options = '--market btc-perp --side buy --type stop-market --size 1';
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
+      stderrArray: [
+        /.{24} {2}ERROR {4}Failed order: Stop and take profit orders must specify trigger price/,
         /.{24} {2}ERROR {2}One or more orders failed to be placed/,
       ],
       exitCode: 1,

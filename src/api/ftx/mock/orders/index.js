@@ -1,7 +1,9 @@
-import { placeOrder } from './placeOrder.js';
+import { mockPlaceOrder } from './mockPlaceOrder.js';
+import { mockPlaceTriggerOrder } from './mockPlaceTriggerOrder.js';
 
-const orders = {
-  placeOrder,
-};
+function mockOrders() {
+  mockPlaceOrder();
+  mockPlaceTriggerOrder();
+}
 
-export { orders };
+export { mockOrders };
