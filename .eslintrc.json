@@ -8,6 +8,8 @@
     "airbnb-base",
     "plugin:import/errors",
     "plugin:import/warnings",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
     "plugin:node/recommended",
     "plugin:sonarjs/recommended",
     "plugin:unicorn/recommended",
@@ -17,7 +19,7 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
-  "plugins": ["import", "node", "sonarjs", "unicorn"],
+  "plugins": ["import", "jest", "node", "sonarjs", "unicorn"],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "curly": ["error", "all"],
@@ -39,6 +41,9 @@
     "import/no-default-export": "error",
     "import/no-unresolved": ["error", { "ignore": ["^p-queue$"] }],
     "import/prefer-default-export": "off",
+
+    "jest/expect-expect": ["error", { "assertFunctionNames": ["expect*"] }],
+    "jest/valid-title": "off",
 
     "node/no-missing-import": ["error", { "allowModules": ["p-queue"] }],
     "node/no-unsupported-features/es-syntax": "off",
