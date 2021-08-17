@@ -2,6 +2,7 @@ import { spawn } from 'child_process';
 import { createInterface } from 'readline';
 
 const SHORT_FLAG_TEST_NAME = 'SUCCEEDS: Short flag';
+const NEGATED_LONG_FLAG_TEST_NAME = 'SUCCEEDS: Negated long flag';
 
 const TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME =
   'SUCCEEDS: Type option alias argument';
@@ -60,13 +61,17 @@ async function expectChildToMatch(child, expectedChild) {
   });
 }
 
-async function expectToPlaceSingleOrder(options) {
+async function expectToPlaceOrders(options, count) {
   const command = composeCommand(options);
+
+  const individualOrdersStdoutArray = Array.from({ length: count }).fill(
+    /.{24} {2}INFO {5}Placed order/
+  );
 
   const expectedChild = {
     stdoutArray: [
       /.{24} {2}INFO {3}Processing order\(s\)/,
-      /.{24} {2}INFO {5}Placed order/,
+      ...individualOrdersStdoutArray,
       /.{24} {2}INFO {3}Placed order\(s\)/,
     ],
     stderrArray: [],
@@ -78,11 +83,33 @@ async function expectToPlaceSingleOrder(options) {
   await expectChildToMatch(child, expectedChild);
 }
 
+function testSplitOption(basicOrderOptions) {
+  test('SUCCEEDS: Split order', async () => {
+    const options = `${basicOrderOptions} --split 2`;
+
+    await expectToPlaceOrders(options, 2);
+  });
+}
+
 function testIgnoresPriceOption(basicOrderOptions) {
   test('SUCCEEDS: Ignored price option', async () => {
     const options = `${basicOrderOptions} --price 10`;
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
+  });
+}
+
+function testShorthandNumberArguments(composeOptions) {
+  test('SUCCEEDS: Shorthand number arguments', async () => {
+    const shorthands = ['k', 'm'];
+
+    const expectations = shorthands.map((shorthand) => {
+      const options = composeOptions(shorthand);
+
+      return expectToPlaceOrders(options, 1);
+    });
+
+    await Promise.all(expectations);
   });
 }
 
@@ -91,16 +118,17 @@ describe('Order type: Market', () => {
     '--market btc-perp --side buy --type market --size 1';
 
   test('SUCCEEDS: Basic market order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
-  test(`${TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME}`, async () => {
+  test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type m --size 1';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   testIgnoresPriceOption(BASIC_ORDER_OPTIONS);
+  testSplitOption(BASIC_ORDER_OPTIONS);
 });
 
 describe('Order type: Limit', () => {
@@ -108,14 +136,16 @@ describe('Order type: Limit', () => {
     '--market btc-perp --side buy --type limit --size 1 --price 10';
 
   test('SUCCEEDS: Basic limit order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type l --size 1 --price 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
+
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type limit --size 1';
@@ -141,17 +171,18 @@ describe('Order type: Stop market', () => {
     '--market btc-perp --side buy --type stop-market --size 1 --trigger-price 10';
 
   test('SUCCEEDS: Basic stop market order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options =
       '--market btc-perp --side buy --type sm --size 1 --trigger-price 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   testIgnoresPriceOption(BASIC_ORDER_OPTIONS);
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type stop-market --size 1';
@@ -177,15 +208,17 @@ describe('Order type: Stop limit', () => {
     '--market btc-perp --side buy --type stop-limit --size 1 --price 10 --trigger-price 10';
 
   test('SUCCEEDS: Basic stop limit order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options =
       '--market btc-perp --side buy --type sl --size 1 --price 10 --trigger-price 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
+
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
     const options =
@@ -233,17 +266,18 @@ describe('Order type: Trailing stop', () => {
     '--market btc-perp --side buy --type trailing-stop --size 1 --trail-value 10';
 
   test('SUCCEEDS: Basic trailing stop order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options =
       '--market btc-perp --side buy --type ts --size 1 --trail-value 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   testIgnoresPriceOption(BASIC_ORDER_OPTIONS);
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test('FAILS: Missing trail value option', async () => {
     const options =
@@ -271,17 +305,18 @@ describe('Order type: Take profit market', () => {
     '--market btc-perp --side buy --type take-profit-market --size 1 --trigger-price 10';
 
   test('SUCCEEDS: Basic take profit market order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options =
       '--market btc-perp --side buy --type tpm --size 1 --trigger-price 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   testIgnoresPriceOption(BASIC_ORDER_OPTIONS);
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test(MISSING_TRIGGER_PRICE_OPTION_TEST_NAME, async () => {
     const options =
@@ -309,15 +344,17 @@ describe('Order type: Take profit limit', () => {
     '--market btc-perp --side buy --type take-profit-limit --size 1 --price 10 --trigger-price 10';
 
   test('SUCCEEDS: Basic take profit limit order', async () => {
-    await expectToPlaceSingleOrder(BASIC_ORDER_OPTIONS);
+    await expectToPlaceOrders(BASIC_ORDER_OPTIONS, 1);
   });
 
   test(TYPE_OPTION_ALIAS_ARGUMENT_TEST_NAME, async () => {
     const options =
       '--market btc-perp --side buy --type tpl --size 1 --price 10 --trigger-price 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
+
+  testSplitOption(BASIC_ORDER_OPTIONS);
 
   test(MISSING_PRICE_OPTION_TEST_NAME, async () => {
     const options =
@@ -364,7 +401,7 @@ describe('Option: Market', () => {
   test(SHORT_FLAG_TEST_NAME, async () => {
     const options = '-m btc-perp --side buy --type market --size 1';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   test(MISSING_OPTION_TEST_NAME, async () => {
@@ -422,7 +459,7 @@ describe('Option: Side', () => {
   test('SUCCEEDS: Sell argument', async () => {
     const options = '--market btc-perp --side sell --type market --size 1';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   test('SUCCEEDS: Alias arguments', async () => {
@@ -431,7 +468,7 @@ describe('Option: Side', () => {
     const expectations = aliases.map((alias) => {
       const options = `--market btc-perp --side ${alias} --type market --size 1`;
 
-      return expectToPlaceSingleOrder(options);
+      return expectToPlaceOrders(options, 1);
     });
 
     await Promise.all(expectations);
@@ -491,7 +528,7 @@ describe('Option: Type', () => {
   test(SHORT_FLAG_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy -t market --size 1';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
   test(MISSING_OPTION_TEST_NAME, async () => {
@@ -546,20 +583,13 @@ describe('Option: Size', () => {
   test(SHORT_FLAG_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type market -s 1';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCEEDS: Shorthand arguments', async () => {
-    const shorthands = ['k', 'm'];
-
-    const expectations = shorthands.map((shorthand) => {
-      const options = `--market btc-perp --side buy --type market --size 1${shorthand}`;
-
-      return expectToPlaceSingleOrder(options);
-    });
-
-    await Promise.all(expectations);
-  });
+  testShorthandNumberArguments(
+    (shorthand) =>
+      `--market btc-perp --side buy --type market --size 1${shorthand}`
+  );
 
   test(MISSING_OPTION_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type market';
@@ -683,19 +713,33 @@ describe('Option: Price', () => {
   test(SHORT_FLAG_TEST_NAME, async () => {
     const options = '--market btc-perp --side buy --type limit --size 1 -p 10';
 
-    await expectToPlaceSingleOrder(options);
+    await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCEEDS: Shorthand arguments', async () => {
-    const shorthands = ['k', 'm'];
+  testShorthandNumberArguments(
+    (shorthand) =>
+      `--market btc-perp --side buy --type limit --size 1 --price 1${shorthand}`
+  );
 
-    const expectations = shorthands.map((shorthand) => {
-      const options = `--market btc-perp --side buy --type limit --size 1 --price 1${shorthand}`;
+  test('SUCCEEDS: Price range', async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price 10:20';
 
-      return expectToPlaceSingleOrder(options);
-    });
+    await expectToPlaceOrders(options, 1);
+  });
 
-    await Promise.all(expectations);
+  test('SUCCEEDS: Reverse price range', async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price 20:10';
+
+    await expectToPlaceOrders(options, 1);
+  });
+
+  test('SUCCEEDS: Shorthand price range', async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price 10k:20k';
+
+    await expectToPlaceOrders(options, 1);
   });
 
   test(MISSING_ARGUMENT_TEST_NAME, async () => {
@@ -808,5 +852,236 @@ describe('Option: Price', () => {
     const child = spawnTestChild(command);
 
     await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (price range missing first price)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price :10';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '-p, --price <price>' argument ':10' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (price range missing second price)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price 10:';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '-p, --price <price>' argument '10:' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (price range extra price)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price 10:20:30';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '-p, --price <price>' argument '10:20:30' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (price range invalid prices)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type limit --size 1 --price invalid-price:invalid-price';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '-p, --price <price>' argument 'invalid-price:invalid-price' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Option: Trigger price', () => {
+  testShorthandNumberArguments(
+    (shorthand) =>
+      `--market btc-perp --side buy --type market --size 1 --trigger-price 1${shorthand}`
+  );
+
+  test(MISSING_ARGUMENT_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [/error/],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (NaN)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price invalid-trigger-price';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '--trigger-price <price>' argument 'invalid-trigger-price' is invalid\. Trigger price must be a number greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (negative)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price -1';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '--trigger-price <price>' argument '-1' is invalid\. Trigger price must be a number greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (zero)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price 0';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '--trigger-price <price>' argument '0' is invalid\. Trigger price must be a number greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (negative zero)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price -0';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '--trigger-price <price>' argument '-0' is invalid\. Trigger price must be a number greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+
+  test(`${INVALID_ARGUMENT_TEST_NAME} (shorthand zero)`, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --trigger-price 0k';
+
+    const command = composeCommand(options);
+
+    const expectedChild = {
+      stdoutArray: [],
+      stderrArray: [
+        /error: option '--trigger-price <price>' argument '0k' is invalid\. Trigger price must be a number greater than zero\./,
+      ],
+      exitCode: 1,
+    };
+
+    const child = spawnTestChild(command);
+
+    await expectChildToMatch(child, expectedChild);
+  });
+});
+
+describe('Option: Reduce-Only', () => {
+  test(NEGATED_LONG_FLAG_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --no-reduce-only';
+
+    await expectToPlaceOrders(options, 1);
+  });
+});
+
+describe('Option: IOC', () => {
+  test(NEGATED_LONG_FLAG_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --no-ioc';
+
+    await expectToPlaceOrders(options, 1);
+  });
+});
+
+describe('Option: Post-Only', () => {
+  test(NEGATED_LONG_FLAG_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --no-post-only';
+
+    await expectToPlaceOrders(options, 1);
+  });
+});
+
+describe('Option: Retry-Until-Filled', () => {
+  test(NEGATED_LONG_FLAG_TEST_NAME, async () => {
+    const options =
+      '--market btc-perp --side buy --type market --size 1 --no-retry';
+
+    await expectToPlaceOrders(options, 1);
   });
 });

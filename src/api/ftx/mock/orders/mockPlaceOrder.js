@@ -31,6 +31,32 @@ function isValidPrice({ type, price }) {
   return !safePrice.isNaN() && safePrice.isPositive();
 }
 
+function requiresIoc(type) {
+  return type === 'limit';
+}
+
+function isValidIoc({ type, ioc }) {
+  // If order doesn't require IOC mode then it shouldn't be provided.
+  if (!requiresIoc(type)) {
+    return ioc == null;
+  }
+
+  return typeof ioc === 'boolean';
+}
+
+function requiresPostOnly(type) {
+  return type === 'limit';
+}
+
+function isValidPostOnly({ type, postOnly }) {
+  // If order doesn't require Post-Only mode then it shouldn't be provided.
+  if (!requiresPostOnly(type)) {
+    return postOnly == null;
+  }
+
+  return typeof postOnly === 'boolean';
+}
+
 function isSuccessfulRequest(requestBody) {
   if (!isValidMarket(requestBody.market)) {
     return false;
@@ -56,12 +82,19 @@ function isSuccessfulRequest(requestBody) {
     return false;
   }
 
-  if (!isValidExternalReferralProgram(requestBody.externalReferralProgram)) {
+  if (!isValidIoc(requestBody)) {
     return false;
   }
 
-  // TODO: Add checks for `ioc` and `postOnly`.
+  if (!isValidPostOnly(requestBody)) {
+    return false;
+  }
+
   // TODO: Implement `rejectOnPriceBand`.
+
+  if (!isValidExternalReferralProgram(requestBody.externalReferralProgram)) {
+    return false;
+  }
 
   return true;
 }
