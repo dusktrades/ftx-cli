@@ -25,6 +25,7 @@ function addCommands() {
 
 function initialise() {
   program.version(CONFIG.PACKAGE.version, '-v, --version');
+  program.usage('[command] [options]');
 
   program.addHelpText(
     'after',
