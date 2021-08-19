@@ -1,10 +1,10 @@
 import nock from 'nock';
 
-import { mockFtxApi } from '../src/api/ftx/mock/index.js';
+import { MockFtxApi } from '../src/mocks/ftx-api/index.js';
 
 function enableTestMode() {
   nock.disableNetConnect();
-  mockFtxApi();
+  MockFtxApi.create();
 }
 
 export { enableTestMode };

@@ -43,7 +43,6 @@
     "import/prefer-default-export": "off",
 
     "jest/expect-expect": ["error", { "assertFunctionNames": ["expect*"] }],
-    "jest/valid-title": "off",
 
     "node/no-missing-import": ["error", { "allowModules": ["p-queue"] }],
     "node/no-unsupported-features/es-syntax": "off",

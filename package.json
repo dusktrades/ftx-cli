@@ -38,7 +38,7 @@
     "format:fix": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose",
     "test:bail": "npm test -- --bail"
   },
   "dependencies": {
@@ -54,6 +54,7 @@
     "p-queue": "^7.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",

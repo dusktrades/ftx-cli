@@ -23,7 +23,7 @@ function addCommands() {
   }
 }
 
-function initialise() {
+function start() {
   program.version(CONFIG.PACKAGE.version, '-v, --version');
   program.usage('[command] [options]');
 
@@ -42,4 +42,4 @@ function initialise() {
   program.parseAsync(process.argv);
 }
 
-initialise();
+start();

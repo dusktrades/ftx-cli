@@ -23,12 +23,13 @@ function getGlobalOptions() {
     schedule: inlineGlobalOptions.schedule,
     repeat: inlineGlobalOptions.repeat,
 
+    enableReduceOnly:
+      inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
     enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
     enablePostOnly:
       inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
-    enableReduceOnly:
-      inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
     enableRetry: inlineGlobalOptions.retry ?? CONFIG.USER.get('ENABLE_RETRY'),
+
     rateLimit: inlineGlobalOptions.rateLimit ?? CONFIG.USER.get('RATE_LIMIT'),
 
     enableColours:
