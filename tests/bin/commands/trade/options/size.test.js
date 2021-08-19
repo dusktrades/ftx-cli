@@ -7,19 +7,19 @@ import {
 } from '../helpers/index.js';
 
 describe('[OPTION] Size', () => {
-  test('SUCCESS: Long flag (--size)', async () => {
+  test('SUCCEEDS: Long flag (--size)', async () => {
     const options = '--market btc-perp --side buy --type market --size 1';
 
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCESS: Short flag (-s)', async () => {
+  test('SUCCEEDS: Short flag (-s)', async () => {
     const options = '--market btc-perp --side buy --type market -s 1';
 
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCESS: Shorthand number arguments', async () => {
+  test('SUCCEEDS: Shorthand number arguments', async () => {
     await expectToAcceptShorthandNumberArguments(
       (shorthand) =>
         `--market btc-perp --side buy --type market --size 1${shorthand}`

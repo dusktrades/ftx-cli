@@ -7,14 +7,14 @@ import {
 } from '../helpers/index.js';
 
 describe('[OPTION] Trigger price', () => {
-  test('SUCCESS: Long flag (--trigger-price)', async () => {
+  test('SUCCEEDS: Long flag (--trigger-price)', async () => {
     const options =
       '--market btc-perp --side buy --type stop-market --size 1 --trigger-price 10';
 
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCESS: Shorthand number arguments', async () => {
+  test('SUCCEEDS: Shorthand number arguments', async () => {
     await expectToAcceptShorthandNumberArguments(
       (shorthand) =>
         `--market btc-perp --side buy --type stop-market --size 1 --trigger-price 1${shorthand}`
