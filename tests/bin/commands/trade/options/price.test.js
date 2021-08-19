@@ -74,7 +74,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument 'invalid-price' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument 'invalid-price' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -93,7 +93,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '-1' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '-1' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -112,7 +112,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '0' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '0' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -131,7 +131,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '-0' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '-0' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -150,7 +150,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '0k' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '0k' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -169,7 +169,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument ':10' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument ':10' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -188,7 +188,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '10:' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '10:' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -207,7 +207,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument '10:20:30' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument '10:20:30' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };
@@ -226,7 +226,7 @@ describe('[OPTION] Price', () => {
     const expectedChild = {
       stdoutArray: [],
       stderrArray: [
-        /error: option '-p, --price <price>' argument 'invalid-price:invalid-price' is invalid\. Price must be a number, or range of numbers, greater than zero\./,
+        /error: option '-p, --price <price>' argument 'invalid-price:invalid-price' is invalid\. Price must be a number, or range of numbers \(format: X:Y\), greater than zero\./,
       ],
       exitCode: 1,
     };

@@ -4,7 +4,7 @@ function parse(market) {
 
 const MARKET = {
   FLAGS: '-m, --market <market>',
-  DESCRIPTION: 'market symbol',
+  DESCRIPTION: 'Market name.',
   PARSER: parse,
 };
 

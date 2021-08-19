@@ -14,7 +14,7 @@ async function expectArgumentToBeInvalid(argument) {
     stdoutArray: [],
     stderrArray: [
       new RegExp(
-        String.raw`error: option '--duration <duration>' argument '${argument}' is invalid\. Duration must be a subset of the following format, where X, Y, and Z are integers greater than zero: XhYmZs \(e\.g\. 1h2m3s, 1h2m, 1h\)`
+        String.raw`error: option '--duration <duration>' argument '${argument}' is invalid\. Duration must be one or more integers greater than zero paired with duration part identifiers \(format: XhYmZs\)\.`
       ),
     ],
     exitCode: 1,

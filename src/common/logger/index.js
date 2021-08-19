@@ -1,35 +1,45 @@
 import chalk from 'chalk';
 
-function formatLevel(level, enableColours) {
-  const formattedLevel = level.text.toUpperCase().padEnd(5);
+function formatLevel({ text, colour }, enableColours) {
+  const formattedLevel = text.toUpperCase().padEnd(5);
 
   if (!enableColours) {
     return formattedLevel;
   }
 
   // Level hasn't been assigned a colour.
-  if (level.colour == null) {
+  if (colour == null) {
     return formattedLevel;
   }
 
-  return chalk[level.colour](formattedLevel);
+  return chalk[colour](formattedLevel);
 }
 
-function getConsoleMethod(level) {
-  return level.text === 'error' ? 'error' : 'log';
+function getConsoleMethod({ text }) {
+  switch (text) {
+    case 'error':
+      return console.error;
+    case 'warn':
+      return console.warn;
+    default:
+      return console.log;
+  }
 }
 
 function log(level, message, enableColours) {
   const formattedTimestamp = new Date().toISOString();
   const formattedLevel = formatLevel(level, enableColours);
-  const logMethod = getConsoleMethod(level);
+  const consoleMethod = getConsoleMethod(level);
 
-  console[logMethod](`${formattedTimestamp}  ${formattedLevel}  ${message}`);
+  consoleMethod(`${formattedTimestamp}  ${formattedLevel}  ${message}`);
 }
 
 const Logger = {
   info(message, { enableColours }) {
     log({ text: 'info' }, message, enableColours);
+  },
+  warn(message, { enableColours }) {
+    log({ text: 'warn', colour: 'yellow' }, message, enableColours);
   },
   error(message, { enableColours }) {
     log({ text: 'error', colour: 'red' }, message, enableColours);

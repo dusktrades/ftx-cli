@@ -3,11 +3,11 @@
 ## Contents
 
 - [`trade`](#trade)
-  - [Options](#trade-options)
-  - [Examples](#trade-examples)
+  - [Options](#options)
+  - [Examples](#examples)
 - [`cancel`](#cancel)
-  - [Options](#cancel-options)
-  - [Examples](#cancel-examples)
+  - [Options](#options-1)
+  - [Examples](#examples-1)
 - [Resources](#resources)
 
 ![Divider](../../images/divider.png)
@@ -22,7 +22,7 @@ Place order(s).
 trade [options]
 ```
 
-### `trade` options
+### Options
 
 ```
 Required:
@@ -44,6 +44,8 @@ Order-type-specific:
   --rate-limit <rate limit>  Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
 ```
 
+> ℹ️ FTX CLI allows you to place new advanced order types. [Learn more](./advanced-orders.md).
+>
 > ℹ️ You can save your order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
 
 #### Market
@@ -229,7 +231,7 @@ Examples: `2/200`, `6/200`, `24/200`.
 
 [Learn more about rate limit overrides](./rate-limit-overrides.md).
 
-### `trade` examples
+### Examples
 
 ```sh
 # Place order: market buy 1 BTC/USD.
@@ -264,7 +266,7 @@ Cancel order(s).
 cancel [options]
 ```
 
-### `cancel` options
+### Options
 
 ```
 -m, --market <market>  Market name.
@@ -296,7 +298,7 @@ Optional.
 | `buy`  | `b`     |
 | `sell` | `s`     |
 
-### `cancel` examples
+### Examples
 
 ```sh
 # Cancel all orders.

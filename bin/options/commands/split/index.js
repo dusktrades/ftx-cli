@@ -16,7 +16,7 @@ function parse(splitCount) {
 
 const SPLIT = {
   FLAGS: '--split <count>',
-  DESCRIPTION: 'split count',
+  DESCRIPTION: 'Splits the order into a number of smaller, equal-sized orders.',
   PARSER: parse,
   DEFAULT: new BigNumber(1),
 };

@@ -1,11 +1,12 @@
 const IOC = {
   ENABLE: {
     FLAGS: '--ioc',
-    DESCRIPTION: 'enable Immediate-or-Cancel (IOC) mode',
+    DESCRIPTION:
+      'Enable Immediate-or-Cancel (IOC) mode. Limit orders will only be executed as the taker.',
   },
   DISABLE: {
     FLAGS: '--no-ioc',
-    DESCRIPTION: 'disable Immediate-or-Cancel (IOC) mode',
+    DESCRIPTION: 'Disable Immediate-or-Cancel (IOC) mode.',
   },
 };
 

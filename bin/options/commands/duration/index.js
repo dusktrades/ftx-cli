@@ -4,7 +4,7 @@ import { InvalidOptionArgumentError } from 'commander';
 import { parseNumber } from '../../helpers/index.js';
 
 const ERROR_MESSAGE =
-  'Duration must be a subset of the following format, where X, Y, and Z are integers greater than zero: XhYmZs (e.g. 1h2m3s, 1h2m, 1h)';
+  'Duration must be one or more integers greater than zero paired with duration part identifiers (format: XhYmZs).';
 
 // TODO: Move to util constants/conversion functions.
 const MILLISECONDS_PER_SECOND = 1000;
@@ -59,7 +59,8 @@ function parse(duration) {
 
 const DURATION = {
   FLAGS: '--duration <duration>',
-  DESCRIPTION: 'TWAP order placement duration',
+  DESCRIPTION:
+    'Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.',
   PARSER: parse,
   DEFAULT: new BigNumber(0),
 };

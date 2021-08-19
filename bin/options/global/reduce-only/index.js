@@ -1,11 +1,12 @@
 const REDUCE_ONLY = {
   ENABLE: {
     FLAGS: '--reduce-only',
-    DESCRIPTION: 'enable Reduce-Only mode',
+    DESCRIPTION:
+      'Enable Reduce-Only mode. Orders will only reduce your position.',
   },
   DISABLE: {
     FLAGS: '--no-reduce-only',
-    DESCRIPTION: 'disable Reduce-Only mode',
+    DESCRIPTION: 'Disable Reduce-Only mode.',
   },
 };
 

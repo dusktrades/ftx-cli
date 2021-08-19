@@ -3,18 +3,18 @@
 ## Contents
 
 - [Split order](#split-order)
-  - [Usage](#split-order-usage)
-  - [Examples](#split-order-examples)
+  - [Usage](#usage)
+  - [Examples](#examples)
 - [Scaled order](#scaled-order)
-  - [Usage](#scaled-order-usage)
-  - [Examples](#scaled-order-examples)
+  - [Usage](#usage-1)
+  - [Examples](#examples-1)
 - [TWAP order](#twap-order)
-  - [Usage](#twap-order-usage)
-  - [Examples](#twap-order-examples)
+  - [Usage](#usage-2)
+  - [Examples](#examples-2)
 - [Scheduled order](#scheduled-order)
-  - [Usage](#scheduled-order-usage)
-  - [Examples](#scheduled-order-examples)
-  - [Resources](#scheduled-order-resources)
+  - [Usage](#usage-3)
+  - [Examples](#examples-3)
+  - [Resources](#resources)
 - [Notes](#notes)
 
 ![Divider](../../images/divider.png)
@@ -27,11 +27,11 @@ A split order is an order which will be split into smaller, equal-sized orders. 
 
 Split orders can be used with any order type to disguise the order size.
 
-### Split order usage
+### Usage
 
 Split counts have the following format: `--split X`
 
-### Split order examples
+### Examples
 
 ```sh
 # Overall order:
@@ -69,7 +69,7 @@ Scaled orders can be used to minimise market impact or obtain a better average p
 
 When scaled orders need to be queued due to rate limits, they will be queued from the first price to the second price in the price range. This effect will be more apparent the slower the account's rate limit and the higher the number of orders being sent in quick succession, and can be used to prioritise order placement sequence.
 
-### Scaled order usage
+### Usage
 
 Price ranges have the following format: `--price X:Y`
 
@@ -79,7 +79,7 @@ Compatible order types:
 - `stop-limit`
 - `take-profit-limit`
 
-### Scaled order examples
+### Examples
 
 ```sh
 # Overall order:
@@ -113,11 +113,11 @@ A TWAP order is a split order paired with a placement duration. The split orders
 
 TWAP orders can be used to minimise market impact or increase the seriality/predictability of order placement sequence.
 
-### TWAP order usage
+### Usage
 
 Placement durations have the following format: `--duration XhYmZs`
 
-### TWAP order examples
+### Examples
 
 ```sh
 # Overall order:
@@ -151,42 +151,67 @@ ftx trade --market btc-perp --side buy --type limit --size 30 --split 3 --durati
 
 ## Scheduled order
 
-A scheduled order is an order which will attempt to be placed at a specific date and time or repeating schedule.
+A scheduled order is an order which will attempt to be placed at a specific future date and time or at every given time period.
 
-Scheduled orders can be used to simulate complex timed-based order types (e.g. Time-of-Day orders) or repeating investing strategies (e.g. Dollar-Cost Averaging).
+Scheduled orders can be used to simulate complex time-based order types (e.g. Time-of-Day orders) or repeating investing strategies (e.g. Dollar-Cost Averaging).
 
 > ℹ️ You can use scheduling with any command.
 
-### Scheduled order usage
+### Usage
 
-Schedules are formatted `--schedule <schedule>`, where `<schedule>` matches one of the following formats:
+Schedules are formatted `--schedule <schedule>`, where the argument matches one of the following formats:
 
-| Name                      | Description                                   | Format(s)                                                                                                                                                        |
-| ------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ISO 8601 date             | Schedule to run _at_ a specific date and time | Local: `YYYY-MM-DDThh:mm:ss`<br>UTC: `YYYY-MM-DDThh:mm:ssZ`<br>Full: `YYYY-MM-DDThh:mm:ss±hh:mm`                                                                 |
-| Cron expression/shorthand | Schedule to run at _every_ time period        | Shorthand options:<br><br>`every-second`<br>`every-minute`<br>`hourly`<br>`daily`<br>`weekly`<br>`monthly`<br>`quarterly`<br>`yearly`<br><br>Full: `* * * * * *` |
+#### ISO 8601
 
-### Scheduled order examples
-
-```sh
-# Market buy 1 BTC-PERP on December 25, 2021 at 09:30:00 (local timezone).
-ftx trade --market btc-perp --side buy --type market --size 1 --schedule 2021-12-25T09:30:00
-
-# Market buy 1 BTC-PERP on December 25, 2021 at 09:30:00 (UTC).
-ftx trade --market btc-perp --side buy --type market --size 1 --schedule 2021-12-25T09:30:00Z
-
-# Market buy 1 BTC-PERP on December 25, 2021 at 09:30:00 (PST [UTC-08:00]).
-ftx trade --market btc-perp --side buy --type market --size 1 --schedule 2021-12-25T09:30:00−08:00
-
-# Market buy 1 BTC-PERP every day at 00:00:00 (local timezone).
-ftx trade --market btc-perp --side buy --type market --size 1 --schedule daily
-
-# Market buy 1 BTC-PERP every Monday at 14:00:00 (local timezone).
-ftx trade --market btc-perp --side buy --type market --size 1 --schedule "0 14 * * 1"
+```
+--schedule <ISO 8601 timestamp>  Schedule to run at a specific future date and time.
 ```
 
-### Scheduled order resources
+| Type                | Argument format             | Example                     |
+| ------------------- | --------------------------- | --------------------------- |
+| Local timezone      | `YYYY-MM-DDThh:mm:ss`       | `2021-01-01T00:00:00`       |
+| UTC (exchange time) | `YYYY-MM-DDThh:mm:ssZ`      | `2021-01-01T00:00:00Z`      |
+| UTC offset          | `YYYY-MM-DDThh:mm:ss±hh:mm` | `2021-01-01T00:00:00-01:00` |
 
+#### Cron expression/shorthand
+
+```
+--schedule <cron [expression|shorthand]>  Schedule to run at every given time period (local timezone) until manually aborted.
+```
+
+| Shorthand argument | Description               |
+| ------------------ | ------------------------- |
+| `every-second`     | Run at every new second.  |
+| `every-minute`     | Run at every new minute.  |
+| `hourly`           | Run at every new hour.    |
+| `daily`            | Run at every new day.     |
+| `weekly`           | Run at every new week.    |
+| `monthly`          | Run at every new month.   |
+| `quarterly`        | Run at every new quarter. |
+| `yearly`           | Run at every new year.    |
+
+### Examples
+
+```sh
+# Market buy 1 BTC/USD on 1 January 2021 at 00:00:00 (local timezone).
+ftx trade --market btc/usd --side buy --type market --size 1 --schedule 2021-01-01T00:00:00
+
+# Market sell 2.5 BTC-PERP on 18 February 2021 at 18:30:00 (UTC).
+ftx trade --market btc-perp --side sell --type market --size 2.5 --schedule 2021-02-18T18:30:00Z
+
+# Market buy 10 ETH/BTC on 25 December 2021 at 07:46:39 (PST [UTC-08:00]).
+ftx trade --market eth/btc --side buy --type market --size 10 --schedule 2021-12-25T07:46:39−08:00
+
+# Market buy 100 FTT/USDT every day at 00:00:00 (local timezone).
+ftx trade --market ftt/usdt --side buy --type market --size 100 --schedule daily
+
+# Market buy 10,000 USDT-0924 every Wednesday in August at 19:45:00 (local timezone).
+ftx trade --market usdt-0924 --side buy --type market --size 10k --schedule "45 19 * 8 3"
+```
+
+### Resources
+
+- [ISO 8601 standard](https://www.iso.org/iso-8601-date-and-time-format.html)
 - [ISO 8601 wiki](https://en.wikipedia.org/wiki/ISO_8601)
 - [ISO 8601 playground](https://www.timestamp-converter.com/)
 - [Cron wiki](https://en.wikipedia.org/wiki/Cron)

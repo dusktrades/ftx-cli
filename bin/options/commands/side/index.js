@@ -17,7 +17,7 @@ function parse(side) {
 
 const SIDE = {
   FLAGS: '--side <side>',
-  DESCRIPTION: 'order side',
+  DESCRIPTION: 'Order side.',
   PARSER: parse,
 };
 

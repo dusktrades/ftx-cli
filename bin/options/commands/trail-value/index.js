@@ -8,7 +8,8 @@ function parse(trailValue) {
 
 const TRAIL_VALUE = {
   FLAGS: '--trail-value <value>',
-  DESCRIPTION: 'trail value',
+  DESCRIPTION:
+    'Distance the price must change direction and move in order to trigger trailing stop orders.',
   PARSER: parse,
 };
 

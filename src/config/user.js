@@ -1,5 +1,6 @@
 import Conf from 'conf';
 
+import { Logger } from '../common/index.js';
 import { MockUserConfig } from '../mocks/user-config/index.js';
 import { PACKAGE } from './package.js';
 
@@ -21,11 +22,20 @@ function composeUserConfig() {
     return MockUserConfig.create(DEFAULTS);
   }
 
-  return new Conf({
-    projectName: PACKAGE.name,
-    projectSuffix: '',
-    defaults: DEFAULTS,
-  });
+  try {
+    return new Conf({
+      projectName: PACKAGE.name,
+      projectSuffix: '',
+      defaults: DEFAULTS,
+      clearInvalidConfig: true,
+    });
+  } catch {
+    Logger.warn(
+      'Could not access configuration file; reverting to default configuration. Please note that any configuration changes will not be saved.'
+    );
+
+    return MockUserConfig.create({ DEFAULTS, isMock: true });
+  }
 }
 
 const USER = composeUserConfig();

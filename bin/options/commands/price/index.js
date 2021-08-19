@@ -5,7 +5,7 @@ function parse(price) {
 
   return parser(
     price,
-    'Price must be a number, or range of numbers, greater than zero.',
+    'Price must be a number, or range of numbers (format: X:Y), greater than zero.',
     {
       allowNegative: false,
       allowZero: false,
@@ -15,7 +15,7 @@ function parse(price) {
 
 const PRICE = {
   FLAGS: '-p, --price <price>',
-  DESCRIPTION: 'limit price or price range',
+  DESCRIPTION: 'Price that limit orders will be executed at.',
   PARSER: parse,
 };
 

@@ -3,7 +3,7 @@ import { InvalidOptionArgumentError } from 'commander';
 import { parseNumber } from '../../helpers/index.js';
 
 const errorMessage =
-  'Rate limit must match the following format, where X (per-interval request limit) and Y (interval in milliseconds) are integers greater than zero: X/Y (e.g. 6/200)';
+  'Rate limit must be two integers greater than zero (format: X/Y).';
 
 function parseRateLimitNumber(number) {
   return parseNumber(number, errorMessage, {
@@ -28,7 +28,8 @@ function parse(rateLimit) {
 
 const RATE_LIMIT = {
   FLAGS: '--rate-limit <rate limit>',
-  DESCRIPTION: 'order placement rate limit',
+  DESCRIPTION:
+    'Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).',
   PARSER: parse,
 };
 

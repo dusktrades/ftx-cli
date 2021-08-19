@@ -130,7 +130,7 @@ You can inline these options with any command to modify its behaviour. Inline op
 | `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
 | `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
-| `--schedule <schedule>`          | Run command at a given date and time or repeating schedule                                             |               |                                                                                 |
+| `--schedule <schedule>`          | Schedule to run command at a specific future date and time or at every given time period               |               |                                                                                 |
 | `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
 | `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
 

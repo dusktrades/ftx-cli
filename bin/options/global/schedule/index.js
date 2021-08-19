@@ -46,17 +46,17 @@ function parseDate(date) {
 }
 
 function parseCronExpression(cronExpression) {
-  const cronShorthand = CRON_SHORTHANDS[cronExpression];
+  const expandedShorthand = CRON_SHORTHANDS[cronExpression];
 
-  if (cronShorthand != null) {
-    return { type: 'cron', cronExpression: cronShorthand };
+  if (expandedShorthand != null) {
+    return { type: 'cron', cronExpression: expandedShorthand };
   }
 
   if (cron.validate(cronExpression)) {
     return { type: 'cron', cronExpression };
   }
 
-  return cronExpression;
+  return null;
 }
 
 function parse(schedule) {
@@ -73,13 +73,14 @@ function parse(schedule) {
   }
 
   throw new InvalidOptionArgumentError(
-    'Schedule must be a valid ISO 8601 date in the future (YYYY-MM-DDThh:mm:ss, e.g. 2030-01-01T00:00:00), cron shorthand (e.g. daily), or cron expression (e.g. * * * * * *)'
+    'Schedule must be one of: future ISO 8601 timestamp, cron expression, cron shorthand.'
   );
 }
 
 const SCHEDULE = {
   FLAGS: '--schedule <schedule>',
-  DESCRIPTION: 'run command at a given date and time or repeating schedule',
+  DESCRIPTION:
+    'Schedule to run command at a specific future date and time or at every given time period.',
   PARSER: parse,
 };
 

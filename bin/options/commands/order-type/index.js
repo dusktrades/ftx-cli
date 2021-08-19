@@ -22,7 +22,7 @@ function parse(orderType) {
 
 const ORDER_TYPE = {
   FLAGS: '-t, --type <type>',
-  DESCRIPTION: 'order type',
+  DESCRIPTION: 'Order type.',
   PARSER: parse,
 };
 
