@@ -3,27 +3,23 @@ import updateNotifier from 'update-notifier';
 
 import { CONFIG } from '../src/config/index.js';
 
-const CURRENT_VERSION = 'v{currentVersion}';
-const LATEST_VERSION = 'v{latestVersion}';
+const CURRENT_VERSION_TEMPLATE = 'v{currentVersion}';
+const LATEST_VERSION_TEMPLATE = 'v{latestVersion}';
 const COMMAND = 'npm install -g ftx-cli';
-const RELEASE_NOTES_URL =
+
+const RELEASE_NOTES_URL_TEMPLATE =
   'https://github.com/dusktrades/ftx-cli/releases/tag/v{latestVersion}';
 
-// TODO: Remove dev parameters.
-const Notifier = updateNotifier({
-  pkg: {
-    ...CONFIG.PACKAGE,
-    version: '1.0.0',
-  },
-  updateCheckInterval: 0,
-});
-
 function composeCurrentVersion(enableColours) {
-  return enableColours ? chalk.grey(CURRENT_VERSION) : CURRENT_VERSION;
+  return enableColours
+    ? chalk.grey(CURRENT_VERSION_TEMPLATE)
+    : CURRENT_VERSION_TEMPLATE;
 }
 
 function composeLatestVersion(enableColours) {
-  return enableColours ? chalk.green(LATEST_VERSION) : LATEST_VERSION;
+  return enableColours
+    ? chalk.green(LATEST_VERSION_TEMPLATE)
+    : LATEST_VERSION_TEMPLATE;
 }
 
 function composeCommand(enableColours) {
@@ -31,7 +27,9 @@ function composeCommand(enableColours) {
 }
 
 function composeReleaseNotesUrl(enableColours) {
-  return enableColours ? chalk.grey(RELEASE_NOTES_URL) : RELEASE_NOTES_URL;
+  return enableColours
+    ? chalk.grey(RELEASE_NOTES_URL_TEMPLATE)
+    : RELEASE_NOTES_URL_TEMPLATE;
 }
 
 function composeMessage(enableColours) {
@@ -43,14 +41,20 @@ function composeMessage(enableColours) {
   return `FTX CLI update available: ${currentVersion} → ${latestVersion}\n\nRun ${command} to update via npm!\n\nRelease notes: ${releaseNotesUrl}`;
 }
 
+function getBorderColour(enableColours) {
+  return enableColours ? 'cyan' : null;
+}
+
 function notifyUpdate(enableColours) {
-  Notifier.notify({
+  const notifier = updateNotifier({ pkg: CONFIG.PACKAGE });
+
+  notifier.notify({
     message: composeMessage(enableColours),
     boxenOptions: {
-      padding: 1,
-      margin: 1,
+      padding: { left: 1, right: 1 },
+      margin: 0,
       align: 'center',
-      borderColor: enableColours ? 'grey' : null,
+      borderColor: getBorderColour(enableColours),
       borderStyle: 'single',
     },
   });
