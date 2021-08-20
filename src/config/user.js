@@ -15,6 +15,7 @@ const DEFAULTS = {
     intervalMs: 200,
   },
   ENABLE_COLOURS: true,
+  ENABLE_UPDATE_NOTIFICATIONS: true,
 };
 
 function composeUserConfig() {

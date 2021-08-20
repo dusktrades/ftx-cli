@@ -11,6 +11,10 @@ const CONFIG_OPTIONS = [
   { OPTION_KEY: 'retry', CONFIG_KEY: 'ENABLE_RETRY' },
   { OPTION_KEY: 'rateLimit', CONFIG_KEY: 'RATE_LIMIT' },
   { OPTION_KEY: 'colour', CONFIG_KEY: 'ENABLE_COLOURS' },
+  {
+    OPTION_KEY: 'updateNotifications',
+    CONFIG_KEY: 'ENABLE_UPDATE_NOTIFICATIONS',
+  },
 ];
 
 function setOption(key, value) {

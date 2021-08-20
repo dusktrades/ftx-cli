@@ -6,6 +6,7 @@ import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { sleep } from '../src/util/index.js';
 import { handleError } from './handleError.js';
+import { notifyUpdate } from './notifyUpdate.js';
 
 // Repeat at XX:XX:00; used if no user/command-provided schedule.
 const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
@@ -34,6 +35,9 @@ function getGlobalOptions() {
 
     enableColours:
       inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
+    enableUpdateNotifications:
+      inlineGlobalOptions.updateNotifications ??
+      CONFIG.USER.get('ENABLE_UPDATE_NOTIFICATIONS'),
   };
 }
 
@@ -108,6 +112,10 @@ async function runFunction(command, options) {
 
 async function runCommand(command, inlineCommandOptions) {
   const options = getOptions(inlineCommandOptions);
+
+  if (options.global.enableUpdateNotifications) {
+    notifyUpdate(options.global.enableColours);
+  }
 
   try {
     await runFunction(command, options);

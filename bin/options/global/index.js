@@ -10,6 +10,7 @@ import { REPEAT } from './repeat/index.js';
 import { RETRY } from './retry/index.js';
 import { SCHEDULE } from './schedule/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
+import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
 // The order here is the order options will appear in help outputs.
 const GLOBAL = [
@@ -37,6 +38,8 @@ const GLOBAL = [
   // UI customisation options.
   COLOUR.ENABLE,
   COLOUR.DISABLE,
+  UPDATE_NOTIFICATIONS.ENABLE,
+  UPDATE_NOTIFICATIONS.DISABLE,
 ];
 
 export { GLOBAL };
