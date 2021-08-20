@@ -1,0 +1,6 @@
+{
+  "fenced-code-language": false,
+  "line-length": false,
+  "no-duplicate-heading": { "siblings_only": true },
+  "no-inline-html": { "allowed_elements": ["br", "sup"] }
+}

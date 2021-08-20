@@ -1,180 +1,45 @@
 #!/usr/bin/env node
 
-import { Option, program } from 'commander';
+import { program } from 'commander';
 
 import { CONFIG } from '../src/config/index.js';
-import { parseOption } from './parseOption.js';
-import { runCommand } from './runCommand.js';
+import { enableTestMode } from './enableTestMode.js';
+import { COMMANDS, composeCommand } from './commands/index.js';
+import { OPTIONS, composeOption } from './options/index.js';
 
-function composeSortOption(choices) {
-  return new Option('--sort <sorting method>', 'sorting method').choices(
-    choices
-  );
+function addGlobalOptions() {
+  for (const optionConfig of OPTIONS.GLOBAL) {
+    const option = composeOption(optionConfig);
+
+    program.addOption(option);
+  }
 }
 
-const GLOBAL_OPTIONS = {
-  EXCHANGE: new Option(
-    '-e, --exchange <exchange>',
-    'FTX exchange platform'
-  ).choices(['ftx', 'ftx-us']),
-  API_KEY: ['-k, --key <key>', 'FTX API key'],
-  API_SECRET: ['-x, --secret <secret>', 'FTX API secret'],
-  SUBACCOUNT: ['-a, --subaccount <subaccount>', 'FTX subaccount name'],
-  REPEAT: [
-    '-z, --repeat [cron expression]',
-    'repeat the command with optional schedule',
-    parseOption.repeat,
-  ],
-  ENABLE_COLOURS: ['--colour', 'enable coloured output'],
-  DISABLE_COLOURS: ['--no-colour', 'disable coloured output'],
-  ENABLE_UPDATE_NOTIFICATIONS: [
-    '--update-notifications',
-    'enable update notifications',
-  ],
-  DISABLE_UPDATE_NOTIFICATIONS: [
-    '--no-update-notifications',
-    'disable update notifications',
-  ],
-};
+function addCommands() {
+  for (const commandConfig of COMMANDS) {
+    const command = composeCommand(commandConfig);
 
-const COMMAND_OPTIONS = {
-  CURRENCY: [
-    '-c, --currency <currency>',
-    'currency symbol(s)',
-    parseOption.currency,
-  ],
-  SIZE: ['-s, --size <size>', 'currency amount', parseOption.size],
-  MIN_RATE: [
-    '-r, --min-rate <rate>',
-    'minimum yearly lending rate (%)',
-    parseOption.minRate,
-  ],
+    program.addCommand(command);
+  }
+}
 
-  // TODO: Convert to regular spread option instead of custom constructor.
-  SPOT_TYPE: new Option('-t, --type <type>', 'spot type').argParser(
-    parseOption.spotType
-  ),
-  QUOTE_CURRENCY: [
-    '-q, --quote-currency <currency>',
-    'quote currency symbol(s)',
-    parseOption.currency,
-  ],
-  TOKEN_LEVERAGE: [
-    '--token-leverage <leverage>',
-    'token leverage name or multiplier',
-    parseOption.tokenLeverage,
-  ],
+function start() {
+  program.version(CONFIG.PACKAGE.version, '-v, --version');
+  program.usage('[command] [options]');
 
-  FUTURE_TYPE: new Option('-t, --type <type>', 'future type').argParser(
-    parseOption.futureType
-  ),
-};
-
-program.version(CONFIG.PACKAGE.version, '-v, --version');
-
-program.addHelpText(
-  'after',
-
-  // TODO: Change to newline instead of template string.
-  `
-GitHub: https://github.com/dusktrades/ftx-cli`
-);
-
-program
-  .addOption(GLOBAL_OPTIONS.EXCHANGE)
-  .option(...GLOBAL_OPTIONS.API_KEY)
-  .option(...GLOBAL_OPTIONS.API_SECRET)
-  .option(...GLOBAL_OPTIONS.SUBACCOUNT)
-  .option(...GLOBAL_OPTIONS.REPEAT)
-  .option(...GLOBAL_OPTIONS.ENABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.DISABLE_COLOURS)
-  .option(...GLOBAL_OPTIONS.ENABLE_UPDATE_NOTIFICATIONS)
-  .option(...GLOBAL_OPTIONS.DISABLE_UPDATE_NOTIFICATIONS);
-
-program
-  .command('login')
-  .description('store FTX API credentials locally')
-  .action((inlineCommandOptions) => runCommand('login', inlineCommandOptions));
-
-program
-  .command('logout')
-  .description('remove stored FTX API credentials')
-  .action((inlineCommandOptions) => runCommand('logout', inlineCommandOptions));
-
-program
-  .command('config')
-  .description('store option preferences locally')
-  .action((inlineCommandOptions) => runCommand('config', inlineCommandOptions));
-
-program
-  .command('rates')
-  .description('display lending rates')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .addOption(composeSortOption(['currency', 'previous', 'estimated']))
-  .action((inlineCommandOptions) => runCommand('rates', inlineCommandOptions));
-
-program
-  .command('earnings')
-  .description('display my lending earnings')
-  .action((inlineCommandOptions) =>
-    runCommand('earnings', inlineCommandOptions)
+  program.addHelpText(
+    'after',
+    '\nGitHub: https://github.com/dusktrades/ftx-cli#readme'
   );
 
-program
-  .command('offers')
-  .description('display my open lending offers')
-  .addOption(
-    composeSortOption(['currency', 'lendable', 'offered', 'locked', 'min-rate'])
-  )
-  .action((inlineCommandOptions) => runCommand('offers', inlineCommandOptions));
+  addGlobalOptions();
+  addCommands();
 
-program
-  .command('lend')
-  .description('create lending offer(s)')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .option(...COMMAND_OPTIONS.SIZE)
-  .option(...COMMAND_OPTIONS.MIN_RATE)
-  .action((inlineCommandOptions) => runCommand('lend', inlineCommandOptions));
+  if (process.env.NODE_ENV === 'test-child') {
+    enableTestMode();
+  }
 
-program
-  .command('stop')
-  .description('withdraw lending offer(s)')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .action((inlineCommandOptions) => runCommand('stop', inlineCommandOptions));
+  program.parseAsync(process.argv);
+}
 
-program
-  .command('spot')
-  .description('display spot markets')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .addOption(COMMAND_OPTIONS.SPOT_TYPE)
-  .option(...COMMAND_OPTIONS.QUOTE_CURRENCY)
-  .option(...COMMAND_OPTIONS.TOKEN_LEVERAGE)
-  .addOption(
-    composeSortOption(['name', 'price', 'change-1h', 'change-24h', 'volume'])
-  )
-  .action((inlineCommandOptions) => runCommand('spot', inlineCommandOptions));
-
-program
-  .command('futures')
-  .description('display futures stats')
-  .option(...COMMAND_OPTIONS.CURRENCY)
-  .addOption(COMMAND_OPTIONS.FUTURE_TYPE)
-  .addOption(
-    composeSortOption([
-      'name',
-      'last-price',
-      'mark-price',
-      'change-1h',
-      'change-24h',
-      'volume',
-      'open-interest',
-      'oi',
-      'previous-funding',
-      'estimated-funding',
-    ])
-  )
-  .action((inlineCommandOptions) =>
-    runCommand('futures', inlineCommandOptions)
-  );
-
-program.parseAsync(process.argv);
+start();

@@ -1,4 +1,4 @@
-import { EmptyResultsError } from '../../../../common/errors/index.js';
+import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ } from '../../../../util/index.js';
 import { userRewards } from '../user-rewards/index.js';
 import { get } from './get.js';

@@ -1,22 +1,10 @@
-import Conf from 'conf';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const PACKAGE = require('../../package.json');
-
-const USER = new Conf({
-  projectName: PACKAGE.name,
-  projectSuffix: '',
-  defaults: {
-    ENABLE_COLOURS: true,
-    ENABLE_UPDATE_NOTIFICATIONS: true,
-    EXCHANGE: 'ftx',
-  },
-});
+import { PACKAGE } from './package.js';
+import { USER } from './user.js';
 
 const CONFIG = {
   PACKAGE,
   USER,
+  EXTERNAL_REFERRAL_PROGRAM_NAME: 'FTX CLI',
 };
 
 export { CONFIG };

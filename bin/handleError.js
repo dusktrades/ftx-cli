@@ -2,14 +2,14 @@ import {
   ApiError,
   EmptyResultsError,
   HttpError,
-} from '../src/common/errors/index.js';
+  Logger,
+  RateLimitError,
+} from '../src/common/index.js';
 
-import { Logger } from '../src/common/logger/index.js';
+const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError, RateLimitError];
 
-const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError];
-
-function isErrorHandled(error) {
-  return HANDLED_ERRORS.some((errorType) => error instanceof errorType);
+function isHandled(error) {
+  return HANDLED_ERRORS.some((handledError) => error instanceof handledError);
 }
 
 function handleError(error, enableColours) {
@@ -17,7 +17,7 @@ function handleError(error, enableColours) {
    * A handled error occurred. We should have an error message so user can learn
    * how to solve the issue.
    */
-  if (isErrorHandled(error)) {
+  if (isHandled(error)) {
     Logger.error(error.message, { enableColours });
 
     return;
