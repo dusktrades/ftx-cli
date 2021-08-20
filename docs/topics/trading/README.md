@@ -5,10 +5,10 @@
 - [`trade`](#trade)
   - [Options](#options)
   - [Examples](#examples)
+  - [Resources](#resources)
 - [`cancel`](#cancel)
   - [Options](#options-1)
   - [Examples](#examples-1)
-- [Resources](#resources)
 
 ![Divider](../../images/divider.png)
 
@@ -19,7 +19,7 @@ Authentication required.
 Place order(s).
 
 ```
-trade [options]
+ftx trade [options]
 ```
 
 ### Options
@@ -48,6 +48,8 @@ Order-type-specific:
 >
 > ℹ️ You can save your order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
 
+---
+
 #### Market
 
 ```
@@ -59,6 +61,8 @@ Required.
 Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the `spot` and `futures` commands.
 
 Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
+
+---
 
 #### Side
 
@@ -72,6 +76,8 @@ Required.
 | ------ | ------- |
 | `buy`  | `b`     |
 | `sell` | `s`     |
+
+---
 
 #### Type
 
@@ -91,6 +97,8 @@ Required.
 | `take-profit-market` | `tpm`   | [`trigger-price`](#trigger-price)                    |
 | `take-profit-limit`  | `tpl`   | [`price`](#price), [`trigger-price`](#trigger-price) |
 
+---
+
 #### Size
 
 ```
@@ -103,6 +111,8 @@ Supports [number shorthands](./404.md).
 
 Examples: `0.001`, `10`, `100k`.
 
+---
+
 #### Price
 
 ```
@@ -111,9 +121,11 @@ Examples: `0.001`, `10`, `100k`.
 
 Required for limit orders (`limit`, `stop-limit`, `take-profit-limit`).
 
-Supports [number shorthands](./404.md) and price ranges ([scaled orders](./advanced-orders.md#scaled-order)).
+Supports [number shorthands](./404.md) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
 
-Examples: `0.001`, `10`, `100k`, `500:1k`.
+Examples: `0.001`, `100k`, `500:1k`.
+
+---
 
 #### Trigger price
 
@@ -126,6 +138,8 @@ Required for stop and take profit orders (`stop-market`, `stop-limit`, `take-pro
 Supports [number shorthands](./404.md).
 
 Examples: `0.001`, `10`, `100k`.
+
+---
 
 #### Trail value
 
@@ -140,6 +154,8 @@ Positive value for `buy` orders (i.e. the price must increase by the value witho
 Supports [number shorthands](./404.md).
 
 Examples: `1`, `-1`, `1k`, `-1k`.
+
+---
 
 #### Split
 
@@ -157,6 +173,8 @@ Examples: `1`, `100`, `1k`.
 
 [Learn more about split orders](./advanced-orders.md#split-order).
 
+---
+
 #### Duration
 
 ```
@@ -171,6 +189,8 @@ Examples: `30s`, `1h45m10s`, `3h`.
 
 [Learn more about TWAP orders](./advanced-orders.md#twap-order).
 
+---
+
 #### Reduce-Only
 
 ```
@@ -181,6 +201,8 @@ Examples: `30s`, `1h45m10s`, `3h`.
 Optional (default: disabled).
 
 Compatible with all order types.
+
+---
 
 #### Immediate-or-Cancel (IOC)
 
@@ -193,6 +215,8 @@ Optional (default: disabled).
 
 Compatible order types: `limit`.
 
+---
+
 #### Post-Only
 
 ```
@@ -204,6 +228,8 @@ Optional (default: enabled).
 
 Compatible order types: `limit`.
 
+---
+
 #### Retry-Until-Filled
 
 ```
@@ -214,6 +240,8 @@ Compatible order types: `limit`.
 Optional (default: enabled).
 
 Compatible order types: `stop-market`, `trailing-stop`, `take-profit-market`.
+
+---
 
 #### Rate limit
 
@@ -231,30 +259,39 @@ Examples: `2/200`, `6/200`, `24/200`.
 
 [Learn more about rate limit overrides](./rate-limit-overrides.md).
 
+---
+
 ### Examples
 
 ```sh
 # Place order: market buy 1 BTC/USD.
 ftx trade --market btc/usd --side buy --type market --size 1
 
-# Place order: limit buy 1 BTC-PERP at $10,000.
-ftx trade --market btc-perp --side buy --type limit --size 1 --price 10k
+# Place order: limit sell 2.5 BTC-PERP at $100,000.
+ftx trade --market btc-perp --side sell --type limit --size 2.5 --price 100k
 
-# Place order: stop market buy 500 FTT-PERP, triggering at $100.
-ftx trade --market ftt-perp --side buy --type stop-market --size 500 --trigger-price 100
+# Place order: stop market buy 10 ETH/BTC, triggering at 0.1.
+ftx trade --market eth/btc --side buy --type stop-market --size 10 --trigger-price 0.1
 
-# Place order: stop limit buy 1,000 SOL-0924 at $89.5, triggering at $90.5.
-ftx trade --market sol-0924 --side buy --type stop-limit --size 1k --price 89.5 --trigger-price 90.5
+# Place order: stop limit buy 100 FTT/USDT at $150, triggering at $150.5.
+ftx trade --market ftt/usdt --side buy --type stop-limit --size 100 --price 150 --trigger-price 150.5
 
-# Place order: trailing stop buy 1 TRUMP2024, trailing by $0.1.
-ftx trade --market trump2024 --side buy --type trailing-stop --size 1 --trail-value 0.1
+# Place order: trailing stop buy 10,000 USDT-0924, trailing by $0.005.
+ftx trade --market usdt-0924 --side buy --type trailing-stop --size 10k --trail-value 0.005
 
-# Place order: take profit market buy 10 SRM/USDT, triggering at $3.
-ftx trade --market srm/usdt --side buy --type take-profit-market --size 10 --trigger-price 3
+# Place order: take profit market buy 1 BTC/USD, triggering at $30,500.
+ftx trade --market btc/usd --side buy --type take-profit-market --size 1 --trigger-price 30.5k
 
-# Place order: take profit limit buy 10,200 USDTBEAR/USD at $3,100, triggering at $3,000.
-ftx trade --market usdtbear/usd --side buy --type take-profit-limit --size 10.2k --price 3100 --trigger-price 3000
+# Place order: take profit limit buy 1 BTC/USD at $30,450, triggering at $30,500.
+ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 30.45k --trigger-price 30.5k
 ```
+
+### Resources
+
+- [Article: Advanced Order Types](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
+- [Article: Reduce-only Orders](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
+
+![Divider](../../images/divider.png)
 
 ## `cancel`
 
@@ -263,7 +300,7 @@ Authentication required.
 Cancel order(s).
 
 ```
-cancel [options]
+ftx cancel [options]
 ```
 
 ### Options
@@ -272,6 +309,8 @@ cancel [options]
 -m, --market <market>  Market name.
 --side <side>          Order side.
 ```
+
+---
 
 #### Market
 
@@ -284,6 +323,8 @@ Optional.
 Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the `spot` and `futures` commands.
 
 Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
+
+---
 
 #### Side
 
@@ -298,23 +339,20 @@ Optional.
 | `buy`  | `b`     |
 | `sell` | `s`     |
 
+---
+
 ### Examples
 
 ```sh
 # Cancel all orders.
 ftx cancel
 
-# Cancel all BTC/USD orders.
-ftx cancel --market btc/usd
+# Cancel all BTC-PERP orders.
+ftx cancel --market btc-perp
 
 # Cancel all buy orders.
 ftx cancel --side buy
 
-# Cancel all BTC/USD buy orders.
-ftx cancel --market btc/usd --side buy
+# Cancel all BTC/USD sell orders.
+ftx cancel --market btc/usd --side sell
 ```
-
-## Resources
-
-- [Article: Advanced Order Types](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
-- [Article: Reduce-only Orders](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
