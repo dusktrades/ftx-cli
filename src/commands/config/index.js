@@ -5,6 +5,11 @@ import { CONFIG } from '../../config/index.js';
 
 const CONFIG_OPTIONS = [
   { OPTION_KEY: 'exchange', CONFIG_KEY: 'EXCHANGE' },
+  { OPTION_KEY: 'ioc', CONFIG_KEY: 'ENABLE_IOC' },
+  { OPTION_KEY: 'postOnly', CONFIG_KEY: 'ENABLE_POST_ONLY' },
+  { OPTION_KEY: 'reduceOnly', CONFIG_KEY: 'ENABLE_REDUCE_ONLY' },
+  { OPTION_KEY: 'retry', CONFIG_KEY: 'ENABLE_RETRY' },
+  { OPTION_KEY: 'rateLimit', CONFIG_KEY: 'RATE_LIMIT' },
   { OPTION_KEY: 'colour', CONFIG_KEY: 'ENABLE_COLOURS' },
 ];
 
@@ -31,10 +36,10 @@ function setOptions() {
   const inlineGlobalOptions = program.opts();
   const changedConfigOptions = getChangedConfigOptions(inlineGlobalOptions);
 
-  for (const configOption of changedConfigOptions) {
-    const newValue = inlineGlobalOptions[configOption.OPTION_KEY];
+  for (const { OPTION_KEY, CONFIG_KEY } of changedConfigOptions) {
+    const newValue = inlineGlobalOptions[OPTION_KEY];
 
-    setOption(configOption.CONFIG_KEY, newValue);
+    setOption(CONFIG_KEY, newValue);
   }
 }
 

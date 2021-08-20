@@ -2,7 +2,7 @@
 
 > 💸 Supercharged FTX lending from the command line.
 
-[![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total Downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
+[![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
 
 ![Demo](docs/images/demo.png)
 
@@ -130,6 +130,7 @@ You can inline these options with any command to modify its behaviour. Inline op
 | `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
 | `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
 | `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
+| `--schedule <schedule>`          | Schedule to run command at a specific future date and time or at every given time period               |               |                                                                                 |
 | `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
 | `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
 

@@ -27,7 +27,7 @@ async function get({ exchange, credentials }) {
     const pageResponse = await spotMargin.getMyLendingHistory({
       exchange,
       credentials,
-      parameters: { startTime: 0, endTime: rollingEndTime },
+      queryParameters: { startTime: 0, endTime: rollingEndTime },
     });
 
     data.push(...pageResponse);

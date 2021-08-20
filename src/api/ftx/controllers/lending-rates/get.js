@@ -1,4 +1,4 @@
-import { EmptyResultsError } from '../../../../common/errors/index.js';
+import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';

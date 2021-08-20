@@ -1,0 +1,3 @@
+const MAX_32_BIT_INTEGER = 2_147_483_647;
+
+export { MAX_32_BIT_INTEGER };

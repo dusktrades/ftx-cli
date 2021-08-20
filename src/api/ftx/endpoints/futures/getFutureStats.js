@@ -1,17 +1,11 @@
-import { composeHeaders } from '../composeHeaders.js';
-import { composeUrl } from '../composeUrl.js';
 import { request } from '../request.js';
 
-function composeEndpoint(parameters) {
-  return `futures/${parameters.name}/stats`;
-}
-
-async function getFutureStats({ exchange, parameters }) {
-  const endpoint = composeEndpoint(parameters);
-  const url = composeUrl(exchange, endpoint);
-  const headers = composeHeaders({ exchange });
-
-  return request({ url, headers });
+async function getFutureStats(options) {
+  return request({
+    ...options,
+    rawEndpoint: `futures/${options.pathParameters.name}/stats`,
+    method: 'get',
+  });
 }
 
 export { getFutureStats };
