@@ -1,6 +1,6 @@
 # [![FTX CLI](docs/images/banner.png)](https://github.com/dusktrades/ftx-cli)
 
-> 💸 Supercharged FTX lending from the command line.
+> 💱 The power of FTX meets the power of the command line.
 
 [![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
 
@@ -8,12 +8,12 @@
 
 ## Contents
 
-- [Features](#features)
+- [Why FTX CLI?](#why-ftx-cli)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
   - [Try it out](#try-it-out)
-  - [Global package (recommended)](#global-package-recommended)
-  - [Build from source](#build-from-source)
+  - [Global package](#global-package)
+  - [Alternative methods](#alternative-methods)
 - [Getting started](#getting-started)
   - [Obtain API credentials](#obtain-api-credentials)
   - [Secure API credentials](#secure-api-credentials)
@@ -36,28 +36,35 @@
 - [FAQ](#faq)
 - [Disclaimer](#disclaimer)
 - [Contact](#contact)
-- [Donate](#donate)
+- [Support the project](#support-the-project)
+  - [Contribute](#contribute)
+  - [Share](#share)
+  - [Referral](#referral)
+  - [Donate](#donate)
 - [License](#license)
 
 ![Divider](docs/images/divider.png)
 
-## Features
+## Why FTX CLI?
 
-🌍 **Global exchange:** supports FTX and FTX US\
-👤 **Multiple logins:** allows switching between API credentials and subaccounts\
-📊 **Better metrics:** displays all the metrics provided by FTX and more\
-🔁 **Repeat commands:** compounds lending offers automatically via inbuilt command scheduler\
-⏲️ **Custom schedules:** repeats commands using custom cron expressions\
-🔐 **Self-hosted:** retains your control over your API credentials\
-⚙️ **Close to the metal:** remains faithful to FTX terminology, options, and errors
+🆓 **Free:** no ads, no trackers, no paid licences, no subscriptions, no added fees.\
+📖 **Open source:** _'not your (API) keys, not your coins'._\
+🔐 **Self-hosted:** no intermediary servers; drop it into your existing infrastructure.\
+⚡ **Fast:** place complex orders in the heat of the moment.\
+🔌 **Powerful:** scheduled commands, advanced orders, auto-compounding lending, and more.\
+👨‍💻 **Extendable:** combine inputs, outputs, or behaviour with other CLIs or custom scripts.\
+🌍 **Global:** [FTX](https://ftx.com/#a=dusktrades), with or without the [US](https://ftx.us/#a=dusktrades).\
+👤 **Multiple accounts:** switch accounts and subaccounts on the fly.
 
 ![Divider](docs/images/divider.png)
 
 ## Prerequisites
 
-- Node.js v14.13.0+
+- Node.js v14.13.0+ ([why?](#why-is-node-required))
 
-The quickest and easiest way to install or update Node.js is via [nvm](https://github.com/nvm-sh/nvm).
+It is recommended that you use a version manager to install and update Node.js, such as [nvm](https://github.com/nvm-sh/nvm) (Unix-like, macOS, WSL, etc.) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows).
+
+You can find other ways to install Node.js [here](https://nodejs.org).
 
 ![Divider](docs/images/divider.png)
 
@@ -65,29 +72,25 @@ The quickest and easiest way to install or update Node.js is via [nvm](https://g
 
 ### Try it out
 
-Before you install, why not try one of the commands out? This one doesn't require authentication and will display information on lending rates.
+Not sure whether you want to install yet? You can execute commands remotely from the npm registry with [`npx`](https://docs.npmjs.com/cli/v7/commands/npx), which is included with Node.js.
+
+Here's one that will display previous and current FTX lending rates for USD and USDT:
 
 ```sh
-npx ftx-cli rates
+npx ftx-cli rates --currency usd,usdt
 ```
 
-### Global package (recommended)
+### Global package
 
-The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli). By default, you will be notified when an update is available.
+The quickest and recommended way to install is from [npm](https://www.npmjs.com/package/ftx-cli), which is included with Node.js. By default, the latest version will be installed and you will be notified when an update is available.
 
 ```sh
 npm install -g ftx-cli
 ```
 
-### Build from source
+### Alternative methods
 
-You can also download/clone and install the package manually. You will be in charge of downloading/pulling and installing the latest source when an update is available.
-
-```sh
-git clone https://github.com/dusktrades/ftx-cli
-cd ftx-cli
-npm install -g
-```
+Advanced users may want to try one of the [alternative installation methods](./docs/guides/alternative-installation-methods.md).
 
 ![Divider](docs/images/divider.png)
 
@@ -395,23 +398,23 @@ ftx stop --repeat "0 9 * * *"
 
 ## FAQ
 
-### Why is this open-source/self-hosted?
+### Why do I need Node.js v14.13.0+?
 
-The popular crypto phrase _'not your keys, not your coins'_ holds true for your API keys, too (especially if insecure). The way this project is set up means your API credentials are only communicated between, and stored on, your own machine and FTX — and anyone can scrutinise and build from source to verify that claim.
+FTX CLI runs on Node.js – which is constantly evolving – and v14.13.0 just happens to have a slick, modern feature set that we like (notably: [named imports from CommonJS modules](https://github.com/nodejs/node/pull/35249)) while being LTS, and without the need to transpile or use experimental flags. We could certainly increase backwards compatibility by forgoing some of these built-in features, but we would still have to draw the line somewhere: so why not here? Please let us know about your use case if this is an issue.
+
+### What are you doing with my API credentials?
+
+[See for yourself](https://github.com/dusktrades/ftx-cli/search?q=secret)! TL;DR: FTX CLI only communicates with FTX or FTX US, and your API credentials will be stored locally on your machine if you decide to [`login`](#404).
 
 ### Why did I get rate-limited?
 
-It's possible to get rate-limited by FTX if you attempt to execute large amounts of commands in a short period of time. [Learn more.](https://docs.ftx.com/#rate-limits)
+It is possible to hit the [rate limits set out by FTX](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX) if you attempt to execute large amounts of commands in a short period of time. Slow down!
 
 ### Why did I receive _'Size too large'_ error?
 
 The FTX API seems to accept sizes with precision up to 8 decimal places, which you can utilise if you set size explicitly.
 
 However, we have encountered strange behaviour when creating lending offers close to your lendable size (such as when auto-compounding), therefore we truncate lendable size to 6 decimal places before communicating with FTX. This makes the errors less common, but it remains possible to receive them while we look for a more robust solution. As a workaround, you can try the command again or wait for the next repeat scheduled run.
-
-### Why did I receive X error?
-
-This package doesn't impose many artificial limitations beyond the defaults, meaning most limits and errors are relayed directly from the FTX platform. Please ensure what you're trying to do is possible on FTX before raising the issue with this package.
 
 ### Why would I want to auto-compound my lending offers?
 
@@ -431,18 +434,32 @@ _X = Average annual lending rate_
 
 ## Disclaimer
 
-FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsibility. Trading involves a high degree of risk and is not suitable for all persons.
+FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsibility. Trading involves a high degree of risk and is not suitable for all persons. FTX CLI is an FTX [External Referral Program](https://help.ftx.com/hc/en-us/articles/360044373831-External-Referral-Programs); we may receive commissions from trading fees that are paid on orders that are placed using the tool (this does not affect the trading fees that you pay).
 
 ## Contact
 
 [Website](https://dusktrades.com) • [Twitter](https://twitter.com/dusktrades) • [Email](mailto:dusktrades@protonmail.com)
 
-## Donate
+## Support the project
+
+### Contribute
+
+Please feel free to [create a GitHub issue](https://github.com/dusktrades/ftx-cli/issues/new) or [join our Discord server](https://404.com) to report bugs, suggest features, or ask questions.
+
+### Share
+
+Share the project with your friends and followers (here's a free [tweet](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fdusktrades%2Fftx-cli&via=dusktrades&text=I%27m%20using%20FTX%20CLI%20to%20trade%20and%20more%20on%20@FTX_Official%21%0A%0A)!).
+
+### Referral
+
+Create an [FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades) account using our referral link – as a bonus, you will receive 5% off your trading fees.
+
+### Donate
 
 **BTC:** `bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys`\
 **ETH/ERC-20:** `0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d`\
 **SOL/SPL:** `32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV`
 
-## License
+## Licence
 
-MIT © [Dusk](https://dusktrades.com)
+[MIT](./LICENCE) © [Dusk](https://dusktrades.com)

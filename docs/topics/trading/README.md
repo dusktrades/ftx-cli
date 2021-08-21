@@ -18,7 +18,7 @@ Authentication required.
 
 Place order(s).
 
-```
+```sh
 ftx trade [options]
 ```
 
@@ -299,7 +299,7 @@ Authentication required.
 
 Cancel order(s).
 
-```
+```sh
 ftx cancel [options]
 ```
 
