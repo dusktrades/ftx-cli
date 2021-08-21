@@ -15,9 +15,8 @@
   - [Global package](#global-package)
   - [Alternative methods](#alternative-methods)
 - [Getting started](#getting-started)
-  - [Obtain API credentials](#obtain-api-credentials)
+  - [Create API credentials](#create-api-credentials)
   - [Secure API credentials](#secure-api-credentials)
-  - [Resources](#resources)
 - [Usage](#usage)
   - [Global options](#global-options)
   - [Login](#login)
@@ -52,7 +51,7 @@
 🔐 **Self-hosted:** no intermediary servers; drop it into your existing infrastructure.\
 ⚡ **Fast:** place complex orders in the heat of the moment.\
 🔌 **Powerful:** scheduled commands, advanced orders, auto-compounding lending, and more.\
-👨‍💻 **Extendable:** combine inputs, outputs, or behaviour with other CLIs or custom scripts.\
+👨‍💻 **Extendable:** combine input, output, or behaviour with other CLIs or custom scripts.\
 🌍 **Global:** [FTX](https://ftx.com/#a=dusktrades), with or without the [US](https://ftx.us/#a=dusktrades).\
 👤 **Multiple accounts:** switch accounts and subaccounts on the fly.
 
@@ -96,47 +95,149 @@ Advanced users may want to try one of the [alternative installation methods](./d
 
 ## Getting started
 
-### Obtain API credentials
+> ℹ️ Planning on using FTX CLI purely for displaying exchange data? You can ignore this section for now; API credentials (key and secret) are only required for authenticated, account-related parts of the platform, such as trading and lending.
+>
+> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](#login) command.
 
-1. Create a new account (5% fees discount) on [FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)
-2. [Settings](https://ftx.com/profile#a=dusktrades) > Margin > 'ENABLE SPOT MARGIN TRADING'
-3. [Settings](https://ftx.com/profile#a=dusktrades) > Api > 'CREATE API KEY'
-4. Note credentials down temporarily
+### Create API credentials
+
+1. If you don't have an FTX account yet, [create one](https://ftx.com/#a=dusktrades) ([click here](https://ftx.us/#a=dusktrades) for FTX US)
+2. Select 'Main Account' (account-wide) or the specific subaccount that FTX CLI can access:
+   - [Subaccounts](https://ftx.com/subaccounts#a=dusktrades) → 'CREATE SUBACCOUNT' or 'Select Account'
+3. If you want to margin trade or lend, make sure to enable [spot margin trading](https://help.ftx.com/hc/en-us/articles/360053007671):
+   - [Settings](https://ftx.com/profile#a=dusktrades) → Margin → 'ENABLE SPOT MARGIN TRADING'
+4. Create your API key and secret:
+   - [Settings](https://ftx.com/profile#a=dusktrades) → Api → 'CREATE API KEY'
+5. If you want to save your credentials on your machine, run the [`login`](#login) command:
+
+> ℹ️ API credentials and subaccount names are case-sensitive, as they are used to authenticate with the FTX platform. API credentials can be copy and pasted after you create them, and subaccount names from the [subaccounts page](https://ftx.com/subaccounts#a=dusktrades).
+
+```sh
+# Account-wide access (requires API credentials not linked to a specific subaccount).
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET
+
+# Subaccount-only access.
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount SUBACCOUNT
+```
 
 ### Secure API credentials
 
-1. Edit API key permissions to the minimum required for this package to function properly
+Here are some best practices for keeping your API credentials secure:
+
+1. Edit API key permissions to the minimum required for FTX CLI to function properly:
    - Disable 'Read-only'
    - Disable 'Withdrawals enabled'
    - Disable 'Internal transfers enabled'
-2. If you know the static IP address(es) you will be using, you can further improve security by whitelisting them via 'WHITELIST IP'
-
-### Resources
-
-- [Margin Lending (UI)](https://ftx.com/spot-margin/lending#a=dusktrades) ([FTX US](https://ftx.us/spot-margin/lending#a=dusktrades))
-- [Spot Margin Trading Explainer (Article)](https://help.ftx.com/hc/en-us/articles/360053007671-Spot-Margin-Trading-Explainer)
-- [FTX Guide: How to Borrow and Lend on FTX (Video)](https://www.youtube.com/watch?v=0ms7u__Gbys)
+2. If you know the static IP address(es) you will be using, you can further improve security by whitelisting them:
+   - 'WHITELIST IP'
 
 ![Divider](docs/images/divider.png)
 
 ## Usage
 
-If you need a quick reminder or link back here in future, try `ftx --help`.
-
 ### Global options
 
-You can inline these options with any command to modify its behaviour. Inline options take priority over stored credentials/config.
+You can include these options with any command to modify its behaviour. Inline options take priority over stored credentials (via [`login`](#login)) and configuration (via [`config`](#config)).
 
-| Option                           | Description                                                                                            | Default       | Notes                                                                           |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------- |
-| `-e, --exchange <exchange>`      | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`         | Options: `ftx`, `ftx-us`                                                        |
-| `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
-| `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
-| `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
-| `--schedule <schedule>`          | Schedule to run command at a specific future date and time or at every given time period               |               |                                                                                 |
-| `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
-| `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
-| `--update-notifications`         | Enable update notifications                                                                            | `true`        | Disable: `--no-update-notifications`                                            |
+```
+General:
+  -v, --version                  Output the version number.
+  -h, --help                     Display help for command.
+
+Platform:
+  -e, --exchange <exchange>      FTX exchange platform.
+
+Account:
+  -k, --key <key>                FTX API key.
+  -x, --secret <secret>          FTX API secret.
+  -a, --subaccount <subaccount>  FTX subaccount name.
+
+Behaviour:
+  --schedule <schedule>          Schedule command to run at a specific future date and time or at every given time period until manually aborted.
+
+UI:
+  --[no-]colour                  Toggle coloured output.
+  --[no-]update-notifications    Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day.
+```
+
+---
+
+#### Exchange
+
+```
+-e, --exchange <exchange>  FTX exchange platform.
+```
+
+Optional (default: `ftx`).
+
+| Choice   |
+| -------- |
+| `ftx`    |
+| `ftx-us` |
+
+---
+
+#### Key
+
+```
+-k, --key <key>  FTX API key.
+```
+
+Optional.
+
+---
+
+#### Secret
+
+```
+-x, --secret <secret>  FTX API secret.
+```
+
+Optional.
+
+---
+
+#### Subaccount
+
+```
+-a, --subaccount <subaccount>  FTX subaccount name.
+```
+
+Optional (default: main account).
+
+---
+
+#### Schedule
+
+```
+--schedule <schedule>  Schedule command to run at a specific future date and time or at every given time period until manually aborted.
+```
+
+Optional (default: disabled).
+
+---
+
+#### Colour
+
+```
+--colour     Enable coloured output.
+--no-colour  Disable coloured output.
+```
+
+Optional (default: enabled).
+
+---
+
+#### Update notifications
+
+```
+--update-notifications     Enable update notifications. When an update is available, a notification will appear after command execution at most once a day.
+--no-update-notifications  Disable update notifications.
+```
+
+Optional (default: enabled).
+
+---
 
 ### Login
 
