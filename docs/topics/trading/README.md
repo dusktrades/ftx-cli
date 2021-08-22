@@ -2,24 +2,20 @@
 
 ## Contents
 
-- [`trade`](#trade)
+- [🔐 `trade`](#-trade)
   - [Options](#options)
   - [Examples](#examples)
   - [Resources](#resources)
-- [`cancel`](#cancel)
+- [🔐 `cancel`](#-cancel)
   - [Options](#options-1)
   - [Examples](#examples-1)
 
 ![Divider](../../images/divider.png)
 
-## `trade`
-
-Authentication required.
-
-Place order(s).
+## 🔐 `trade`
 
 ```sh
-ftx trade [options]
+ftx trade [options]  Place order(s).
 ```
 
 ### Options
@@ -123,7 +119,7 @@ Required for limit orders (`limit`, `stop-limit`, `take-profit-limit`).
 
 Supports [number shorthands](./404.md) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
 
-Examples: `0.001`, `100k`, `500:1k`.
+Examples: `0.001`, `10:20`, `100k:50k`.
 
 ---
 
@@ -153,7 +149,7 @@ Positive value for `buy` orders (i.e. the price must increase by the value witho
 
 Supports [number shorthands](./404.md).
 
-Examples: `1`, `-1`, `1k`, `-1k`.
+Examples: `1`, `-1`, `1k`.
 
 ---
 
@@ -293,14 +289,10 @@ ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 
 
 ![Divider](../../images/divider.png)
 
-## `cancel`
-
-Authentication required.
-
-Cancel order(s).
+## 🔐 `cancel`
 
 ```sh
-ftx cancel [options]
+ftx cancel [options]  Cancel order(s).
 ```
 
 ### Options

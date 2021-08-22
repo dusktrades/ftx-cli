@@ -19,16 +19,7 @@
   - [Secure API credentials](#secure-api-credentials)
 - [Usage](#usage)
   - [Global options](#global-options)
-  - [Login](#login)
-  - [Logout](#logout)
-  - [Config](#config)
-  - [Rates](#rates)
-  - [Earnings](#earnings)
-  - [Offers](#offers)
-  - [Lend](#lend)
-  - [Stop](#stop)
-  - [Spot](#spot)
-  - [Futures](#futures)
+  - [Topics](#topics)
 - [Examples](#examples)
   - [Using subaccounts](#using-subaccounts)
   - [Repeating commands and auto-compounding](#repeating-commands-and-auto-compounding)
@@ -48,12 +39,13 @@
 
 🆓 **Free:** no ads, no trackers, no paid licences, no subscriptions, no added fees.\
 📖 **Open source:** _'not your (API) keys, not your coins'._\
-🔐 **Self-hosted:** no intermediary servers; drop it into your existing infrastructure.\
+🔐 **Self-hosted:** no intermediary servers; you're in control.\
 ⚡ **Fast:** place complex orders in the heat of the moment.\
-🔌 **Powerful:** scheduled commands, advanced orders, auto-compounding lending, and more.\
+🔌 **Powerful:** try scheduled commands, advanced orders, auto-compounding lending, and more.\
+🎨 **Customisable:** configure the UI and collate exchange data to create custom interfaces.\
 👨‍💻 **Extendable:** combine input, output, or behaviour with other CLIs or custom scripts.\
 🌍 **Global:** [FTX](https://ftx.com/#a=dusktrades), with or without the [US](https://ftx.us/#a=dusktrades).\
-👤 **Multiple accounts:** switch accounts and subaccounts on the fly.
+👤 **Multiple accounts:** switch account and subaccount on the fly.
 
 ![Divider](docs/images/divider.png)
 
@@ -96,8 +88,6 @@ Advanced users may want to try one of the [alternative installation methods](./d
 ## Getting started
 
 > ℹ️ Planning on using FTX CLI purely for displaying exchange data? You can ignore this section for now; API credentials (key and secret) are only required for authenticated, account-related parts of the platform, such as trading and lending.
->
-> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](#login) command.
 
 ### Create API credentials
 
@@ -108,8 +98,11 @@ Advanced users may want to try one of the [alternative installation methods](./d
    - [Settings](https://ftx.com/profile#a=dusktrades) → Margin → 'ENABLE SPOT MARGIN TRADING'
 4. Create your API key and secret:
    - [Settings](https://ftx.com/profile#a=dusktrades) → Api → 'CREATE API KEY'
-5. If you want to save your credentials on your machine, run the [`login`](#login) command:
 
+### Save API credentials
+
+> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](#login) command.
+>
 > ℹ️ API credentials and subaccount names are case-sensitive, as they are used to authenticate with the FTX platform. API credentials can be copy and pasted after you create them, and subaccount names from the [subaccounts page](https://ftx.com/subaccounts#a=dusktrades).
 
 ```sh
@@ -117,7 +110,7 @@ Advanced users may want to try one of the [alternative installation methods](./d
 ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET
 
 # Subaccount-only access.
-ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount SUBACCOUNT
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount YOUR_SUBACCOUNT
 ```
 
 ### Secure API credentials
@@ -137,7 +130,7 @@ Here are some best practices for keeping your API credentials secure:
 
 ### Global options
 
-You can include these options with any command to modify its behaviour. Inline options take priority over stored credentials (via [`login`](#login)) and configuration (via [`config`](#config)).
+You can include these options with any command to modify its behaviour.
 
 ```
 General:
@@ -159,6 +152,8 @@ UI:
   --[no-]colour                  Toggle coloured output.
   --[no-]update-notifications    Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day.
 ```
+
+> ℹ️ Inline options take priority over saved credentials (via [`login`](#login)) and configuration (via [`config`](#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
 
 ---
 
@@ -239,216 +234,27 @@ Optional (default: enabled).
 
 ---
 
-### Login
-
-Store FTX API credentials locally. This provides a convenient method of remaining authenticated with FTX. Please note any previously stored credentials will be overwritten.
-
-| Option                          | Description         | Default       | Notes                                                    |
-| ------------------------------- | ------------------- | ------------- | -------------------------------------------------------- |
-| `-k, --key <key>`               | FTX API key         |               | Required                                                 |
-| `-x, --secret <secret>`         | FTX API secret      |               | Required                                                 |
-| `-a, --subaccount <subaccount>` | FTX subaccount name | No subaccount | [Learn more about using subaccounts](#using-subaccounts) |
-
-```sh
-# Store API credentials.
-ftx login --key API_KEY --secret API_SECRET
-
-# Store API credentials and subaccount.
-ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
-```
-
-### Logout
-
-Remove stored FTX API credentials.
-
-```sh
-ftx logout
-```
-
-### Config
-
-Store option preferences locally. This lets you customise the default behaviour of the package so you don't need to continuously repeat the same options.
-
-| Option                      | Description                                                                                            | Default | Notes                                |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------------------------ |
-| `-e, --exchange <exchange>` | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`   | Options: `ftx`, `ftx-us`             |
-| `--colour`                  | Enable coloured output                                                                                 | `true`  | Disable: `--no-colour`               |
-| `--update-notifications`    | Enable update notifications                                                                            | `true`  | Disable: `--no-update-notifications` |
-
-```sh
-# Store preference to use FTX US.
-ftx config --exchange ftx-us
-
-# Store preference to disable coloured output.
-ftx config --no-colour
-
-# Store preference to disable update notifications.
-ftx config --no-update-notifications
-```
-
-### Rates
-
-Display lending rates.
-
-| Option                      | Description        | Default                 | Notes                                        |
-| --------------------------- | ------------------ | ----------------------- | -------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list                |
-| `--sort <sorting method>`   | Sorting method     | `currency`              | Options: `currency`, `previous`, `estimated` |
-
-```sh
-# Display lending rates for all currencies.
-ftx rates
-
-# Display lending rates for BTC.
-ftx rates --currency btc
-
-# Display lending rates for USD and USDT, sorted by estimated next lending rate.
-ftx rates --currency usd,usdt --sort estimated
-```
-
-### Earnings
-
-Display my lending earnings.
-
-🔐 Requires authentication
-
-```sh
-ftx earnings
-```
-
-### Offers
-
-Display my open lending offers.
-
-🔐 Requires authentication
-
-| Option                    | Description    | Default    | Notes                                                            |
-| ------------------------- | -------------- | ---------- | ---------------------------------------------------------------- |
-| `--sort <sorting method>` | Sorting method | `currency` | Options: `currency`, `lendable`, `offered`, `locked`, `min-rate` |
-
-```sh
-# Display my open lending offers.
-ftx offers
-
-# Display my open lending offers, sorted by locked size.
-ftx offers --sort locked
-```
-
-### Lend
-
-Create lending offer(s). Please note any matching existing offer(s) will be updated.
-
-🔐 Requires authentication
-
-| Option                      | Description                     | Default                 | Notes                                                          |
-| --------------------------- | ------------------------------- | ----------------------- | -------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s)              | All lendable currencies | Supports comma-separated list                                  |
-| `-s, --size <size>`         | Currency amount                 | Maximum lendable size   | Supports thousand (`k`, `K`) and million (`m`, `M`) shorthands |
-| `-r, --min-rate <rate>`     | Minimum yearly lending rate (%) | `0`                     |                                                                |
-
-```sh
-# Offer all lendable currencies with no minimum rate.
-ftx lend
-
-# Offer all BTC with no minimum rate.
-ftx lend --currency btc
-
-# Offer all lendable currencies at a minimum rate of 5% per year.
-ftx lend --min-rate 5
-
-# Offer 100 TWTR with no minimum rate.
-ftx lend --currency twtr --size 100
-
-# Offer all USD and USDT at a minimum rate of 7.5% per year.
-ftx lend --currency usd,usdt --min-rate 7.5
-
-# Offer 10,500 USD at a minimum rate of 10% per year.
-ftx lend --currency usd --size 10.5k --min-rate 10
-```
-
-### Stop
-
-Withdraw lending offer(s).
-
-🔐 Requires authentication
-
-| Option                      | Description        | Default                 | Notes                         |
-| --------------------------- | ------------------ | ----------------------- | ----------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list |
-
-```sh
-# Withdraw all offers.
-ftx stop
-
-# Withdraw offer for USD.
-ftx stop --currency usd
-
-# Withdraw offers for USD and USDT.
-ftx stop --currency usd,usdt
-```
-
-> ⚠️ Funds will stay locked by FTX for up to 1 hour after withdrawing your offer.
-
-### Spot
-
-Display spot stats.
-
-| Option                            | Description                       | Default             | Notes                                                                                                                                                    |
-| --------------------------------- | --------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-c, --currency <currency>`       | Currency symbol(s)                | All currencies      | Supports comma-separated list                                                                                                                            |
-| `-t, --type <type>`               | Spot type                         | All spot types      | Supports comma-separated list<br><br>Options:<br>`coin`<br>`fiat`<br>`leveraged-token` (`lev`)<br>`volatility-token` (`vol`)<br>`equity-token` (`stock`) |
-| `-q, --quote-currency <currency>` | Quote currency symbol(s)          | All currencies      | Supports comma-separated list                                                                                                                            |
-| `--token-leverage <leverage>`     | Token leverage name or multiplier | All token leverages | Supports comma-separated list<br><br>Options:<br>`bull` (`3x`)<br>`half` (`0.5x`)<br>`hedge` (`-1x`)<br>`bear` (`-3x`)                                   |
-| `--sort <sorting method>`         | Sorting method                    | `name`              | Options:<br>`name`<br>`price`<br>`change-1h`<br>`change-24h`<br>`volume`                                                                                 |
-
-```sh
-# Display stats for all spot markets.
-ftx spot
-
-# Display stats for all BTC and ETH spot markets.
-ftx spot --currency btc,eth
-
-# Display stats for all fiat spot markets.
-ftx spot --type fiat
-
-# Display stats for all tokenised equity spot markets, sorted by 1 hour change.
-ftx spot --type equity-token --sort change-1h
-
-# Display stats for all leveraged and volatility token spot markets, sorted by volume.
-ftx spot --type leveraged-token,volatility-token --sort volume
-
-# Display stats for BEAR (-3x) leveraged token USDT spot markets.
-ftx spot --quote-currency usdt --token-leverage bear
-```
-
-### Futures
-
-Display futures stats.
-
-| Option                      | Description        | Default          | Notes                                                                                                                                                                                  |
-| --------------------------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                                                                                          |
-| `-t, --type <type>`         | Future type        | All future types | Supports comma-separated list<br /><br />Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                  |
-| `--sort <sorting method>`   | Sorting method     | `name`           | Options:<br />`name`<br />`last-price`<br />`mark-price`<br />`change-1h`<br />`change-24h`<br />`volume`<br />`open-interest` (`oi`)<br />`previous-funding`<br />`estimated-funding` |
-
-```sh
-# Display stats for all futures.
-ftx futures
-
-# Display stats for all BTC and ETH-related futures.
-ftx futures --currency btc,eth
-
-# Display stats for all perpetual futures.
-ftx futures --type perpetual
-
-# Display stats for all perpetual futures, sorted by estimated next funding rate.
-ftx futures --type perpetual --sort estimated-funding
-
-# Display stats for BTC quarterly and move futures, sorted by open interest.
-ftx futures --currency btc --type quarterly,move --sort open-interest
-```
-
-> ⚠️ This command is currently intensive on the FTX API due to the amount of data required. You can reduce load by using the `currency` and `type` filters, and by avoiding repeating the command too quickly.
+### Topics
+
+Visit the documentation for a topic to learn more about related commands:
+
+- [Accounts](./docs/topics/accounts/README.md)
+  - [`login`](./docs/topics/accounts/README.md#login)
+  - [`logout`](./docs/topics/accounts/README.md#logout)
+- [Configuration](./docs/topics/configuration/README.md)
+  - [`config`](./docs/topics/configuration/README.md#config)
+- [Markets](./docs/topics/markets/README.md)
+  - [`spot`](./docs/topics/markets/README.md#spot)
+  - [`futures`](./docs/topics/markets/README.md#futures)
+- [Trading](./docs/topics/trading/README.md)
+  - [🔐 `trade`](./docs/topics/trading/README.md#-trade)
+  - [🔐 `cancel`](./docs/topics/trading/README.md#-cancel)
+- [Lending](./docs/topics/lending/README.md)
+  - [`rates`](./docs/topics/lending/README.md#rates)
+  - [🔐 `offers`](./docs/topics/lending/README.md#-offers)
+  - [🔐 `earnings`](./docs/topics/lending/README.md#-earnings)
+  - [🔐 `lend`](./docs/topics/lending/README.md#-lend)
+  - [🔐 `stop`](./docs/topics/lending/README.md#-stop)
 
 ![Divider](docs/images/divider.png)
 
