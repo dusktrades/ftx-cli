@@ -1,6 +1,6 @@
 import { expectToPlaceOrders } from './expectToPlaceOrders.js';
 
-const SHORTHANDS = ['k', 'm'];
+const SHORTHANDS = ['k', 'K', 'm', 'M'];
 
 async function expectToAcceptShorthandNumberArguments(composeOptions) {
   const expectations = SHORTHANDS.map((shorthand) => {
