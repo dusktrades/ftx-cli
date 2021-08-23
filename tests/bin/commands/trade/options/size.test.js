@@ -1,7 +1,7 @@
 import {
   composeCommand,
   expectChildToMatch,
-  expectToAcceptShorthandNumberArguments,
+  expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
   spawnTestChild,
 } from '../helpers/index.js';
@@ -19,8 +19,8 @@ describe('[OPTION] Size', () => {
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCEEDS: Shorthand number arguments', async () => {
-    await expectToAcceptShorthandNumberArguments(
+  test('SUCCEEDS: Number shorthand arguments', async () => {
+    await expectToAcceptNumberShorthandArguments(
       (shorthand) =>
         `--market btc-perp --side buy --type market --size 1${shorthand}`
     );

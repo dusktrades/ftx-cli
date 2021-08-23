@@ -2,7 +2,7 @@ import { expectToPlaceOrders } from './expectToPlaceOrders.js';
 
 const SHORTHANDS = ['k', 'K', 'm', 'M'];
 
-async function expectToAcceptShorthandNumberArguments(composeOptions) {
+async function expectToAcceptNumberShorthandArguments(composeOptions) {
   const expectations = SHORTHANDS.map((shorthand) => {
     const options = composeOptions(shorthand);
 
@@ -12,4 +12,4 @@ async function expectToAcceptShorthandNumberArguments(composeOptions) {
   await Promise.all(expectations);
 }
 
-export { expectToAcceptShorthandNumberArguments };
+export { expectToAcceptNumberShorthandArguments };

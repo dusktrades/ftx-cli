@@ -1,7 +1,7 @@
 import {
   composeCommand,
   expectChildToMatch,
-  expectToAcceptShorthandNumberArguments,
+  expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
   spawnTestChild,
 } from '../helpers/index.js';
@@ -41,11 +41,18 @@ describe('[OPTION] Trail value', () => {
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCEEDS: Shorthand number arguments', async () => {
-    await expectToAcceptShorthandNumberArguments(
+  test('SUCCEEDS: Number shorthand arguments', async () => {
+    await expectToAcceptNumberShorthandArguments(
       (shorthand) =>
         `--market btc-perp --side buy --type trailing-stop --size 1 --trail-value 10${shorthand}`
     );
+  });
+
+  test('SUCCEEDS: Negative number shorthand argument', async () => {
+    const options =
+      '--market btc-perp --side sell --type trailing-stop --size 1 --trail-value -10k';
+
+    await expectToPlaceOrders(options, 1);
   });
 
   test('FAILS: Missing argument', async () => {
