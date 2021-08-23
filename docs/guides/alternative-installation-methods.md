@@ -4,6 +4,14 @@
 
 The following examples target Unix-like, macOS, WSL, etc. operating systems.
 
+## Contents
+
+- [Versioned global package](#versioned-global-package)
+- [Build from release source](#build-from-release-source)
+- [Build from repository source](#build-from-repository-source)
+
+![Divider](../images/divider.png)
+
 ## Versioned global package
 
 Install a specific version of the package from npm.
@@ -16,6 +24,8 @@ npm view ftx-cli versions
 npm install -g ftx-cli@<version>
 ```
 
+![Divider](../images/divider.png)
+
 ## Build from release source
 
 Download, install, and update the package manually from a [release](https://github.com/dusktrades/ftx-cli/releases). Here's what that may look like:
@@ -27,6 +37,8 @@ wget https://github.com/dusktrades/ftx-cli/archive/refs/tags/<version>.tar.gz
 # Install package globally.
 npm install -g ./<version>.tar.gz
 ```
+
+![Divider](../images/divider.png)
 
 ## Build from repository source
 

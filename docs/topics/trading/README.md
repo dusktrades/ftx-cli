@@ -103,7 +103,7 @@ Required.
 
 Required.
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `0.001`, `10`, `100k`.
 
@@ -117,7 +117,7 @@ Examples: `0.001`, `10`, `100k`.
 
 Required for limit orders (`limit`, `stop-limit`, `take-profit-limit`).
 
-Supports [number shorthands](./404.md) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
 
 Examples: `0.001`, `10:20`, `100k:50k`.
 
@@ -131,7 +131,7 @@ Examples: `0.001`, `10:20`, `100k:50k`.
 
 Required for stop and take profit orders (`stop-market`, `stop-limit`, `take-profit-market`, `take-profit-limit`).
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `0.001`, `10`, `100k`.
 
@@ -147,7 +147,7 @@ Required for `trailing-stop` orders.
 
 Positive value for `buy` orders (i.e. the price must increase by the value without making a new low); negative value for `sell` orders (i.e. the price must decrease by the value without making a new high).
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `1`, `-1`, `1k`.
 
@@ -163,7 +163,7 @@ Optional (default: `1` [disabled]).
 
 Compatible with all order types.
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `1`, `100`, `1k`.
 

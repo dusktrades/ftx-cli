@@ -20,9 +20,6 @@
 - [Usage](#usage)
   - [Global options](#global-options)
   - [Topics](#topics)
-- [Examples](#examples)
-  - [Using subaccounts](#using-subaccounts)
-  - [Repeating commands and auto-compounding](#repeating-commands-and-auto-compounding)
 - [FAQ](#faq)
 - [Disclaimer](#disclaimer)
 - [Contact](#contact)
@@ -39,11 +36,11 @@
 
 🆓 **Free:** no ads, no trackers, no paid licences, no subscriptions, no added fees.\
 📖 **Open source:** _'not your (API) keys, not your coins'._\
-🔐 **Self-hosted:** no intermediary servers; you're in control.\
+🔐 **Self-hosted:** no intermediary servers and no extra downtime; you're in control.\
 ⚡ **Fast:** place complex orders in the heat of the moment.\
-🔌 **Powerful:** try scheduled commands, advanced orders, auto-compounding lending, and more.\
+🔌 **Powerful:** try scheduled commands, new advanced orders, auto-compounding lending, and more.\
 🎨 **Customisable:** configure the UI and collate exchange data to create custom interfaces.\
-👨‍💻 **Extendable:** combine input, output, or behaviour with other CLIs or custom scripts.\
+👨‍💻 **Extensible:** combine input, output, or behaviour with other CLIs or custom scripts.\
 🌍 **Global:** [FTX](https://ftx.com/#a=dusktrades), with or without the [US](https://ftx.us/#a=dusktrades).\
 👤 **Multiple accounts:** switch account and subaccount on the fly.
 
@@ -51,7 +48,7 @@
 
 ## Prerequisites
 
-- Node.js v14.13.0+ ([why?](#why-is-node-required))
+- Node.js v14.13.0+ ([why?](#why-do-i-need-nodejs-v14130))
 
 It is recommended that you use a version manager to install and update Node.js, such as [nvm](https://github.com/nvm-sh/nvm) (Unix-like, macOS, WSL, etc.) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows).
 
@@ -256,28 +253,11 @@ Visit the documentation for a topic to learn more about related commands:
   - [🔐 `lend`](./docs/topics/lending/README.md#-lend)
   - [🔐 `stop`](./docs/topics/lending/README.md#-stop)
 
+> ℹ️ You can utilise subaccounts to isolate margin and manage risk.
+
 ![Divider](docs/images/divider.png)
 
 ## Examples
-
-### Using subaccounts
-
-Subaccounts are fully supported. If you plan on using one subaccount most of the time, you can `login` with it. If you plan on switching between subaccounts, you can use inline options.
-
-```sh
-# Store API credentials and subaccount.
-ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
-
-# Display my open lending offers on 'Idle' subaccount.
-ftx offers --subaccount Idle
-```
-
-**Notes:**
-
-- FTX subaccount names are case-sensitive
-- FTX API credentials can be linked to your whole account or individual subaccounts
-
-> ⚠️ It is recommended that you create and use a subaccount if you want to keep your lending funds separate. The purpose of this is to prevent conflicts with other trading activity on your account (e.g. using a subaccount when auto-compounding will prevent accidentally lending collateral from elsewhere on your account).
 
 ### Repeating commands and auto-compounding
 
@@ -309,9 +289,9 @@ ftx stop --repeat "0 9 * * *"
 
 FTX CLI runs on Node.js – which is constantly evolving – and v14.13.0 just happens to have a slick, modern feature set that we like (notably: [named imports from CommonJS modules](https://github.com/nodejs/node/pull/35249)) while being LTS, and without the need to transpile or use experimental flags. We could certainly increase backwards compatibility by forgoing some of these built-in features, but we would still have to draw the line somewhere: so why not here? Please let us know about your use case if this is an issue.
 
-### What are you doing with my API credentials?
+### How are my API credentials used?
 
-[See for yourself](https://github.com/dusktrades/ftx-cli/search?q=secret)! TL;DR: FTX CLI only communicates with FTX or FTX US, and your API credentials will be stored locally on your machine if you decide to [`login`](#404).
+[See for yourself](https://github.com/dusktrades/ftx-cli/search?q=secret)! TL;DR: FTX CLI only communicates with FTX or FTX US, and your API credentials will be stored on your machine if you decide to [`login`](./docs/topics/accounts/README.md#login).
 
 ### Why did I get rate-limited?
 
@@ -336,6 +316,10 @@ Auto-compounding is perfect if you want to maximise lending earnings while avoid
 
 **\*Formula:** (1 + X / 8760)<sup>8760</sup> - 1\
 _X = Average annual lending rate_
+
+### What's the screenshot setup?
+
+We use a custom theme on [Carbon](https://carbon.now.sh/) to replicate our favourite terminal: [Hyper](https://hyper.is/) with [Fira Code](https://github.com/tonsky/FiraCode) (font ligatures enabled).
 
 ![Divider](docs/images/divider.png)
 

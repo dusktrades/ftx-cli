@@ -168,7 +168,7 @@ Examples: `usd`, `btc`, `tsla,tsm,twtr`.
 
 Optional (default: maximum lendable).
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `0.001`, `10`, `100k`.
 
