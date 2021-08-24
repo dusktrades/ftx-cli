@@ -18,28 +18,23 @@ async function run(options) {
     trailValue: options.command.trailValue,
     splitCount: options.command.split,
     durationMilliseconds: options.command.duration,
-    enableIoc: options.global.enableIoc,
-    enablePostOnly: options.global.enablePostOnly,
-    enableReduceOnly: options.global.enableReduceOnly,
-    enableRetry: options.global.enableRetry,
+    enableReduceOnly: options.global.reduceOnly,
+    enableIoc: options.global.ioc,
+    enablePostOnly: options.global.postOnly,
+    enableRetry: options.global.retry,
     rateLimit: options.global.rateLimit,
   };
 
-  Logger.info('Processing order(s)', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Processing order(s)');
 
   try {
     await Ftx.orders.place({
       exchange: options.global.exchange,
       credentials,
       data,
-      enableColours: options.global.enableColours,
     });
 
-    Logger.info('Placed order(s)', {
-      enableColours: options.global.enableColours,
-    });
+    Logger.info('Placed order(s)');
   } catch {
     process.exitCode = 1;
 
@@ -47,9 +42,7 @@ async function run(options) {
      * Errors are also handled at per-order level because complex orders may be
      * partially accepted and/or have several different errors to report.
      */
-    Logger.error('One or more orders failed to be placed', {
-      enableColours: options.global.enableColours,
-    });
+    Logger.error('One or more orders failed to be placed');
   }
 }
 

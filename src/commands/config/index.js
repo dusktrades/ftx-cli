@@ -3,56 +3,35 @@ import { program } from 'commander';
 import { Logger } from '../../common/index.js';
 import { CONFIG } from '../../config/index.js';
 
-const CONFIG_OPTIONS = [
-  { OPTION_KEY: 'exchange', CONFIG_KEY: 'EXCHANGE' },
-  { OPTION_KEY: 'ioc', CONFIG_KEY: 'ENABLE_IOC' },
-  { OPTION_KEY: 'postOnly', CONFIG_KEY: 'ENABLE_POST_ONLY' },
-  { OPTION_KEY: 'reduceOnly', CONFIG_KEY: 'ENABLE_REDUCE_ONLY' },
-  { OPTION_KEY: 'retry', CONFIG_KEY: 'ENABLE_RETRY' },
-  { OPTION_KEY: 'rateLimit', CONFIG_KEY: 'RATE_LIMIT' },
-  { OPTION_KEY: 'colour', CONFIG_KEY: 'ENABLE_COLOURS' },
-  {
-    OPTION_KEY: 'updateNotifications',
-    CONFIG_KEY: 'ENABLE_UPDATE_NOTIFICATIONS',
-  },
+const commandOptions = [
+  'exchange',
+  'colour',
+  'updateNotifications',
+  'reduceOnly',
+  'ioc',
+  'postOnly',
+  'retry',
+  'rateLimit',
 ];
 
-function setOption(key, value) {
-  // Skip options unaffected by included options.
-  if (value == null) {
-    return;
-  }
-
-  CONFIG.USER.set(key, value);
-}
-
-function getChangedConfigOptions(inlineGlobalOptions) {
-  return CONFIG_OPTIONS.filter(
-    ({ OPTION_KEY }) => inlineGlobalOptions[OPTION_KEY] != null
-  );
+function getModifiedOptions(inlineGlobalOptions) {
+  return commandOptions.filter((option) => inlineGlobalOptions[option] != null);
 }
 
 function setOptions() {
-  /**
-   * We need to query options directly because options object could include
-   * option preferences overwritten by config store.
-   */
   const inlineGlobalOptions = program.opts();
-  const changedConfigOptions = getChangedConfigOptions(inlineGlobalOptions);
+  const modifiedOptions = getModifiedOptions(inlineGlobalOptions);
 
-  for (const { OPTION_KEY, CONFIG_KEY } of changedConfigOptions) {
-    const newValue = inlineGlobalOptions[OPTION_KEY];
+  for (const option of modifiedOptions) {
+    const newValue = inlineGlobalOptions[option];
 
-    setOption(CONFIG_KEY, newValue);
+    CONFIG.USER.set(option, newValue);
   }
 }
 
-async function run(options) {
+async function run() {
   setOptions();
-
-  Logger.info('Stored option preferences', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Saved configuration');
 }
 
 const config = { run };

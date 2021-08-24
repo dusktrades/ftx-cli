@@ -11,64 +11,68 @@ import { notifyUpdate } from './notifyUpdate.js';
 // Repeat at XX:XX:00; used if no user/command-provided schedule.
 const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
 
-function getGlobalOptions() {
+// Options that can be saved with `login` or `config`.
+const configurableOptions = [
+  'exchange',
+  'key',
+  'secret',
+  'subaccount',
+  'colour',
+  'updateNotifications',
+  'reduceOnly',
+  'ioc',
+  'postOnly',
+  'retry',
+  'rateLimit',
+];
+
+function composeGlobalConfigOptions(inlineGlobalOptions) {
+  return Object.fromEntries(
+    configurableOptions.map((option) => [
+      option,
+
+      // Give priority to inline options, fall back to stored account/config.
+      inlineGlobalOptions[option] ?? CONFIG.USER.get(option),
+    ])
+  );
+}
+
+function composeGlobalOptions() {
   const inlineGlobalOptions = program.opts();
+  const globalConfigOptions = composeGlobalConfigOptions(inlineGlobalOptions);
 
-  // Give inline options priority over stored config equivalents.
   return {
-    exchange: inlineGlobalOptions.exchange ?? CONFIG.USER.get('EXCHANGE'),
-    key: inlineGlobalOptions.key ?? CONFIG.USER.get('API_KEY'),
-    secret: inlineGlobalOptions.secret ?? CONFIG.USER.get('API_SECRET'),
-    subaccount: inlineGlobalOptions.subaccount ?? CONFIG.USER.get('SUBACCOUNT'),
-
+    ...globalConfigOptions,
     schedule: inlineGlobalOptions.schedule,
-    repeat: inlineGlobalOptions.repeat,
-
-    enableReduceOnly:
-      inlineGlobalOptions.reduceOnly ?? CONFIG.USER.get('ENABLE_REDUCE_ONLY'),
-    enableIoc: inlineGlobalOptions.ioc ?? CONFIG.USER.get('ENABLE_IOC'),
-    enablePostOnly:
-      inlineGlobalOptions.postOnly ?? CONFIG.USER.get('ENABLE_POST_ONLY'),
-    enableRetry: inlineGlobalOptions.retry ?? CONFIG.USER.get('ENABLE_RETRY'),
-
-    rateLimit: inlineGlobalOptions.rateLimit ?? CONFIG.USER.get('RATE_LIMIT'),
-
-    enableColours:
-      inlineGlobalOptions.colour ?? CONFIG.USER.get('ENABLE_COLOURS'),
-    enableUpdateNotifications:
-      inlineGlobalOptions.updateNotifications ??
-      CONFIG.USER.get('ENABLE_UPDATE_NOTIFICATIONS'),
   };
 }
 
-function getOptions(inlineCommandOptions) {
+function composeOptions(inlineCommandOptions) {
   return {
-    global: getGlobalOptions(),
+    global: composeGlobalOptions(),
     command: inlineCommandOptions,
   };
 }
 
-function logWaiting(options) {
-  Logger.info('Waiting for schedule trigger', {
-    enableColours: options.global.enableColours,
-  });
+function logWaiting() {
+  Logger.info('Waiting for schedule trigger');
 }
 
 async function scheduleCommand(run, options) {
   if (options.global.schedule.type === 'date') {
-    logWaiting(options);
+    logWaiting();
     await sleep(options.global.schedule.millisecondsUntilDate);
     await run(options);
 
     return;
   }
 
-  logWaiting(options);
+  logWaiting();
 
   // TODO: Add method of ending schedule (e.g. `--schedule-end`).
   cron.schedule(options.global.schedule.cronExpression, () => {
     run(options);
-    logWaiting(options);
+    logWaiting();
   });
 }
 
@@ -111,16 +115,18 @@ async function runFunction(command, options) {
 }
 
 async function runCommand(command, inlineCommandOptions) {
-  const options = getOptions(inlineCommandOptions);
+  const options = composeOptions(inlineCommandOptions);
+
+  Logger.setEnableColours(options.global.colour);
 
   if (options.global.enableUpdateNotifications) {
-    notifyUpdate(options.global.enableColours);
+    notifyUpdate(options.global.colour);
   }
 
   try {
     await runFunction(command, options);
   } catch (error) {
-    handleError(error, options.global.enableColours);
+    handleError(error);
   }
 }
 

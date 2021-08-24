@@ -31,7 +31,7 @@ async function run(options) {
   const table = createTable();
 
   const tableData = composeTableData(data, (entry) =>
-    composeTableEntry(entry, options.global.enableColours)
+    composeTableEntry(entry, options.global.colour)
   );
 
   table.push(...tableData);

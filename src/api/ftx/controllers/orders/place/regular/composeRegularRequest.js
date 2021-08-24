@@ -1,7 +1,7 @@
 import { ApiError, Logger } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
-function normalisePrice({ type, price }, enableColours) {
+function normalisePrice({ type, price }) {
   // Exchange decides price for market orders.
   if (type === 'market') {
     return null;
@@ -15,9 +15,7 @@ function normalisePrice({ type, price }, enableColours) {
   if (price == null) {
     const errorMessage = 'Limit orders must specify price';
 
-    Logger.error(`  Failed order: ${errorMessage}`, {
-      enableColours,
-    });
+    Logger.error(`  Failed order: ${errorMessage}`);
 
     throw new ApiError(errorMessage);
   }
@@ -47,7 +45,7 @@ function normalisePostOnly({ type, enablePostOnly }) {
   return null;
 }
 
-function composeRequestBody(data, enableColours) {
+function composeRequestBody(data) {
   /**
    * Case not handled properly by API: unclear why an error isn't returned,
    * since execution should be impossible.
@@ -55,9 +53,7 @@ function composeRequestBody(data, enableColours) {
   if (data.enableIoc && data.enablePostOnly) {
     const errorMessage = 'Orders cannot be IOC and Post-Only';
 
-    Logger.error(`  Failed order: ${errorMessage}`, {
-      enableColours,
-    });
+    Logger.error(`  Failed order: ${errorMessage}`);
 
     throw new ApiError(errorMessage);
   }
@@ -70,15 +66,15 @@ function composeRequestBody(data, enableColours) {
     side: data.side,
     type: data.type,
     size: normaliseSize(data),
-    price: normalisePrice(data, enableColours),
+    price: normalisePrice(data),
     reduceOnly: data.enableReduceOnly,
     ...(ioc != null && { ioc }),
     ...(postOnly != null && { postOnly }),
   };
 }
 
-function composeRegularRequest(exchange, credentials, data, enableColours) {
-  const requestBody = composeRequestBody(data, enableColours);
+function composeRegularRequest(exchange, credentials, data) {
+  const requestBody = composeRequestBody(data);
 
   return () => orders.placeOrder({ exchange, credentials, requestBody });
 }

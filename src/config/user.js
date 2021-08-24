@@ -4,30 +4,32 @@ import { Logger } from '../common/index.js';
 import { MockUserConfig } from '../mocks/user-config/index.js';
 import { PACKAGE } from './package.js';
 
-const DEFAULTS = {
-  EXCHANGE: 'ftx',
-  ENABLE_REDUCE_ONLY: false,
-  ENABLE_IOC: false,
-  ENABLE_POST_ONLY: true,
-  ENABLE_RETRY: true,
-  RATE_LIMIT: {
-    intervalLimit: 6,
-    intervalMs: 200,
+const defaults = {
+  exchange: 'ftx',
+
+  colour: true,
+  updateNotifications: true,
+
+  reduceOnly: false,
+  ioc: false,
+  postOnly: true,
+  retry: true,
+  rateLimit: {
+    limitPerInterval: 6,
+    intervalMilliseconds: 200,
   },
-  ENABLE_COLOURS: true,
-  ENABLE_UPDATE_NOTIFICATIONS: true,
 };
 
 function composeUserConfig() {
   if (process.env.NODE_ENV === 'test-child') {
-    return MockUserConfig.create(DEFAULTS);
+    return MockUserConfig.create(defaults);
   }
 
   try {
     return new Conf({
       projectName: PACKAGE.name,
       projectSuffix: '',
-      defaults: DEFAULTS,
+      defaults,
       clearInvalidConfig: true,
     });
   } catch {
@@ -35,7 +37,7 @@ function composeUserConfig() {
       'Could not access configuration file; reverting to default configuration. Please note that any configuration changes will not be saved.'
     );
 
-    return MockUserConfig.create({ DEFAULTS, isMock: true });
+    return MockUserConfig.create({ defaults, isMock: true });
   }
 }
 

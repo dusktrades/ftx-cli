@@ -45,6 +45,7 @@ function getBorderColour(enableColours) {
   return enableColours ? 'cyan' : null;
 }
 
+// TODO: Refactor. All these colour checks are ugly: check once.
 function notifyUpdate(enableColours) {
   const notifier = updateNotifier({ pkg: CONFIG.PACKAGE });
 

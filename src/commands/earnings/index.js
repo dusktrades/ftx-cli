@@ -58,7 +58,7 @@ async function run(options) {
   });
 
   const table = createTable();
-  const tableData = composeTableData(data, options.global.enableColours);
+  const tableData = composeTableData(data, options.global.colour);
 
   table.push(...tableData);
 

@@ -21,8 +21,8 @@ function parse(rateLimit) {
   }
 
   return {
-    intervalLimit: parseRateLimitNumber(numbers[0]),
-    intervalMs: parseRateLimitNumber(numbers[1]),
+    limitPerInterval: parseRateLimitNumber(numbers[0]),
+    intervalMilliseconds: parseRateLimitNumber(numbers[1]),
   };
 }
 

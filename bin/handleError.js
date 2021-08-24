@@ -12,21 +12,19 @@ function isHandled(error) {
   return HANDLED_ERRORS.some((handledError) => error instanceof handledError);
 }
 
-function handleError(error, enableColours) {
+function handleError(error) {
   /**
    * A handled error occurred. We should have an error message so user can learn
    * how to solve the issue.
    */
   if (isHandled(error)) {
-    Logger.error(error.message, { enableColours });
+    Logger.error(error.message);
 
     return;
   }
 
   // Houston, we have a problem.
-  Logger.error(`An unhandled error occurred:\n\n${error.stack}`, {
-    enableColours,
-  });
+  Logger.error(`An unhandled error occurred:\n\n${error.stack}`);
 }
 
 export { handleError };

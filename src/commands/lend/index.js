@@ -24,9 +24,7 @@ async function run(options) {
     filters: { currencies: options.command.currency },
   });
 
-  Logger.info('Created lending offer(s)', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Created lending offer(s)');
 
   // Show updated offer list.
   await offers.run(options);

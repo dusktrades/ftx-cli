@@ -33,7 +33,7 @@ function normaliseRetryUntilFilled(enableRetry, simpleType) {
   return null;
 }
 
-function normalisePrice(price, simpleType, enableColours) {
+function normalisePrice(price, simpleType) {
   // Exchange decides price for market orders.
   if (simpleType === 'market') {
     return null;
@@ -47,9 +47,7 @@ function normalisePrice(price, simpleType, enableColours) {
   if (price == null) {
     const errorMessage = 'Limit orders must specify price';
 
-    Logger.error(`  Failed order: ${errorMessage}`, {
-      enableColours,
-    });
+    Logger.error(`  Failed order: ${errorMessage}`);
 
     throw new ApiError(errorMessage);
   }
@@ -57,7 +55,7 @@ function normalisePrice(price, simpleType, enableColours) {
   return price.toNumber();
 }
 
-function normaliseTriggerPrice(triggerPrice, normalisedType, enableColours) {
+function normaliseTriggerPrice(triggerPrice, normalisedType) {
   // Trigger price is only required for stop and take profit orders.
   if (!['stop', 'takeProfit'].includes(normalisedType)) {
     return null;
@@ -67,9 +65,7 @@ function normaliseTriggerPrice(triggerPrice, normalisedType, enableColours) {
     const errorMessage =
       'Stop and take profit orders must specify trigger price';
 
-    Logger.error(`  Failed order: ${errorMessage}`, {
-      enableColours,
-    });
+    Logger.error(`  Failed order: ${errorMessage}`);
 
     throw new ApiError(errorMessage);
   }
@@ -77,7 +73,7 @@ function normaliseTriggerPrice(triggerPrice, normalisedType, enableColours) {
   return triggerPrice.toNumber();
 }
 
-function normaliseTrailValue(trailValue, normalisedType, enableColours) {
+function normaliseTrailValue(trailValue, normalisedType) {
   // Trail value is only required for trailing stop orders.
   if (normalisedType !== 'trailingStop') {
     return null;
@@ -86,9 +82,7 @@ function normaliseTrailValue(trailValue, normalisedType, enableColours) {
   if (trailValue == null) {
     const errorMessage = 'Trailing stop orders must specify trail value';
 
-    Logger.error(`  Failed order: ${errorMessage}`, {
-      enableColours,
-    });
+    Logger.error(`  Failed order: ${errorMessage}`);
 
     throw new ApiError(errorMessage);
   }
@@ -100,7 +94,7 @@ function normaliseSize({ size, splitCount }) {
   return size.dividedBy(splitCount).toNumber();
 }
 
-function composeRequestBody(data, enableColours) {
+function composeRequestBody(data) {
   const typeObject = TYPES[data.type];
 
   const retryUntilFilled = normaliseRetryUntilFilled(
@@ -108,22 +102,16 @@ function composeRequestBody(data, enableColours) {
     typeObject.simpleType
   );
 
-  const orderPrice = normalisePrice(
-    data.price,
-    typeObject.simpleType,
-    enableColours
-  );
+  const orderPrice = normalisePrice(data.price, typeObject.simpleType);
 
   const triggerPrice = normaliseTriggerPrice(
     data.triggerPrice,
-    typeObject.normalised,
-    enableColours
+    typeObject.normalised
   );
 
   const trailValue = normaliseTrailValue(
     data.trailValue,
-    typeObject.normalised,
-    enableColours
+    typeObject.normalised
   );
 
   return {
@@ -139,8 +127,8 @@ function composeRequestBody(data, enableColours) {
   };
 }
 
-function composeTriggerRequest(exchange, credentials, data, enableColours) {
-  const requestBody = composeRequestBody(data, enableColours);
+function composeTriggerRequest(exchange, credentials, data) {
+  const requestBody = composeRequestBody(data);
 
   return () => orders.placeTriggerOrder({ exchange, credentials, requestBody });
 }
