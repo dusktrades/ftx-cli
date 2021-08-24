@@ -2,9 +2,6 @@ import { Ftx } from '../../api/index.js';
 import { Logger } from '../../common/index.js';
 import { offers } from '../offers/index.js';
 
-// Repeat at XX:59:00.
-const DEFAULT_REPEAT_CRON_EXPRESSION = '59 * * * *';
-
 async function run(options) {
   const credentials = {
     apiKey: options.global.key,
@@ -32,6 +29,6 @@ async function run(options) {
   await offers.run(options);
 }
 
-const lend = { run, DEFAULT_REPEAT_CRON_EXPRESSION };
+const lend = { run };
 
 export { lend };

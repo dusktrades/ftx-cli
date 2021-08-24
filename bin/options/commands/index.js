@@ -1,3 +1,4 @@
+import { COMPOUND } from './compound/index.js';
 import { CURRENCY } from './currency/index.js';
 import { DURATION } from './duration/index.js';
 import { FUTURE_TYPE } from './future-type/index.js';
@@ -15,6 +16,7 @@ import { TRAIL_VALUE } from './trail-value/index.js';
 import { TRIGGER_PRICE } from './trigger-price/index.js';
 
 const COMMANDS = {
+  COMPOUND,
   CURRENCY,
   DURATION,
   FUTURE_TYPE,
