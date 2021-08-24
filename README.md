@@ -279,8 +279,6 @@ ftx lend --currency usd --min-rate 1 --repeat
 ftx stop --repeat "0 9 * * *"
 ```
 
-> ⚠️ The machine you are using to run repeated commands must remain powered on and capable of communicating with FTX (e.g. PC with no downtime, local server, VM).
-
 ![Divider](docs/images/divider.png)
 
 ## FAQ
