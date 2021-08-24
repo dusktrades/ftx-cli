@@ -25,7 +25,7 @@ Required:
   -m, --market <market>      Market name.
   --side <side>              Order side.
   -t, --type <type>          Order type.
-  -s, --size <size>          Size to execute, measured in base currency or underlying.
+  -s, --size <size>          Size to execute (spot: base currency; futures: underlying).
 
 Order-type-specific:
   -p, --price <price>        Price that limit orders will be executed at.
@@ -98,7 +98,7 @@ Required.
 #### Size
 
 ```
--s, --size <size>  Size to execute, measured in base currency or underlying.
+-s, --size <size>  Size to execute (spot: base currency; futures: underlying).
 ```
 
 Required.

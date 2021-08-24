@@ -140,8 +140,9 @@ ftx lend [options]  Create lending offer(s). Matching existing offer(s) will be 
 
 ```
 -c, --currency <currency>  Currency symbol(s).
--s, --size <size>          Size to lend, measured in base currency.
+-s, --size <size>          Size to lend (base currency).
 -r, --min-rate <rate>      Minimum yearly lending rate (%).
+--compound                 Enable auto-compounding. Proceeds from the lending offer(s) will be automatically compounded hourly by updating offered size(s) to the maximum lendable.
 ```
 
 ---
@@ -163,7 +164,7 @@ Examples: `usd`, `btc`, `tsla,tsm,twtr`.
 #### Size
 
 ```
--s, --size <size>  Size to lend, measured in base currency.
+-s, --size <size>  Size to lend (base currency).
 ```
 
 Optional (default: maximum lendable).
@@ -193,6 +194,8 @@ Examples: `0`, `10`, `100.5`.
 ```
 
 Optional (default: disabled).
+
+[Why?](../../studies/auto-compounding.md)
 
 > ℹ️ Auto-compounding creates a special type of [recurring scheduled command](../../guides/scheduled-commands.md#recurring) optimised for lending. The command will run at 59 minutes past every hour; lending rates and locked balances are updated hourly, so we want to lock our additional margin as late as possible.
 
