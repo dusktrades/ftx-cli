@@ -32,7 +32,7 @@ A scheduled command is a command that is scheduled to run at a future date and t
 ### Recurring
 
 ```
---schedule <cron [expression|shorthand]>  Schedule to run periodically, according to a given interval, until aborted.
+--schedule <cron [expression|shorthand]>  Schedule to run periodically, according to a given interval, until manually aborted.
 ```
 
 #### Cron expression

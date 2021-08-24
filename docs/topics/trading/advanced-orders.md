@@ -129,7 +129,7 @@ ftx trade --market btc-perp --side sell --type limit --size 3 --price 60k:61k --
 
 ## Scheduled order
 
-A scheduled order is an order paired with a [scheduled command](../../guides/scheduled-commands.md).
+A scheduled order is an order that is scheduled to run at a future date and time or periodically, according to a given interval, until manually aborted. Place a scheduled order by using a [scheduled command](../../guides/scheduled-commands.md).
 
 Scheduled orders can be used to simulate complex time-based order types (e.g. Time-of-Day orders) or repeating investing strategies (e.g. Dollar-Cost Averaging).
 

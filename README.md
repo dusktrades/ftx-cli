@@ -98,7 +98,7 @@ Advanced users may want to try one of the [alternative installation methods](./d
 
 ### Save API credentials
 
-> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](#login) command.
+> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](./docs/topics/accounts/README.md#login) command.
 >
 > ℹ️ API credentials and subaccount names are case-sensitive, as they are used to authenticate with the FTX platform. API credentials can be copy and pasted after you create them, and subaccount names from the [subaccounts page](https://ftx.com/subaccounts#a=dusktrades).
 
@@ -143,14 +143,14 @@ Account:
   -a, --subaccount <subaccount>  FTX subaccount name.
 
 Behaviour:
-  --schedule <schedule>          Schedule command to run at a specific future date and time or at every given time period until manually aborted.
+  --schedule <schedule>          Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
 
 UI:
   --[no-]colour                  Toggle coloured output.
   --[no-]update-notifications    Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day.
 ```
 
-> ℹ️ Inline options take priority over saved credentials (via [`login`](#login)) and configuration (via [`config`](#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
+> ℹ️ Inline options take priority over saved credentials (via [`login`](./docs/topics/accounts/README.md#login)) and configuration (via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
 
 ---
 
@@ -202,10 +202,12 @@ Optional (default: main account).
 #### Schedule
 
 ```
---schedule <schedule>  Schedule command to run at a specific future date and time or at every given time period until manually aborted.
+--schedule <schedule>  Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
 ```
 
 Optional (default: disabled).
+
+[Learn more about scheduled commands](./docs/guides/scheduled-commands.md).
 
 ---
 
@@ -255,29 +257,10 @@ Visit the documentation for a topic to learn more about related commands:
 
 > ℹ️ You can utilise subaccounts to isolate margin and manage risk.
 
-![Divider](docs/images/divider.png)
+### Guides
 
-## Examples
-
-### Repeating commands and auto-compounding
-
-Any command can be easily repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. If you need help with cron expression syntax, we recommend reading the [node-cron documentation](https://github.com/node-cron/node-cron#readme) and using [crontab guru](https://crontab.guru/).
-
-| Command | Default repeat schedule                        | Notes                                                                                     |
-| ------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `lend`  | `59 * * * *` ('At 59 minutes past every hour') | Optimised for auto-compounding (FTX lending rates and locked balances are updated hourly) |
-| Others  | `* * * * *` ('At every minute')                |                                                                                           |
-
-```sh
-# Auto-compound all lendable currencies with no minimum rate.
-ftx lend --repeat
-
-# Auto-compound all USD at a minimum rate of 1% per year.
-ftx lend --currency usd --min-rate 1 --repeat
-
-# Withdraw all offers at 09:00 AM every day.
-ftx stop --repeat "0 9 * * *"
-```
+- [Power users](./docs/guides/power-users.md): features aimed at increasing efficiency.
+- [Scheduled commands](./docs/guides/scheduled-commands.md): for when now is not the time.
 
 ![Divider](docs/images/divider.png)
 

@@ -186,17 +186,29 @@ Examples: `0`, `10`, `100.5`.
 
 ---
 
+#### Compound
+
+```
+--compound  Enable auto-compounding. Proceeds from the lending offer(s) will be automatically compounded hourly by updating offered size(s) to the maximum lendable.
+```
+
+Optional (default: disabled).
+
+> ℹ️ Auto-compounding creates a special type of [recurring scheduled command](../../guides/scheduled-commands.md#recurring) optimised for lending. The command will run at 59 minutes past every hour; lending rates and locked balances are updated hourly, so we want to lock our additional margin as late as possible.
+
+---
+
 ### Examples
 
 ```sh
 # Create offer: lend all lendable currencies at a minimum yearly rate of 0%.
 ftx lend
 
-# Create offer: lend 100 USD at a minimum yearly rate of 0%.
-ftx lend --currency usd --size 100
+# Create offer: lend 10,000 USD at a minimum yearly rate of 0%.
+ftx lend --currency usd --size 10k
 
-# Create offer: lend 10,000 USD and USDT at a minimum yearly rate of 5%.
-ftx lend --currency usd,usdt --size 10k --min-rate 5
+# Create offer: lend all USD and USDT at a minimum yearly rate of 5%, with auto-compounding enabled.
+ftx lend --currency usd,usdt --min-rate 5 --compound
 ```
 
 ![Divider](../../images/divider.png)
