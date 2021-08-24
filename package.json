@@ -1,7 +1,7 @@
 {
   "name": "ftx-cli",
   "version": "1.3.0",
-  "description": "Supercharged FTX lending from the command line.",
+  "description": "The power of FTX meets the power of the command line.",
   "author": {
     "name": "Dusk",
     "email": "dusktrades@protonmail.com",
@@ -12,13 +12,19 @@
   "homepage": "https://github.com/dusktrades/ftx-cli#readme",
   "keywords": [
     "ftx",
+    "ftx us",
     "crypto",
     "cryptocurrency",
+    "bitcoin",
     "stablecoins",
+    "spot",
+    "futures",
     "trading",
+    "twap",
     "lending",
     "borrowing",
-    "cli"
+    "cli",
+    "bot"
   ],
   "engines": {
     "node": ">=14.13.0"
@@ -34,8 +40,8 @@
   },
   "scripts": {
     "clean:node_modules": "rm -rf ./node_modules",
-    "format:check": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose",
