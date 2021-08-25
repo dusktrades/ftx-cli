@@ -13,10 +13,10 @@ function isTriggerOrder(type) {
   return TRIGGER_ORDER_TYPES.has(type);
 }
 
-function composeRequest(exchange, credentials, data, enableColours) {
+function composeRequest(exchange, credentials, data) {
   return isTriggerOrder(data.type)
-    ? composeTriggerRequest(exchange, credentials, data, enableColours)
-    : composeRegularRequest(exchange, credentials, data, enableColours);
+    ? composeTriggerRequest(exchange, credentials, data)
+    : composeRegularRequest(exchange, credentials, data);
 }
 
 export { composeRequest };

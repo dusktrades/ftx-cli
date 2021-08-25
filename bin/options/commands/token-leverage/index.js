@@ -19,7 +19,7 @@ function parse(tokenLeverage) {
 
 const TOKEN_LEVERAGE = {
   FLAGS: '--token-leverage <leverage>',
-  DESCRIPTION: 'token leverage name(s) or multiplier(s)',
+  DESCRIPTION: 'Token leverage name(s) or multiplier(s).',
   PARSER: parse,
 };
 

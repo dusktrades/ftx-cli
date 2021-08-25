@@ -1,7 +1,7 @@
 function composeSortOptionConfig(choices) {
   return {
-    FLAGS: '--sort <sorting method>',
-    DESCRIPTION: 'sorting method',
+    FLAGS: '--sort <method>',
+    DESCRIPTION: 'Sorting method.',
     CHOICES: choices,
   };
 }

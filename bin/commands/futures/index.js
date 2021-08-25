@@ -16,7 +16,7 @@ const SORT_OPTION = composeSortOptionConfig([
 
 const FUTURES = {
   NAME: 'futures',
-  DESCRIPTION: 'display futures markets',
+  DESCRIPTION: 'Display futures markets.',
   OPTIONS: [
     { OPTION: OPTIONS.COMMANDS.CURRENCY },
     { OPTION: OPTIONS.COMMANDS.FUTURE_TYPE },

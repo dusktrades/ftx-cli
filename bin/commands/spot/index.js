@@ -11,7 +11,7 @@ const SORT_OPTION = composeSortOptionConfig([
 
 const SPOT = {
   NAME: 'spot',
-  DESCRIPTION: 'display spot markets',
+  DESCRIPTION: 'Display spot markets.',
   OPTIONS: [
     { OPTION: OPTIONS.COMMANDS.CURRENCY },
     { OPTION: OPTIONS.COMMANDS.SPOT_TYPE },

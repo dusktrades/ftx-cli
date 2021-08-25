@@ -1,11 +1,11 @@
 const COLOUR = {
   ENABLE: {
     FLAGS: '--colour',
-    DESCRIPTION: 'enable coloured output',
+    DESCRIPTION: 'Enable coloured output.',
   },
   DISABLE: {
     FLAGS: '--no-colour',
-    DESCRIPTION: 'disable coloured output',
+    DESCRIPTION: 'Disable coloured output.',
   },
 };
 

@@ -8,9 +8,7 @@ async function run(options) {
     subaccount: options.global.subaccount,
   };
 
-  Logger.info('Cancelling order(s)', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Cancelling order(s)');
 
   await Ftx.orders.cancel({
     exchange: options.global.exchange,
@@ -21,9 +19,7 @@ async function run(options) {
     },
   });
 
-  Logger.info('Queued order cancellation(s)', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Queued order cancellation(s)');
 }
 
 const cancel = { run };

@@ -1,6 +1,13 @@
 import chalk from 'chalk';
 
-function formatLevel({ text, colour }, enableColours) {
+/**
+ * TODO: Could we just create a 'before any output' hook and strip ANSI codes?
+ * This would mean we can treat the entire codebase in terms of colours being
+ * enabled, and only worry about the disabled option at the last second.
+ */
+let enableColours = true;
+
+function formatLevel({ text, colour }) {
   const formattedLevel = text.toUpperCase().padEnd(5);
 
   if (!enableColours) {
@@ -18,32 +25,39 @@ function formatLevel({ text, colour }, enableColours) {
 function getConsoleMethod({ text }) {
   switch (text) {
     case 'error':
-      return console.error;
+      return 'error';
     case 'warn':
-      return console.warn;
+      return 'warn';
     default:
-      return console.log;
+      return 'log';
   }
 }
 
-function log(level, message, enableColours) {
+function log(level, message) {
   const formattedTimestamp = new Date().toISOString();
-  const formattedLevel = formatLevel(level, enableColours);
+  const formattedLevel = formatLevel(level);
   const consoleMethod = getConsoleMethod(level);
 
-  consoleMethod(`${formattedTimestamp}  ${formattedLevel}  ${message}`);
+  console[consoleMethod](
+    `${formattedTimestamp}  ${formattedLevel}  ${message}`
+  );
+}
+
+function setEnableColours(newEnableColours) {
+  enableColours = newEnableColours;
 }
 
 const Logger = {
-  info(message, { enableColours }) {
-    log({ text: 'info' }, message, enableColours);
+  info(message) {
+    log({ text: 'info' }, message);
   },
-  warn(message, { enableColours }) {
-    log({ text: 'warn', colour: 'yellow' }, message, enableColours);
+  warn(message) {
+    log({ text: 'warn', colour: 'yellow' }, message);
   },
-  error(message, { enableColours }) {
-    log({ text: 'error', colour: 'red' }, message, enableColours);
+  error(message) {
+    log({ text: 'error', colour: 'red' }, message);
   },
+  setEnableColours,
 };
 
 export { Logger };

@@ -15,9 +15,7 @@ async function run(options) {
     filters: { currencies: options.command.currency },
   });
 
-  Logger.info('Withdrew lending offer(s)', {
-    enableColours: options.global.enableColours,
-  });
+  Logger.info('Withdrew lending offer(s)');
 
   // Show updated offer list.
   await offers.run(options);

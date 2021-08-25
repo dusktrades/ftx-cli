@@ -18,7 +18,7 @@ function parse(futureType) {
 
 const FUTURE_TYPE = {
   FLAGS: '-t, --type <type>',
-  DESCRIPTION: 'future type(s)',
+  DESCRIPTION: 'Future type(s).',
   PARSER: parse,
 };
 

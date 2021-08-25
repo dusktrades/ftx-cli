@@ -24,8 +24,16 @@ function addCommands() {
 }
 
 function start() {
-  program.version(CONFIG.PACKAGE.version, '-v, --version');
   program.usage('[command] [options]');
+
+  program.version(
+    CONFIG.PACKAGE.version,
+    '-v, --version',
+    'Output the version number.'
+  );
+
+  program.addHelpCommand('help [command]', 'Display help for command.');
+  program.helpOption('-h, --help', 'Display help for command.');
 
   program.addHelpText(
     'after',
