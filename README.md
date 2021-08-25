@@ -278,12 +278,6 @@ FTX CLI runs on Node.js – which is constantly evolving – and v14.13.0 just h
 
 It is possible to hit the [rate limits set out by FTX](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX) if you attempt to execute large amounts of commands in a short period of time. Slow down!
 
-### Why did I receive _'Size too large'_ error?
-
-The FTX API seems to accept sizes with precision up to 8 decimal places, which you can utilise if you set size explicitly.
-
-However, we have encountered strange behaviour when creating lending offers close to your lendable size (such as when auto-compounding), therefore we truncate lendable size to 6 decimal places before communicating with FTX. This makes the errors less common, but it remains possible to receive them while we look for a more robust solution. As a workaround, you can try the command again or wait for the next repeat scheduled run.
-
 ### What's the screenshot setup?
 
 We use a custom theme on [Carbon](https://carbon.now.sh/) to replicate our favourite terminal: [Hyper](https://hyper.is/) with [Fira Code](https://github.com/tonsky/FiraCode) (font ligatures enabled).
