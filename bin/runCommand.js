@@ -100,7 +100,7 @@ async function runCommand(command, inlineCommandOptions) {
 
   Logger.setEnableColours(options.global.colour);
 
-  if (options.global.enableUpdateNotifications) {
+  if (options.global.updateNotifications) {
     notifyUpdate(options.global.colour);
   }
 
