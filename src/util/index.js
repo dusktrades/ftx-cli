@@ -5,8 +5,6 @@ export { compareHighToLow } from './compareHighToLow.js';
 export { convertDecimalToPercentage } from './convertDecimalToPercentage.js';
 export { convertHourlyToYearly } from './convertHourlyToYearly.js';
 export { convertIsoToUnix } from './convertIsoToUnix.js';
-export { convertPercentageToDecimal } from './convertPercentageToDecimal.js';
-export { convertYearlyToHourly } from './convertYearlyToHourly.js';
 export { formatCurrency } from './formatCurrency.js';
 export { formatPercentage } from './formatPercentage.js';
 export { formatPercentageChange } from './formatPercentageChange.js';

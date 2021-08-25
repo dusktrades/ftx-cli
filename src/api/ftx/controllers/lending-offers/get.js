@@ -1,7 +1,31 @@
+import BigNumber from 'bignumber.js';
+
 import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
+
+/**
+ * Lendable size is problematic and untrustworthy:
+ *
+ * - Unpredictable slightly inconsistent values sometimes returned
+ * - 'Size too large' errors despite size being under lendable size
+ *
+ * We 'fix' this (i.e. greatly reduce number of unexpected errors) by rounding
+ * lendable size down to 6 decimal places. The FTX UI also does this.
+ */
+function fixLendableSize(lendableSize) {
+  const parsedLendableSize = new BigNumber(lendableSize);
+
+  return parsedLendableSize.decimalPlaces(6, BigNumber.ROUND_DOWN).toNumber();
+}
+
+function normaliseData(data) {
+  return data.map((entry) => ({
+    ...entry,
+    lendable: fixLendableSize(entry.lendable),
+  }));
+}
 
 function allowActive(filter = false, entry) {
   if (!filter) {
@@ -73,8 +97,13 @@ function sortData(data, sortBy) {
   return alphabeticalData;
 }
 
-function processData(data, filters, sortBy) {
-  const filteredData = filterData(data, filters);
+function collateData(data, filters, sortBy) {
+  const normalisedData = normaliseData(data);
+  const filteredData = filterData(normalisedData, filters);
+
+  if (filteredData.length === 0) {
+    throw new EmptyResultsError('No lending offers found');
+  }
 
   return sortData(filteredData, sortBy);
 }
@@ -83,12 +112,7 @@ async function get({ exchange, credentials, filters, sortBy }) {
   // Lending info endpoint gives more detail than lending offers endpoint.
   const data = await spotMargin.getLendingInfo({ exchange, credentials });
 
-  // TODO: Move check to post-filter so useless placeholder offers don't count.
-  if (data.length === 0) {
-    throw new EmptyResultsError('No lending offers found');
-  }
-
-  return processData(data, filters, sortBy);
+  return collateData(data, filters, sortBy);
 }
 
 export { get };
