@@ -1,48 +1,35 @@
 import { Ftx } from '../../api/index.js';
 import { CliUi } from '../../common/index.js';
 import { formatCurrency, formatUsd } from '../../util/index.js';
-import { formatRates } from '../formatRates.js';
 
 function createTable() {
   return CliUi.createTable([
     'Currency',
-    'Total lending duration',
-    'Average lending rate\n(hour/year)',
-    'Total earnings',
-    'Total earnings\n(USD)',
+    'Total interest earned\n(currency)',
+    'Total interest earned\n(USD)',
   ]);
 }
 
-function formatDuration(totalHoursLent) {
-  const totalDaysLent = Math.ceil(totalHoursLent / 24);
-  const hourString = totalHoursLent === 1 ? 'hour' : 'hours';
-  const dayString = totalDaysLent === 1 ? 'day' : 'days';
-
-  return `${totalHoursLent} ${hourString} (~${totalDaysLent} ${dayString})`;
-}
-
-function composeTableEntry(entry, enableColours) {
+function composeTableEntry(entry) {
   return [
-    entry.currency,
-    formatDuration(entry.totalHoursLent),
-    formatRates(entry.hourlyRateDecimal, 'lending', enableColours),
-    formatCurrency(entry.proceeds),
-    formatUsd(entry.proceedsUsd),
+    entry.coin,
+    { hAlign: 'right', content: formatCurrency(entry.value) },
+    { hAlign: 'right', content: formatUsd(entry.valueUsd) },
   ];
 }
 
-function composeTableData(data, enableColours) {
-  const metricRows = data.metricsByCurrency.map((entry) =>
-    composeTableEntry(entry, enableColours)
+function composeTableData(data) {
+  const rows = data.lendingInterestByCoin.map((entry) =>
+    composeTableEntry(entry)
   );
 
   const totalRow = [
     'Total',
-    { content: '', colSpan: 3 },
-    formatUsd(data.lendingEarningsUsd),
+    { content: '', colSpan: 1 },
+    { hAlign: 'right', content: formatUsd(data.lendingInterestUsd) },
   ];
 
-  return [...metricRows, totalRow];
+  return [...rows, totalRow];
 }
 
 async function run(options) {
@@ -52,13 +39,13 @@ async function run(options) {
     subaccount: options.global.subaccount,
   };
 
-  const data = await Ftx.lendingHistory.getAggregated({
+  const data = await Ftx.userRewards.get({
     exchange: options.global.exchange,
     credentials,
   });
 
   const table = createTable();
-  const tableData = composeTableData(data, options.global.enableColours);
+  const tableData = composeTableData(data);
 
   table.push(...tableData);
 
