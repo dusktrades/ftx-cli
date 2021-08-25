@@ -6,7 +6,6 @@ import { IOC } from './ioc/index.js';
 import { POST_ONLY } from './post-only/index.js';
 import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
-import { REPEAT } from './repeat/index.js';
 import { RETRY } from './retry/index.js';
 import { SCHEDULE } from './schedule/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
@@ -14,17 +13,24 @@ import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
 // The order here is the order options will appear in help outputs.
 const GLOBAL = [
-  // Exchange/account options.
+  // Platform.
   EXCHANGE,
+
+  // Account.
   API_KEY,
   API_SECRET,
   SUBACCOUNT,
 
-  // Behaviour options.
+  // Behaviour.
   SCHEDULE,
-  REPEAT,
 
-  // Trading options.
+  // UI.
+  COLOUR.ENABLE,
+  COLOUR.DISABLE,
+  UPDATE_NOTIFICATIONS.ENABLE,
+  UPDATE_NOTIFICATIONS.DISABLE,
+
+  // Trading.
   IOC.ENABLE,
   IOC.DISABLE,
   POST_ONLY.ENABLE,
@@ -34,12 +40,6 @@ const GLOBAL = [
   RETRY.ENABLE,
   RETRY.DISABLE,
   RATE_LIMIT,
-
-  // UI customisation options.
-  COLOUR.ENABLE,
-  COLOUR.DISABLE,
-  UPDATE_NOTIFICATIONS.ENABLE,
-  UPDATE_NOTIFICATIONS.DISABLE,
 ];
 
 export { GLOBAL };

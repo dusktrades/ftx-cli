@@ -11,7 +11,6 @@
 - [Scheduled order](#scheduled-order)
   - [Usage](#usage)
   - [Examples](#examples-3)
-  - [Resources](#resources)
 - [Notes](#notes)
 
 ![Divider](../../images/divider.png)
@@ -130,54 +129,13 @@ ftx trade --market btc-perp --side sell --type limit --size 3 --price 60k:61k --
 
 ## Scheduled order
 
-A scheduled order is an order paired with a [scheduled command](./404.md).
+A scheduled order is an order that is scheduled to run at a future date and time or periodically, according to a given interval, until manually aborted. Place a scheduled order by using a [scheduled command](../../guides/scheduled-commands.md).
 
 Scheduled orders can be used to simulate complex time-based order types (e.g. Time-of-Day orders) or repeating investing strategies (e.g. Dollar-Cost Averaging).
 
-> ℹ️ You can use scheduling with any command.
-
 ### Usage
 
-#### ISO 8601
-
-```
---schedule <ISO 8601 timestamp>  Schedule to run at a specific future date and time.
-```
-
-| Type                | Argument format             | Example                     |
-| ------------------- | --------------------------- | --------------------------- |
-| Local timezone      | `YYYY-MM-DDThh:mm:ss`       | `2021-01-01T00:00:00`       |
-| UTC (exchange time) | `YYYY-MM-DDThh:mm:ssZ`      | `2021-01-01T00:00:00Z`      |
-| UTC offset          | `YYYY-MM-DDThh:mm:ss±hh:mm` | `2021-01-01T00:00:00-01:00` |
-
-- [ISO 8601 standard](https://www.iso.org/iso-8601-date-and-time-format.html)
-- [ISO 8601 wiki](https://en.wikipedia.org/wiki/ISO_8601)
-- [ISO 8601 playground](https://www.timestamp-converter.com/)
-
-#### Cron expression/shorthand
-
-```
---schedule <cron [expression|shorthand]>  Schedule to run at every given time period (local timezone) until manually aborted.
-```
-
-| Type         | Argument format |
-| ------------ | --------------- |
-| Standard     | `* * * * *`     |
-| With seconds | `* * * * * *`   |
-
-| Shorthand argument | Description                     |
-| ------------------ | ------------------------------- |
-| `every-second`     | Run at every new second.        |
-| `every-minute`     | Run at every new minute.        |
-| `hourly`           | Run at every new hour.          |
-| `daily`            | Run at every new day.           |
-| `weekly`           | Run at every new week (Monday). |
-| `monthly`          | Run at every new month.         |
-| `quarterly`        | Run at every new quarter.       |
-| `yearly`           | Run at every new year.          |
-
-- [Cron wiki](https://en.wikipedia.org/wiki/Cron)
-- [Cron playground](https://crontab.guru/)
+Please refer to [scheduled commands usage](../../guides/scheduled-commands.md#usage).
 
 ### Examples
 

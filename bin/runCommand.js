@@ -8,9 +8,6 @@ import { sleep } from '../src/util/index.js';
 import { handleError } from './handleError.js';
 import { notifyUpdate } from './notifyUpdate.js';
 
-// Repeat at XX:XX:00; used if no user/command-provided schedule.
-const FALLBACK_REPEAT_CRON_EXPRESSION = '* * * * *';
-
 // Options that can be saved with `login` or `config`.
 const configurableOptions = [
   'exchange',
@@ -37,13 +34,23 @@ function composeGlobalConfigOptions(inlineGlobalOptions) {
   );
 }
 
+function composeSchedule(schedule, compound) {
+  // Give `compound` option priority over `schedule` option.
+  if (compound) {
+    // Run at 59 minutes past every hour.
+    return { type: 'cron', cronExpression: '59 * * * *' };
+  }
+
+  return schedule;
+}
+
 function composeGlobalOptions() {
   const inlineGlobalOptions = program.opts();
   const globalConfigOptions = composeGlobalConfigOptions(inlineGlobalOptions);
 
   return {
     ...globalConfigOptions,
-    schedule: inlineGlobalOptions.schedule,
+    schedule: composeSchedule(inlineGlobalOptions.schedule),
   };
 }
 
@@ -67,30 +74,17 @@ async function scheduleCommand(run, options) {
     return;
   }
 
-  logWaiting();
-
   // TODO: Add method of ending schedule (e.g. `--schedule-end`).
-  cron.schedule(options.global.schedule.cronExpression, () => {
-    run(options);
+  cron.schedule(options.global.schedule.cronExpression, async () => {
+    await run(options);
     logWaiting();
   });
+
+  logWaiting();
 }
 
-async function repeatRun(run, options, cronExpression) {
-  // Schedule repeat runs.
-  cron.schedule(cronExpression, async () => {
-    await run(options);
-  });
-
-  // Execute initial run.
-  await run(options);
-}
-
-async function runFunction(command, options) {
-  const {
-    run,
-    DEFAULT_REPEAT_CRON_EXPRESSION = FALLBACK_REPEAT_CRON_EXPRESSION,
-  } = Commands[command];
+async function runHandler(command, options) {
+  const { run } = Commands[command];
 
   if (options.global.schedule != null) {
     await scheduleCommand(run, options);
@@ -98,20 +92,7 @@ async function runFunction(command, options) {
     return;
   }
 
-  // TODO: Remove `repeat` option in favour of `schedule`.
-  if (options.global.repeat == null) {
-    await run(options);
-
-    return;
-  }
-
-  if (options.global.repeat === true) {
-    await repeatRun(run, options, DEFAULT_REPEAT_CRON_EXPRESSION);
-
-    return;
-  }
-
-  await repeatRun(run, options, options.global.repeat);
+  await run(options);
 }
 
 async function runCommand(command, inlineCommandOptions) {
@@ -124,7 +105,7 @@ async function runCommand(command, inlineCommandOptions) {
   }
 
   try {
-    await runFunction(command, options);
+    await runHandler(command, options);
   } catch (error) {
     handleError(error);
   }

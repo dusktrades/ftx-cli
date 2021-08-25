@@ -2,24 +2,20 @@
 
 ## Contents
 
-- [`trade`](#trade)
+- [🔐 `trade`](#-trade)
   - [Options](#options)
   - [Examples](#examples)
   - [Resources](#resources)
-- [`cancel`](#cancel)
+- [🔐 `cancel`](#-cancel)
   - [Options](#options-1)
   - [Examples](#examples-1)
 
 ![Divider](../../images/divider.png)
 
-## `trade`
+## 🔐 `trade`
 
-Authentication required.
-
-Place order(s).
-
-```
-ftx trade [options]
+```sh
+ftx trade [options]  Place order(s).
 ```
 
 ### Options
@@ -29,7 +25,7 @@ Required:
   -m, --market <market>      Market name.
   --side <side>              Order side.
   -t, --type <type>          Order type.
-  -s, --size <size>          Size to execute, measured in base currency or underlying.
+  -s, --size <size>          Size to execute (spot: base currency; futures: underlying).
 
 Order-type-specific:
   -p, --price <price>        Price that limit orders will be executed at.
@@ -102,12 +98,12 @@ Required.
 #### Size
 
 ```
--s, --size <size>  Size to execute, measured in base currency or underlying.
+-s, --size <size>  Size to execute (spot: base currency; futures: underlying).
 ```
 
 Required.
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `0.001`, `10`, `100k`.
 
@@ -121,9 +117,9 @@ Examples: `0.001`, `10`, `100k`.
 
 Required for limit orders (`limit`, `stop-limit`, `take-profit-limit`).
 
-Supports [number shorthands](./404.md) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
 
-Examples: `0.001`, `100k`, `500:1k`.
+Examples: `0.001`, `10:20`, `100k:50k`.
 
 ---
 
@@ -135,7 +131,7 @@ Examples: `0.001`, `100k`, `500:1k`.
 
 Required for stop and take profit orders (`stop-market`, `stop-limit`, `take-profit-market`, `take-profit-limit`).
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `0.001`, `10`, `100k`.
 
@@ -151,9 +147,9 @@ Required for `trailing-stop` orders.
 
 Positive value for `buy` orders (i.e. the price must increase by the value without making a new low); negative value for `sell` orders (i.e. the price must decrease by the value without making a new high).
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
-Examples: `1`, `-1`, `1k`, `-1k`.
+Examples: `1`, `-1`, `1k`.
 
 ---
 
@@ -167,7 +163,7 @@ Optional (default: `1` [disabled]).
 
 Compatible with all order types.
 
-Supports [number shorthands](./404.md).
+Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `1`, `100`, `1k`.
 
@@ -293,14 +289,10 @@ ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 
 
 ![Divider](../../images/divider.png)
 
-## `cancel`
+## 🔐 `cancel`
 
-Authentication required.
-
-Cancel order(s).
-
-```
-ftx cancel [options]
+```sh
+ftx cancel [options]  Cancel order(s).
 ```
 
 ### Options

@@ -1,15 +1,17 @@
 import {
   composeCommand,
   expectChildToMatch,
-  expectToAcceptShorthandNumberArguments,
+  expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
   spawnTestChild,
 } from '../helpers/index.js';
 
-// Method of testing shorthand number arguments while only placing one order.
-const MOCK_SHORTHAND_NUMBER_ARGUMENTS = {
+// Method of testing number shorthand arguments while only placing one order.
+const MOCK_NUMBER_SHORTHAND_ARGUMENTS = {
   k: '0.001k',
+  K: '0.001K',
   m: '0.000001m',
+  M: '0.000001M',
 };
 
 async function expectArgumentToBeInvalid(argument) {
@@ -40,9 +42,9 @@ describe('[OPTION] Split', () => {
     await expectToPlaceOrders(options, 1);
   });
 
-  test('SUCCEEDS: Shorthand number arguments', async () => {
-    await expectToAcceptShorthandNumberArguments((shorthand) => {
-      const argument = MOCK_SHORTHAND_NUMBER_ARGUMENTS[shorthand];
+  test('SUCCEEDS: Number shorthand arguments', async () => {
+    await expectToAcceptNumberShorthandArguments((shorthand) => {
+      const argument = MOCK_NUMBER_SHORTHAND_ARGUMENTS[shorthand];
 
       return `--market btc-perp --side buy --type market --size 1 --split ${argument}`;
     });
