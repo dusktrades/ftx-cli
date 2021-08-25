@@ -1,63 +1,58 @@
 # [![FTX CLI](docs/images/banner.png)](https://github.com/dusktrades/ftx-cli)
 
-> 💸 Supercharged FTX lending from the command line.
+> 💱 The power of FTX meets the power of the command line.
 
-[![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
+[![Version](https://flat.badgen.net/npm/v/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Node.js](https://flat.badgen.net/npm/node/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![License](https://flat.badgen.net/npm/license/ftx-cli?cache=300)](LICENSE) [![Total downloads](https://flat.badgen.net/npm/dt/ftx-cli?cache=300)](https://www.npmjs.com/package/ftx-cli) [![Discord](https://flat.badgen.net/discord/members/v3MW4TeXtZ?cache=300)](https://discord.gg/v3MW4TeXtZ) [![Twitter](https://flat.badgen.net/twitter/follow/dusktrades?cache=300)](https://twitter.com/dusktrades)
 
 ![Demo](docs/images/demo.png)
 
 ## Contents
 
-- [Features](#features)
+- [Why FTX CLI?](#why-ftx-cli)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
   - [Try it out](#try-it-out)
-  - [Global package (recommended)](#global-package-recommended)
-  - [Build from source](#build-from-source)
+  - [Global package](#global-package)
+  - [Alternative methods](#alternative-methods)
 - [Getting started](#getting-started)
-  - [Obtain API credentials](#obtain-api-credentials)
+  - [Create API credentials](#create-api-credentials)
   - [Secure API credentials](#secure-api-credentials)
-  - [Resources](#resources)
 - [Usage](#usage)
   - [Global options](#global-options)
-  - [Login](#login)
-  - [Logout](#logout)
-  - [Config](#config)
-  - [Rates](#rates)
-  - [Earnings](#earnings)
-  - [Offers](#offers)
-  - [Lend](#lend)
-  - [Stop](#stop)
-  - [Spot](#spot)
-  - [Futures](#futures)
-- [Examples](#examples)
-  - [Using subaccounts](#using-subaccounts)
-  - [Repeating commands and auto-compounding](#repeating-commands-and-auto-compounding)
+  - [Topics](#topics)
 - [FAQ](#faq)
-- [Disclaimer](#disclaimer)
+- [Support the project](#support-the-project)
+  - [Contribute](#contribute)
+  - [Share](#share)
+  - [Referral](#referral)
+  - [Donate](#donate)
 - [Contact](#contact)
-- [Donate](#donate)
+- [Disclaimer](#disclaimer)
 - [License](#license)
 
 ![Divider](docs/images/divider.png)
 
-## Features
+## Why FTX CLI?
 
-🌍 **Global exchange:** supports FTX and FTX US\
-👤 **Multiple logins:** allows switching between API credentials and subaccounts\
-📊 **Better metrics:** displays all the metrics provided by FTX and more\
-🔁 **Repeat commands:** compounds lending offers automatically via inbuilt command scheduler\
-⏲️ **Custom schedules:** repeats commands using custom cron expressions\
-🔐 **Self-hosted:** retains your control over your API credentials\
-⚙️ **Close to the metal:** remains faithful to FTX terminology, options, and errors
+🆓 **Free:** no ads, no trackers, no paid licences, no subscriptions, no added fees.\
+📖 **Open source:** _'not your (API) keys, not your coins'._\
+🔐 **Self-hosted:** no intermediary servers and no extra downtime; you're in control.\
+⚡ **Fast:** place complex orders in the heat of the moment.\
+🔌 **Powerful:** try scheduled commands, new advanced orders, auto-compounding lending, and more.\
+🎨 **Customisable:** configure the UI and collate exchange data to create custom interfaces.\
+👨‍💻 **Extensible:** combine input, output, or behaviour with other CLIs or custom scripts.\
+🌍 **Global:** [FTX](https://ftx.com/#a=dusktrades), with or without the [US](https://ftx.us/#a=dusktrades).\
+👤 **Multiple accounts:** switch account and subaccount on the fly.
 
 ![Divider](docs/images/divider.png)
 
 ## Prerequisites
 
-- Node.js v14.13.0+
+- Node.js v14.13.0+ ([why?](#why-do-i-need-nodejs-v14130))
 
-The quickest and easiest way to install or update Node.js is via [nvm](https://github.com/nvm-sh/nvm).
+It is recommended that you use a version manager to install and update Node.js, such as [nvm](https://github.com/nvm-sh/nvm) (Unix-like, macOS, WSL, etc.) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows).
+
+You can find other ways to install Node.js [here](https://nodejs.org).
 
 ![Divider](docs/images/divider.png)
 
@@ -65,384 +60,264 @@ The quickest and easiest way to install or update Node.js is via [nvm](https://g
 
 ### Try it out
 
-Before you install, why not try one of the commands out? This one doesn't require authentication and will display information on lending rates.
+Not sure whether you want to install yet? You can execute commands remotely from the npm registry with [`npx`](https://docs.npmjs.com/cli/v7/commands/npx), which is included with Node.js.
+
+Here's one that will display previous and current FTX lending rates for USD and USDT:
 
 ```sh
-npx ftx-cli rates
+npx ftx-cli rates --currency usd,usdt
 ```
 
-### Global package (recommended)
+### Global package
 
-The quickest and easiest way to install is globally from [npm](https://www.npmjs.com/package/ftx-cli). By default, you will be notified when an update is available.
+The quickest and recommended way to install is from [npm](https://www.npmjs.com/package/ftx-cli), which is included with Node.js. By default, the latest version will be installed and you will be notified when an update is available.
 
 ```sh
 npm install -g ftx-cli
 ```
 
-### Build from source
+### Alternative methods
 
-You can also download/clone and install the package manually. You will be in charge of downloading/pulling and installing the latest source when an update is available.
-
-```sh
-git clone https://github.com/dusktrades/ftx-cli
-cd ftx-cli
-npm install -g
-```
+Advanced users may want to try one of the [alternative installation methods](./docs/guides/alternative-installation-methods.md).
 
 ![Divider](docs/images/divider.png)
 
 ## Getting started
 
-### Obtain API credentials
+> ℹ️ Planning on using FTX CLI purely for displaying exchange data? You can ignore this section for now; API credentials (key and secret) are only required for authenticated, account-related parts of the platform, such as trading and lending.
 
-1. Create a new account (5% fees discount) on [FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)
-2. [Settings](https://ftx.com/profile#a=dusktrades) > Margin > 'ENABLE SPOT MARGIN TRADING'
-3. [Settings](https://ftx.com/profile#a=dusktrades) > Api > 'CREATE API KEY'
-4. Note credentials down temporarily
+### Create API credentials
+
+1. If you don't have an FTX account yet, [create one](https://ftx.com/#a=dusktrades) ([click here](https://ftx.us/#a=dusktrades) for FTX US)
+2. Select 'Main Account' (account-wide) or the specific subaccount that FTX CLI can access:
+   - [Subaccounts](https://ftx.com/subaccounts#a=dusktrades) → 'CREATE SUBACCOUNT' or 'Select Account'
+3. If you want to margin trade or lend, make sure to enable [spot margin trading](https://help.ftx.com/hc/en-us/articles/360053007671):
+   - [Settings](https://ftx.com/profile#a=dusktrades) → Margin → 'ENABLE SPOT MARGIN TRADING'
+4. Create your API key and secret:
+   - [Settings](https://ftx.com/profile#a=dusktrades) → Api → 'CREATE API KEY'
+
+### Save API credentials
+
+> ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using the [`login`](./docs/topics/accounts/README.md#login) command.
+>
+> ℹ️ API credentials and subaccount names are case-sensitive, as they are used to authenticate with the FTX platform. API credentials can be copy and pasted after you create them, and subaccount names from the [subaccounts page](https://ftx.com/subaccounts#a=dusktrades).
+
+```sh
+# Account-wide access (requires API credentials not linked to a specific subaccount).
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET
+
+# Subaccount-only access.
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount YOUR_SUBACCOUNT
+```
 
 ### Secure API credentials
 
-1. Edit API key permissions to the minimum required for this package to function properly
+Here are some best practices for keeping your API credentials secure:
+
+1. Edit API key permissions to the minimum required for FTX CLI to function properly:
    - Disable 'Read-only'
    - Disable 'Withdrawals enabled'
    - Disable 'Internal transfers enabled'
-2. If you know the static IP address(es) you will be using, you can further improve security by whitelisting them via 'WHITELIST IP'
-
-### Resources
-
-- [Margin Lending (UI)](https://ftx.com/spot-margin/lending#a=dusktrades) ([FTX US](https://ftx.us/spot-margin/lending#a=dusktrades))
-- [Spot Margin Trading Explainer (Article)](https://help.ftx.com/hc/en-us/articles/360053007671-Spot-Margin-Trading-Explainer)
-- [FTX Guide: How to Borrow and Lend on FTX (Video)](https://www.youtube.com/watch?v=0ms7u__Gbys)
+2. If you know the static IP address(es) you will be using, you can further improve security by whitelisting them:
+   - 'WHITELIST IP'
 
 ![Divider](docs/images/divider.png)
 
 ## Usage
 
-If you need a quick reminder or link back here in future, try `ftx --help`.
-
 ### Global options
 
-You can inline these options with any command to modify its behaviour. Inline options take priority over stored credentials/config.
+You can include these options with any command to modify its behaviour.
 
-| Option                           | Description                                                                                            | Default       | Notes                                                                           |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------- |
-| `-e, --exchange <exchange>`      | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`         | Options: `ftx`, `ftx-us`                                                        |
-| `-k, --key <key>`                | FTX API key                                                                                            |               |                                                                                 |
-| `-x, --secret <secret>`          | FTX API secret                                                                                         |               |                                                                                 |
-| `-a, --subaccount <subaccount>`  | FTX subaccount name                                                                                    | No subaccount | [Learn more about using subaccounts](#using-subaccounts)                        |
-| `--schedule <schedule>`          | Schedule to run command at a specific future date and time or at every given time period               |               |                                                                                 |
-| `-z, --repeat [cron expression]` | Repeat the command with optional schedule                                                              | `false`       | [Learn more about repeating commands](#repeating-commands-and-auto-compounding) |
-| `--colour`                       | Enable coloured output                                                                                 | `true`        | Disable: `--no-colour`                                                          |
-| `--update-notifications`         | Enable update notifications                                                                            | `true`        | Disable: `--no-update-notifications`                                            |
+```
+General:
+  -v, --version                  Output the version number.
+  -h, --help                     Display help for command.
 
-### Login
+Platform:
+  -e, --exchange <exchange>      FTX exchange platform.
 
-Store FTX API credentials locally. This provides a convenient method of remaining authenticated with FTX. Please note any previously stored credentials will be overwritten.
+Account:
+  -k, --key <key>                FTX API key.
+  -x, --secret <secret>          FTX API secret.
+  -a, --subaccount <subaccount>  FTX subaccount name.
 
-| Option                          | Description         | Default       | Notes                                                    |
-| ------------------------------- | ------------------- | ------------- | -------------------------------------------------------- |
-| `-k, --key <key>`               | FTX API key         |               | Required                                                 |
-| `-x, --secret <secret>`         | FTX API secret      |               | Required                                                 |
-| `-a, --subaccount <subaccount>` | FTX subaccount name | No subaccount | [Learn more about using subaccounts](#using-subaccounts) |
+Behaviour:
+  --schedule <schedule>          Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
 
-```sh
-# Store API credentials.
-ftx login --key API_KEY --secret API_SECRET
-
-# Store API credentials and subaccount.
-ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
+UI:
+  --[no-]colour                  Toggle coloured output.
+  --[no-]update-notifications    Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day.
 ```
 
-### Logout
+> ℹ️ Inline options take priority over saved credentials (via [`login`](./docs/topics/accounts/README.md#login)) and configuration (via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
 
-Remove stored FTX API credentials.
+---
 
-```sh
-ftx logout
+#### Exchange
+
+```
+-e, --exchange <exchange>  FTX exchange platform.
 ```
 
-### Config
+Optional (default: `ftx`).
 
-Store option preferences locally. This lets you customise the default behaviour of the package so you don't need to continuously repeat the same options.
+| Choice   |
+| -------- |
+| `ftx`    |
+| `ftx-us` |
 
-| Option                      | Description                                                                                            | Default | Notes                                |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ | ------- | ------------------------------------ |
-| `-e, --exchange <exchange>` | FTX exchange platform ([FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades)) | `ftx`   | Options: `ftx`, `ftx-us`             |
-| `--colour`                  | Enable coloured output                                                                                 | `true`  | Disable: `--no-colour`               |
-| `--update-notifications`    | Enable update notifications                                                                            | `true`  | Disable: `--no-update-notifications` |
+---
 
-```sh
-# Store preference to use FTX US.
-ftx config --exchange ftx-us
+#### Key
 
-# Store preference to disable coloured output.
-ftx config --no-colour
-
-# Store preference to disable update notifications.
-ftx config --no-update-notifications
+```
+-k, --key <key>  FTX API key.
 ```
 
-### Rates
+Optional.
 
-Display lending rates.
+---
 
-| Option                      | Description        | Default                 | Notes                                        |
-| --------------------------- | ------------------ | ----------------------- | -------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list                |
-| `--sort <sorting method>`   | Sorting method     | `currency`              | Options: `currency`, `previous`, `estimated` |
+#### Secret
 
-```sh
-# Display lending rates for all currencies.
-ftx rates
-
-# Display lending rates for BTC.
-ftx rates --currency btc
-
-# Display lending rates for USD and USDT, sorted by estimated next lending rate.
-ftx rates --currency usd,usdt --sort estimated
+```
+-x, --secret <secret>  FTX API secret.
 ```
 
-### Earnings
+Optional.
 
-Display my lending earnings.
+---
 
-🔐 Requires authentication
+#### Subaccount
 
-```sh
-ftx earnings
+```
+-a, --subaccount <subaccount>  FTX subaccount name.
 ```
 
-### Offers
+Optional (default: main account).
 
-Display my open lending offers.
+---
 
-🔐 Requires authentication
+#### Schedule
 
-| Option                    | Description    | Default    | Notes                                                            |
-| ------------------------- | -------------- | ---------- | ---------------------------------------------------------------- |
-| `--sort <sorting method>` | Sorting method | `currency` | Options: `currency`, `lendable`, `offered`, `locked`, `min-rate` |
-
-```sh
-# Display my open lending offers.
-ftx offers
-
-# Display my open lending offers, sorted by locked size.
-ftx offers --sort locked
+```
+--schedule <schedule>  Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
 ```
 
-### Lend
+Optional (default: disabled).
 
-Create lending offer(s). Please note any matching existing offer(s) will be updated.
+[Learn more about scheduled commands](./docs/guides/scheduled-commands.md).
 
-🔐 Requires authentication
+---
 
-| Option                      | Description                     | Default                 | Notes                                                          |
-| --------------------------- | ------------------------------- | ----------------------- | -------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s)              | All lendable currencies | Supports comma-separated list                                  |
-| `-s, --size <size>`         | Currency amount                 | Maximum lendable size   | Supports thousand (`k`, `K`) and million (`m`, `M`) shorthands |
-| `-r, --min-rate <rate>`     | Minimum yearly lending rate (%) | `0`                     |                                                                |
+#### Colour
 
-```sh
-# Offer all lendable currencies with no minimum rate.
-ftx lend
-
-# Offer all BTC with no minimum rate.
-ftx lend --currency btc
-
-# Offer all lendable currencies at a minimum rate of 5% per year.
-ftx lend --min-rate 5
-
-# Offer 100 TWTR with no minimum rate.
-ftx lend --currency twtr --size 100
-
-# Offer all USD and USDT at a minimum rate of 7.5% per year.
-ftx lend --currency usd,usdt --min-rate 7.5
-
-# Offer 10,500 USD at a minimum rate of 10% per year.
-ftx lend --currency usd --size 10.5k --min-rate 10
+```
+--colour     Enable coloured output.
+--no-colour  Disable coloured output.
 ```
 
-### Stop
+Optional (default: enabled).
 
-Withdraw lending offer(s).
+---
 
-🔐 Requires authentication
+#### Update notifications
 
-| Option                      | Description        | Default                 | Notes                         |
-| --------------------------- | ------------------ | ----------------------- | ----------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All lendable currencies | Supports comma-separated list |
-
-```sh
-# Withdraw all offers.
-ftx stop
-
-# Withdraw offer for USD.
-ftx stop --currency usd
-
-# Withdraw offers for USD and USDT.
-ftx stop --currency usd,usdt
+```
+--update-notifications     Enable update notifications. When an update is available, a notification will appear after command execution at most once a day.
+--no-update-notifications  Disable update notifications.
 ```
 
-> ⚠️ Funds will stay locked by FTX for up to 1 hour after withdrawing your offer.
+Optional (default: enabled).
 
-### Spot
+---
 
-Display spot stats.
+### Topics
 
-| Option                            | Description                       | Default             | Notes                                                                                                                                                    |
-| --------------------------------- | --------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-c, --currency <currency>`       | Currency symbol(s)                | All currencies      | Supports comma-separated list                                                                                                                            |
-| `-t, --type <type>`               | Spot type                         | All spot types      | Supports comma-separated list<br><br>Options:<br>`coin`<br>`fiat`<br>`leveraged-token` (`lev`)<br>`volatility-token` (`vol`)<br>`equity-token` (`stock`) |
-| `-q, --quote-currency <currency>` | Quote currency symbol(s)          | All currencies      | Supports comma-separated list                                                                                                                            |
-| `--token-leverage <leverage>`     | Token leverage name or multiplier | All token leverages | Supports comma-separated list<br><br>Options:<br>`bull` (`3x`)<br>`half` (`0.5x`)<br>`hedge` (`-1x`)<br>`bear` (`-3x`)                                   |
-| `--sort <sorting method>`         | Sorting method                    | `name`              | Options:<br>`name`<br>`price`<br>`change-1h`<br>`change-24h`<br>`volume`                                                                                 |
+Visit the documentation for a topic to learn more about related commands:
 
-```sh
-# Display stats for all spot markets.
-ftx spot
+- [Accounts](./docs/topics/accounts/README.md)
+  - [`login`](./docs/topics/accounts/README.md#login)
+  - [`logout`](./docs/topics/accounts/README.md#logout)
+- [Configuration](./docs/topics/configuration/README.md)
+  - [`config`](./docs/topics/configuration/README.md#config)
+- [Markets](./docs/topics/markets/README.md)
+  - [`spot`](./docs/topics/markets/README.md#spot)
+  - [`futures`](./docs/topics/markets/README.md#futures)
+- [Trading](./docs/topics/trading/README.md)
+  - [🔐 `trade`](./docs/topics/trading/README.md#-trade)
+  - [🔐 `cancel`](./docs/topics/trading/README.md#-cancel)
+- [Lending](./docs/topics/lending/README.md)
+  - [`rates`](./docs/topics/lending/README.md#rates)
+  - [🔐 `offers`](./docs/topics/lending/README.md#-offers)
+  - [🔐 `earnings`](./docs/topics/lending/README.md#-earnings)
+  - [🔐 `lend`](./docs/topics/lending/README.md#-lend)
+  - [🔐 `stop`](./docs/topics/lending/README.md#-stop)
 
-# Display stats for all BTC and ETH spot markets.
-ftx spot --currency btc,eth
+> ℹ️ You can utilise subaccounts to isolate margin and manage risk.
 
-# Display stats for all fiat spot markets.
-ftx spot --type fiat
+### Guides
 
-# Display stats for all tokenised equity spot markets, sorted by 1 hour change.
-ftx spot --type equity-token --sort change-1h
-
-# Display stats for all leveraged and volatility token spot markets, sorted by volume.
-ftx spot --type leveraged-token,volatility-token --sort volume
-
-# Display stats for BEAR (-3x) leveraged token USDT spot markets.
-ftx spot --quote-currency usdt --token-leverage bear
-```
-
-### Futures
-
-Display futures stats.
-
-| Option                      | Description        | Default          | Notes                                                                                                                                                                                  |
-| --------------------------- | ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-c, --currency <currency>` | Currency symbol(s) | All currencies   | Supports comma-separated list                                                                                                                                                          |
-| `-t, --type <type>`         | Future type        | All future types | Supports comma-separated list<br /><br />Options: `perpetual` (`perp`), `quarterly` (`dated`), `move`                                                                                  |
-| `--sort <sorting method>`   | Sorting method     | `name`           | Options:<br />`name`<br />`last-price`<br />`mark-price`<br />`change-1h`<br />`change-24h`<br />`volume`<br />`open-interest` (`oi`)<br />`previous-funding`<br />`estimated-funding` |
-
-```sh
-# Display stats for all futures.
-ftx futures
-
-# Display stats for all BTC and ETH-related futures.
-ftx futures --currency btc,eth
-
-# Display stats for all perpetual futures.
-ftx futures --type perpetual
-
-# Display stats for all perpetual futures, sorted by estimated next funding rate.
-ftx futures --type perpetual --sort estimated-funding
-
-# Display stats for BTC quarterly and move futures, sorted by open interest.
-ftx futures --currency btc --type quarterly,move --sort open-interest
-```
-
-> ⚠️ This command is currently intensive on the FTX API due to the amount of data required. You can reduce load by using the `currency` and `type` filters, and by avoiding repeating the command too quickly.
-
-![Divider](docs/images/divider.png)
-
-## Examples
-
-### Using subaccounts
-
-Subaccounts are fully supported. If you plan on using one subaccount most of the time, you can `login` with it. If you plan on switching between subaccounts, you can use inline options.
-
-```sh
-# Store API credentials and subaccount.
-ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
-
-# Display my open lending offers on 'Idle' subaccount.
-ftx offers --subaccount Idle
-```
-
-**Notes:**
-
-- FTX subaccount names are case-sensitive
-- FTX API credentials can be linked to your whole account or individual subaccounts
-
-> ⚠️ It is recommended that you create and use a subaccount if you want to keep your lending funds separate. The purpose of this is to prevent conflicts with other trading activity on your account (e.g. using a subaccount when auto-compounding will prevent accidentally lending collateral from elsewhere on your account).
-
-### Repeating commands and auto-compounding
-
-Any command can be easily repeated at specified intervals via the inbuilt command scheduler and will keep running until manually aborted. If you need help with cron expression syntax, we recommend reading the [node-cron documentation](https://github.com/node-cron/node-cron#readme) and using [crontab guru](https://crontab.guru/).
-
-| Command | Default repeat schedule                        | Notes                                                                                     |
-| ------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `lend`  | `59 * * * *` ('At 59 minutes past every hour') | Optimised for auto-compounding (FTX lending rates and locked balances are updated hourly) |
-| Others  | `* * * * *` ('At every minute')                |                                                                                           |
-
-```sh
-# Auto-compound all lendable currencies with no minimum rate.
-ftx lend --repeat
-
-# Auto-compound all USD at a minimum rate of 1% per year.
-ftx lend --currency usd --min-rate 1 --repeat
-
-# Withdraw all offers at 09:00 AM every day.
-ftx stop --repeat "0 9 * * *"
-```
-
-> ⚠️ The machine you are using to run repeated commands must remain powered on and capable of communicating with FTX (e.g. PC with no downtime, local server, VM).
+- [Power users](./docs/guides/power-users.md): features aimed at increasing efficiency.
+- [Scheduled commands](./docs/guides/scheduled-commands.md): for when now is not the time.
 
 ![Divider](docs/images/divider.png)
 
 ## FAQ
 
-### Why is this open-source/self-hosted?
+### Why do I need Node.js v14.13.0+?
 
-The popular crypto phrase _'not your keys, not your coins'_ holds true for your API keys, too (especially if insecure). The way this project is set up means your API credentials are only communicated between, and stored on, your own machine and FTX — and anyone can scrutinise and build from source to verify that claim.
+FTX CLI runs on Node.js – which is constantly evolving – and v14.13.0 just happens to have a slick, modern feature set that we like (notably: [named imports from CommonJS modules](https://github.com/nodejs/node/pull/35249)) while being LTS, and without the need to transpile or use experimental flags. We could certainly increase backwards compatibility by forgoing some of these built-in features, but we would still have to draw the line somewhere: so why not here? Please let us know about your use case if this is an issue.
+
+### How are my API credentials used?
+
+[See for yourself](https://github.com/dusktrades/ftx-cli/search?q=secret)! TL;DR: FTX CLI only communicates with FTX or FTX US, and your API credentials will be stored on your machine if you decide to [`login`](./docs/topics/accounts/README.md#login).
 
 ### Why did I get rate-limited?
 
-It's possible to get rate-limited by FTX if you attempt to execute large amounts of commands in a short period of time. [Learn more.](https://docs.ftx.com/#rate-limits)
+It is possible to hit the [rate limits set out by FTX](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX) if you attempt to execute large amounts of commands in a short period of time. Slow down!
 
-### Why did I receive _'Size too large'_ error?
+### What's the screenshot setup?
 
-The FTX API seems to accept sizes with precision up to 8 decimal places, which you can utilise if you set size explicitly.
-
-However, we have encountered strange behaviour when creating lending offers close to your lendable size (such as when auto-compounding), therefore we truncate lendable size to 6 decimal places before communicating with FTX. This makes the errors less common, but it remains possible to receive them while we look for a more robust solution. As a workaround, you can try the command again or wait for the next repeat scheduled run.
-
-### Why did I receive X error?
-
-This package doesn't impose many artificial limitations beyond the defaults, meaning most limits and errors are relayed directly from the FTX platform. Please ensure what you're trying to do is possible on FTX before raising the issue with this package.
-
-### Why would I want to auto-compound my lending offers?
-
-Auto-compounding is perfect if you want to maximise lending earnings while avoiding manually updating your lending offers to include recent payouts. It is worth the small effort to set up if you intend to lend long-term with decent size. See the table below for examples:
-
-| Average annual lending rate | Effective annual rate (with hourly compounding)\* |
-| --------------------------: | ------------------------------------------------: |
-|                          5% |                                            ~5.13% |
-|                         10% |                                           ~10.52% |
-|                         25% |                                           ~28.40% |
-|                         50% |                                           ~64.87% |
-
-**\*Formula:** (1 + X / 8760)<sup>8760</sup> - 1\
-_X = Average annual lending rate_
+We use a custom theme on [Carbon](https://carbon.now.sh/) to replicate our favourite terminal: [Hyper](https://hyper.is/) with [Fira Code](https://github.com/tonsky/FiraCode) (font ligatures enabled).
 
 ![Divider](docs/images/divider.png)
 
-## Disclaimer
+## Support the project
 
-FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsibility. Trading involves a high degree of risk and is not suitable for all persons.
+### Contribute
 
-## Contact
+Please feel free to [create a GitHub issue](https://github.com/dusktrades/ftx-cli/issues/new) or [join our Discord server](https://discord.gg/v3MW4TeXtZ) to report bugs, suggest features, or ask questions.
 
-[Website](https://dusktrades.com) • [Twitter](https://twitter.com/dusktrades) • [Email](mailto:dusktrades@protonmail.com)
+### Share
 
-## Donate
+Share the project with your friends and followers (here's a free [tweet](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fdusktrades%2Fftx-cli&via=dusktrades&text=I%27m%20using%20FTX%20CLI%20to%20trade%20and%20more%20on%20@FTX_Official%21%0A%0A)!).
+
+### Referral
+
+Create an [FTX](https://ftx.com/#a=dusktrades) or [FTX US](https://ftx.us/#a=dusktrades) account using our referral links – as a bonus, you will receive 5% off your trading fees.
+
+### Donate
 
 **BTC:** `bc1q5f323q4399s3plle9t33j7czv5knj90ujyg3ys`\
 **ETH/ERC-20:** `0x07324D924CA0C9Fbe933AE7E958e47Dd7d040C4d`\
 **SOL/SPL:** `32Jwe936XEN5NEvbWusapYeqwFcuPQkSgCuzduQEkfCV`
 
-## License
+![Divider](docs/images/divider.png)
 
-MIT © [Dusk](https://dusktrades.com)
+## Contact
+
+[Website](https://dusktrades.com) • [Twitter](https://twitter.com/dusktrades) • [Email](mailto:dusktrades@protonmail.com)
+
+![Divider](docs/images/divider.png)
+
+## Disclaimer
+
+FTX CLI is not affiliated with FTX. Your account(s) and funds are your responsibility. Trading involves a high degree of risk and is not suitable for all persons. FTX CLI is an FTX [External Referral Program](https://help.ftx.com/hc/en-us/articles/360044373831-External-Referral-Programs); we may receive a fraction of the trading fees that are generated by the software (this does not affect the trading fees that you pay).
+
+![Divider](docs/images/divider.png)
+
+## Licence
+
+[MIT](./LICENCE) © [Dusk](https://dusktrades.com)
