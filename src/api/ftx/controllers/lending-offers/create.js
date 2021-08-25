@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { spotMargin } from '../../endpoints/index.js';
 import { get } from './get.js';
 
@@ -22,52 +20,12 @@ function composeRequestBody(currency, data) {
   };
 }
 
-function roundLendableSize(lendableSize) {
-  return lendableSize.decimalPlaces(6, BigNumber.ROUND_DOWN);
-}
-
-function offsetLendableSize(roundedLendableSize, lendableSize) {
-  if (roundedLendableSize.isEqualTo(lendableSize)) {
-    return roundedLendableSize.minus(0.000_001);
-  }
-
-  return roundedLendableSize;
-}
-
-/**
- * Lendable size is problematic and untrustworthy:
- *
- * - Unpredictable slightly inconsistent values sometimes returned
- * - 'Size too large' errors despite size being under lendable size.
- * - FTX UI encourages up to 6 decimal places
- *
- * We 'fix' this (i.e. greatly reduce number of unexpected errors) by rounding
- * lendable size down to 6 decimal places and, if still equal to the returned
- * lendable size, subtracting 0.000001. This gives us our 'actual' (i.e. safe)
- * lendable size.
- */
-function fixLendableSize(lendableSize) {
-  const parsedLendableSize = new BigNumber(lendableSize);
-  const roundedLendableSize = roundLendableSize(parsedLendableSize);
-
-  const fixedLendableSize = offsetLendableSize(
-    roundedLendableSize,
-    parsedLendableSize
-  );
-
-  return fixedLendableSize.toNumber();
-}
-
 function getLendableSize(currency, lendableCurrencies) {
   const lendableEntry = lendableCurrencies.find(
     (entry) => entry.coin === currency
   );
 
-  if (lendableEntry?.lendable == null) {
-    return null;
-  }
-
-  return fixLendableSize(lendableEntry.lendable);
+  return lendableEntry?.lendable;
 }
 
 function composeRequest(
