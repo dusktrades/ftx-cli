@@ -2,7 +2,7 @@ import { parseUppercaseList } from '../../helpers/index.js';
 
 const QUOTE_CURRENCY = {
   FLAGS: '-q, --quote-currency <currency>',
-  DESCRIPTION: 'quote currency symbol(s)',
+  DESCRIPTION: 'Quote currency symbol(s).',
   PARSER: parseUppercaseList,
 };
 

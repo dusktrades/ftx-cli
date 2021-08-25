@@ -1,6 +1,6 @@
 const LOGOUT = {
   NAME: 'logout',
-  DESCRIPTION: 'remove stored FTX API credentials',
+  DESCRIPTION: 'Remove FTX API credentials from your machine.',
 };
 
 export { LOGOUT };

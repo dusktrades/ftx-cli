@@ -10,7 +10,7 @@ const SORT_OPTION = composeSortOptionConfig([
 
 const OFFERS = {
   NAME: 'offers',
-  DESCRIPTION: 'display my open lending offers',
+  DESCRIPTION: 'Display my active lending offers.',
   OPTIONS: [{ OPTION: SORT_OPTION }],
 };
 

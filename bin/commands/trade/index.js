@@ -2,7 +2,7 @@ import { OPTIONS } from '../../options/index.js';
 
 const TRADE = {
   NAME: 'trade',
-  DESCRIPTION: 'place order(s)',
+  DESCRIPTION: 'Place order(s).',
   OPTIONS: [
     { OPTION: OPTIONS.COMMANDS.MARKET, IS_REQUIRED: true },
     { OPTION: OPTIONS.COMMANDS.SIDE, IS_REQUIRED: true },

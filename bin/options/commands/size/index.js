@@ -9,7 +9,7 @@ function parse(size) {
 
 const SIZE = {
   FLAGS: '-s, --size <size>',
-  DESCRIPTION: 'Size to execute, measured in base currency or underlying.',
+  DESCRIPTION: 'Size to execute (spot: base currency; futures: underlying).',
   PARSER: parse,
 };
 

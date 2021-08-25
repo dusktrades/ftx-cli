@@ -3,7 +3,7 @@ import { OPTIONS } from '../../options/index.js';
 
 const RATES = {
   NAME: 'rates',
-  DESCRIPTION: 'display lending rates',
+  DESCRIPTION: 'Display lending rates.',
   OPTIONS: [
     { OPTION: OPTIONS.COMMANDS.CURRENCY },
     { OPTION: composeSortOptionConfig(['currency', 'previous', 'estimated']) },

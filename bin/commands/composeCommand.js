@@ -19,6 +19,7 @@ function composeCommand(config) {
   // Name, description, and action are required.
   const command = new Command(config.NAME)
     .description(config.DESCRIPTION)
+    .helpOption('-h, --help', 'Display help for command.')
     .action(async (inlineCommandOptions) => {
       await runCommand(config.NAME, inlineCommandOptions);
     });

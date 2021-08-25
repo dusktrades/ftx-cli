@@ -2,7 +2,8 @@ import { OPTIONS } from '../../options/index.js';
 
 const LEND = {
   NAME: 'lend',
-  DESCRIPTION: 'create lending offer(s)',
+  DESCRIPTION:
+    'Create lending offer(s). Matching existing offer(s) will be overwritten.',
   OPTIONS: [
     { OPTION: OPTIONS.COMMANDS.CURRENCY },
     { OPTION: OPTIONS.COMMANDS.SIZE },
