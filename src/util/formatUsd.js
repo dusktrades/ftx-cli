@@ -1,5 +1,10 @@
+const options = {
+  style: 'currency',
+  currency: 'USD',
+};
+
 function formatUsd(value) {
-  return `$${value.toFixed(2)}`;
+  return new Intl.NumberFormat('en-US', options).format(value);
 }
 
 export { formatUsd };

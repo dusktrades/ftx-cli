@@ -1,5 +1,5 @@
-function formatPercentage(percentage) {
-  return `${percentage.toFixed(4)}%`;
+function formatPercentage(percentage, decimalPlaces) {
+  return `${percentage.toFixed(decimalPlaces)}%`;
 }
 
 export { formatPercentage };

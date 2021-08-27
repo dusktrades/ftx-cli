@@ -25,7 +25,7 @@ function composeTableData(data) {
 
   const totalRow = [
     'Total',
-    { content: '', colSpan: 1 },
+    { colSpan: 1, content: '' },
     { hAlign: 'right', content: formatUsd(data.lendingInterestUsd) },
   ];
 
