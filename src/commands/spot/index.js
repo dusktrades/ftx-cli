@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Ftx } from '../../api/index.js';
-import { CliUi } from '../../common/index.js';
+import { createTable, Logger } from '../../common/index.js';
 import { shorthandNumber } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatChange } from '../formatChange.js';
@@ -19,8 +19,8 @@ async function getData(options) {
   });
 }
 
-function createTable() {
-  return CliUi.createTable([
+function composeTable() {
+  return createTable([
     'Name',
     'Price',
     'Change\n(hour/24 hours)',
@@ -42,14 +42,14 @@ function composeTableEntry(entry, enableColours) {
 
 async function run(options) {
   const data = await getData(options);
-  const table = createTable();
+  const table = composeTable();
 
   const tableData = composeTableData(data, (entry) =>
     composeTableEntry(entry, options.global.colour)
   );
 
   table.push(...tableData);
-  CliUi.logTable(table);
+  Logger.table(table);
 }
 
 const spot = { run };

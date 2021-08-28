@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
 import { Ftx } from '../../api/index.js';
-import { CliUi } from '../../common/index.js';
+import { createTable, Logger } from '../../common/index.js';
 
 import {
   formatCurrency,
@@ -11,11 +11,11 @@ import {
 
 const columnHeadingRow = [
   'Currency',
-  'Available with borrowing\n(currency)',
-  'Available without borrowing\n(currency)',
-  'Borrowed\n(currency)',
-  'Total\n(currency)',
-  'Total\n(USD)',
+  'Available with borrowing',
+  'Available without borrowing',
+  'Borrowed',
+  'Total',
+  'Total (USD)',
   'Allocation',
 ];
 
@@ -123,11 +123,11 @@ async function run(options) {
     credentials,
   });
 
-  const table = CliUi.createTable(columnHeadingRow);
+  const table = createTable(columnHeadingRow);
   const tableData = composeTableData(data);
 
   table.push(...tableData);
-  CliUi.logTable(table);
+  Logger.table(table);
 }
 
 const wallet = { run };

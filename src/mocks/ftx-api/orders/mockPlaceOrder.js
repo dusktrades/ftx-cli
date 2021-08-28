@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { MOCK_HOSTNAME } from '../mockHostname.js';
+import { MOCK_HOSTNAME } from '../mockHostnames.js';
 
 import {
   MARKET_NOT_FOUND_ERROR,

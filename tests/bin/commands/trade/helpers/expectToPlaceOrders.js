@@ -1,6 +1,5 @@
-import { composeCommand } from './composeCommand.js';
-import { expectChildToMatch } from './expectChildToMatch.js';
-import { spawnTestChild } from './spawnTestChild.js';
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+import { composeTradeCommand } from './composeTradeCommand.js';
 
 function composeStdoutOrdersArray(count) {
   return Array.from({ length: count }).fill(/.{24} {2}INFO {5}Placed order/);
@@ -23,7 +22,7 @@ function composeExpectedChild(count) {
 }
 
 async function expectToPlaceOrders(options, count) {
-  const command = composeCommand(options);
+  const command = composeTradeCommand(options);
   const expectedChild = composeExpectedChild(count);
   const child = spawnTestChild(command);
 

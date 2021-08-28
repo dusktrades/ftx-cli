@@ -1,9 +1,9 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 describe('[OPTION] Price', () => {
@@ -52,7 +52,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -69,7 +69,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price invalid-price';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -88,7 +88,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price -1';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -107,7 +107,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price 0';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -126,7 +126,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price -0';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -145,7 +145,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price 0k';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -164,7 +164,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price :10';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -183,7 +183,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price 10:';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -202,7 +202,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price 10:20:30';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -221,7 +221,7 @@ describe('[OPTION] Price', () => {
     const options =
       '--market btc-perp --side buy --type limit --size 1 --price invalid-price:invalid-price';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

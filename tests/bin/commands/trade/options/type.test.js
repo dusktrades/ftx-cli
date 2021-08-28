@@ -1,9 +1,5 @@
-import {
-  composeCommand,
-  expectChildToMatch,
-  expectToPlaceOrders,
-  spawnTestChild,
-} from '../helpers/index.js';
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+import { composeTradeCommand, expectToPlaceOrders } from '../helpers/index.js';
 
 describe('[OPTION] Type', () => {
   test('SUCCEEDS: Long flag (--type)', async () => {
@@ -20,7 +16,7 @@ describe('[OPTION] Type', () => {
 
   test('FAILS: Missing required option', async () => {
     const options = '--market btc-perp --side buy --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -35,7 +31,7 @@ describe('[OPTION] Type', () => {
 
   test('FAILS: Missing argument', async () => {
     const options = '--market btc-perp --side buy --type --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -50,7 +46,7 @@ describe('[OPTION] Type', () => {
 
   test('FAILS: Invalid argument', async () => {
     const options = '--market btc-perp --side buy --type invalid-type --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

@@ -1,11 +1,11 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToPlaceOrders,
   expectToPlaceScaledOrder,
   expectToPlaceSplitOrder,
   expectToPlaceTwapOrder,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 const BASE_OPTIONS =
@@ -38,7 +38,7 @@ describe('[ORDER TYPE] Limit', () => {
 
   test('FAILS: Missing price option', async () => {
     const options = '--market btc-perp --side buy --type limit --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],

@@ -1,9 +1,9 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 describe('[OPTION] Trigger price', () => {
@@ -25,7 +25,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -42,7 +42,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price invalid-trigger-price';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -61,7 +61,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price -1';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -80,7 +80,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price 0';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -99,7 +99,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price -0';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -118,7 +118,7 @@ describe('[OPTION] Trigger price', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --trigger-price 0k';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
