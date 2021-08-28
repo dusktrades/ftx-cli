@@ -13,6 +13,8 @@ function isHandled(error) {
 }
 
 function handleError(error) {
+  process.exitCode = 1;
+
   /**
    * A handled error occurred. We should have an error message so user can learn
    * how to solve the issue.

@@ -1,5 +1,5 @@
-import { mockOrders } from './orders/index.js';
-import { mockWallet } from './wallet/index.js';
+import { mockOrders } from './endpoints/orders/index.js';
+import { mockWallet } from './endpoints/wallet/index.js';
 
 function create() {
   mockOrders();
