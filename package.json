@@ -32,7 +32,6 @@
   "type": "module",
   "files": [
     "bin",
-    "docs",
     "src"
   ],
   "bin": {
