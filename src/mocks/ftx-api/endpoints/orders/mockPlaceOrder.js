@@ -103,6 +103,7 @@ function isSuccessfulRequest(requestBody) {
 function mockPlaceOrder() {
   const endpoint = '/api/orders';
 
+  // TODO: Refactor to match wallet endpoint mocks.
   nock(HOSTNAME, {
     reqheaders: {
       ...COMMON_REQUEST_HEADERS,

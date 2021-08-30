@@ -121,6 +121,7 @@ async function run(options) {
   const data = await Ftx.wallet.get({
     exchange: options.global.exchange,
     credentials,
+    sortBy: options.command.sort,
   });
 
   const table = createTable(columnHeadingRow);

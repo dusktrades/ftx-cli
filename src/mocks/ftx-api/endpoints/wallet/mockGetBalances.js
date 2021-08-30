@@ -1,41 +1,66 @@
-import nock from 'nock';
+import { interceptTestCase } from '../../helpers/index.js';
 
-import { COMMON_REQUEST_HEADERS, HOSTNAME } from '../../helpers/index.js';
-import { composeBalanceEntry } from './helpers/index.js';
+import {
+  composeBalanceEntry,
+  composeEmptyBalanceEntry,
+} from './helpers/index.js';
 
-const validSubaccountResponse = {
-  success: true,
-  result: ['USD', 'ETH', 'USDT', 'BTC', 'FTT'].map((currency) =>
-    composeBalanceEntry(currency)
-  ),
-};
-
-const invalidSubaccountResponse = {
-  success: false,
-  error: 'No such subaccount',
-};
-
-function mockGetBalances() {
-  nock(HOSTNAME, {
-    reqheaders: {
-      ...COMMON_REQUEST_HEADERS,
+const testCases = [
+  // Subaccount with balances.
+  {
+    additionalRequestHeaders: {
       'ftx-key': 'key',
-      'ftx-subaccount': 'subaccount',
+      'ftx-subaccount': 'subaccount-with-balances',
     },
-  })
-    .persist()
-    .get('/api/wallet/balances')
-    .reply(200, validSubaccountResponse);
+    statusCode: 200,
+    response: {
+      success: true,
+      result: [
+        ...['USD', 'ETH', 'USDT', 'BTC', 'FTT'].map((currency) =>
+          composeBalanceEntry(currency)
+        ),
+        composeEmptyBalanceEntry('DOGE'),
+      ],
+    },
+  },
 
-  nock(HOSTNAME, {
-    reqheaders: {
-      ...COMMON_REQUEST_HEADERS,
+  // Subaccount without balances.
+  {
+    additionalRequestHeaders: {
+      'ftx-key': 'key',
+      'ftx-subaccount': 'subaccount-without-balances',
+    },
+    statusCode: 200,
+    response: {
+      success: true,
+      result: ['BTC', 'ETH'].map((currency) =>
+        composeEmptyBalanceEntry(currency)
+      ),
+    },
+  },
+
+  // Invalid subaccount.
+  {
+    additionalRequestHeaders: {
       'ftx-key': 'key',
       'ftx-subaccount': 'invalid-subaccount',
     },
-  })
-    .get('/api/wallet/balances')
-    .reply(500, invalidSubaccountResponse);
+    statusCode: 500,
+    response: {
+      success: false,
+      error: 'No such subaccount',
+    },
+  },
+];
+
+function mockGetBalances() {
+  for (const testCase of testCases) {
+    interceptTestCase({
+      ...testCase,
+      endpoint: 'wallet/balances',
+      method: 'get',
+    });
+  }
 }
 
 export { mockGetBalances };

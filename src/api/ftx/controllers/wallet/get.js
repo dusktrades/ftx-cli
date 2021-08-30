@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { compareAToZ } from '../../../../util/index.js';
+import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { wallet } from '../../endpoints/index.js';
 
 const balanceKeys = [
@@ -56,17 +56,51 @@ function addBalanceAllocations(balances, totalBalanceUsd) {
   }));
 }
 
-function sortBalances(balances) {
-  return balances.sort((a, b) => compareAToZ(a.coin, b.coin));
+function sortBalances(balances, sortBy) {
+  const alphabeticalBalances = [...balances].sort((a, b) =>
+    compareAToZ(a.coin, b.coin)
+  );
+
+  if (['available-with-borrowing', 'awb'].includes(sortBy)) {
+    return alphabeticalBalances.sort((a, b) =>
+      compareHighToLow(a.free, b.free)
+    );
+  }
+
+  if (['available-without-borrowing', 'awob'].includes(sortBy)) {
+    return alphabeticalBalances.sort((a, b) =>
+      compareHighToLow(a.availableWithoutBorrow, b.availableWithoutBorrow)
+    );
+  }
+
+  if (['borrowed', 'b'].includes(sortBy)) {
+    return alphabeticalBalances.sort((a, b) =>
+      compareHighToLow(a.spotBorrow, b.spotBorrow)
+    );
+  }
+
+  if (['total', 't'].includes(sortBy)) {
+    return alphabeticalBalances.sort((a, b) =>
+      compareHighToLow(a.total, b.total)
+    );
+  }
+
+  if (['total-usd', 'usd', 'allocation', 'a'].includes(sortBy)) {
+    return alphabeticalBalances.sort((a, b) =>
+      compareHighToLow(a.usdValue, b.usdValue)
+    );
+  }
+
+  return alphabeticalBalances;
 }
 
-function composeBalances(balances, totalBalanceUsd) {
+function composeBalances(balances, totalBalanceUsd, sortBy) {
   const balancesWithAllocations = addBalanceAllocations(
     balances,
     totalBalanceUsd
   );
 
-  return sortBalances(balancesWithAllocations);
+  return sortBalances(balancesWithAllocations, sortBy);
 }
 
 function sortSubaccounts(subaccounts) {
@@ -85,14 +119,14 @@ function sortSubaccounts(subaccounts) {
   });
 }
 
-function composeSubaccounts(data) {
+function composeSubaccounts(data, sortBy) {
   const subaccounts = Object.entries(data).map(([subaccount, balances]) => {
     const nonZeroBalances = removeZeroBalances(balances);
     const subaccountBalanceUsd = calculateTotalBalanceUsd(nonZeroBalances);
 
     return {
       subaccount,
-      balances: composeBalances(nonZeroBalances, subaccountBalanceUsd),
+      balances: composeBalances(nonZeroBalances, subaccountBalanceUsd, sortBy),
       subaccountBalanceUsd,
     };
   });
@@ -100,7 +134,7 @@ function composeSubaccounts(data) {
   return sortSubaccounts(subaccounts);
 }
 
-function composeTotalAccount(subaccounts) {
+function composeTotalAccount(subaccounts, sortBy) {
   const totalAccountBalances = [];
 
   for (const { balances } of subaccounts) {
@@ -130,24 +164,28 @@ function composeTotalAccount(subaccounts) {
   const totalAccountBalanceUsd = calculateTotalBalanceUsd(totalAccountBalances);
 
   return {
-    balances: composeBalances(totalAccountBalances, totalAccountBalanceUsd),
+    balances: composeBalances(
+      totalAccountBalances,
+      totalAccountBalanceUsd,
+      sortBy
+    ),
     totalAccountBalanceUsd,
   };
 }
 
-function normaliseData(data) {
-  const subaccounts = composeSubaccounts(data);
+function normaliseData(data, sortBy) {
+  const subaccounts = composeSubaccounts(data, sortBy);
 
   return {
     subaccounts,
-    totalAccount: composeTotalAccount(subaccounts),
+    totalAccount: composeTotalAccount(subaccounts, sortBy),
   };
 }
 
 async function get(options) {
   const data = await getData(options);
 
-  return normaliseData(data);
+  return normaliseData(data, options.sortBy);
 }
 
 export { get };
