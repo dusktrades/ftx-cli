@@ -1,12 +1,21 @@
 import { composeSortOptionConfig } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
 
-const SORT_OPTION = composeSortOptionConfig([
+const sortOption = composeSortOptionConfig([
   'name',
+  'n',
+
   'price',
+  'p',
+
   'change-1h',
+  'c1',
+
   'change-24h',
+  'c24',
+
   'volume',
+  'v',
 ]);
 
 const SPOT = {
@@ -17,7 +26,7 @@ const SPOT = {
     { OPTION: OPTIONS.COMMANDS.SPOT_TYPE },
     { OPTION: OPTIONS.COMMANDS.QUOTE_CURRENCY },
     { OPTION: OPTIONS.COMMANDS.TOKEN_LEVERAGE },
-    { OPTION: SORT_OPTION },
+    { OPTION: sortOption },
   ],
 };
 

@@ -87,31 +87,31 @@ function sortData(data, sortBy) {
     compareAToZ(a.name, b.name)
   );
 
-  if (sortBy === 'last-price') {
+  if (['last-price', 'lp'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.lastPrice, b.lastPrice)
     );
   }
 
-  if (sortBy === 'mark-price') {
+  if (['mark-price', 'mp'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.markPrice, b.markPrice)
     );
   }
 
-  if (sortBy === 'change-1h') {
+  if (['change-1h', 'c1'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.change1hPercentage, b.change1hPercentage)
     );
   }
 
-  if (sortBy === 'change-24h') {
+  if (['change-24h', 'c24'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.change24hPercentage, b.change24hPercentage)
     );
   }
 
-  if (sortBy === 'volume') {
+  if (['volume', 'v'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.volumeUsd24h, b.volumeUsd24h)
     );
@@ -123,13 +123,13 @@ function sortData(data, sortBy) {
     );
   }
 
-  if (sortBy === 'previous-funding') {
+  if (['previous-funding', 'pf'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.previousFundingRate, b.previousFundingRate)
     );
   }
 
-  if (sortBy === 'estimated-funding') {
+  if (['estimated-funding', 'ef'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.nextFundingRate, b.nextFundingRate)
     );
@@ -138,16 +138,11 @@ function sortData(data, sortBy) {
   return alphabeticalData;
 }
 
-function processData(dataSources, sortBy) {
+async function getStats({ exchange, filters, sortBy }) {
+  const dataSources = await getDataSources(exchange, filters);
   const data = composeData(dataSources);
 
   return sortData(data, sortBy);
-}
-
-async function getStats({ exchange, filters, sortBy }) {
-  const dataSources = await getDataSources(exchange, filters);
-
-  return processData(dataSources, sortBy);
 }
 
 export { getStats };

@@ -55,11 +55,11 @@ Examples: `usd`, `btc`, `tsla,tsm,twtr`.
 
 Optional (default: `currency`).
 
-| Choice      | Description                                     |
-| ----------- | ----------------------------------------------- |
-| `currency`  | Sort by currency symbol (A-Z).                  |
-| `previous`  | Sort by previous funding rate (high-low).       |
-| `estimated` | Sort by estimated next funding rate (high-low). |
+| Choice      | Aliases | Description                                     |
+| ----------- | ------- | ----------------------------------------------- |
+| `currency`  | `c`     | Sort by currency symbol (A-Z).                  |
+| `previous`  | `p`     | Sort by previous funding rate (high-low).       |
+| `estimated` | `e`     | Sort by estimated next funding rate (high-low). |
 
 ---
 
@@ -100,13 +100,13 @@ ftx offers [options]  Display my active lending offers.
 
 Optional (default: `currency`).
 
-| Choice     | Description                       |
-| ---------- | --------------------------------- |
-| `currency` | Sort by currency symbol (A-Z).    |
-| `lendable` | Sort by lendable size (high-low). |
-| `offered`  | Sort by offered size (high-low).  |
-| `locked`   | Sort by locked size (high-low).   |
-| `min-rate` | Sort by minimum rate (high-low).  |
+| Choice     | Aliases | Description                       |
+| ---------- | ------- | --------------------------------- |
+| `currency` | `c`     | Sort by currency symbol (A-Z).    |
+| `lendable` | `le`    | Sort by lendable size (high-low). |
+| `offered`  | `o`     | Sort by offered size (high-low).  |
+| `locked`   | `lo`    | Sort by locked size (high-low).   |
+| `min-rate` | `r`     | Sort by minimum rate (high-low).  |
 
 ---
 

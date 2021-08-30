@@ -14,6 +14,7 @@ import { SPOT_TYPE } from './spot-type/index.js';
 import { TOKEN_LEVERAGE } from './token-leverage/index.js';
 import { TRAIL_VALUE } from './trail-value/index.js';
 import { TRIGGER_PRICE } from './trigger-price/index.js';
+import { UNDERLYING } from './underlying/index.js';
 
 const COMMANDS = {
   COMPOUND,
@@ -32,6 +33,7 @@ const COMMANDS = {
   TOKEN_LEVERAGE,
   TRAIL_VALUE,
   TRIGGER_PRICE,
+  UNDERLYING,
 };
 
 export { COMMANDS };

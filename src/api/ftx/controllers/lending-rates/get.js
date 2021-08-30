@@ -16,13 +16,13 @@ function sortData(data, sortBy) {
     compareAToZ(a.coin, b.coin)
   );
 
-  if (sortBy === 'previous') {
+  if (['previous', 'p'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.previous, b.previous)
     );
   }
 
-  if (sortBy === 'estimated') {
+  if (['estimated', 'e'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.estimate, b.estimate)
     );
