@@ -1,98 +1,65 @@
 import { program } from 'commander';
-import cron from 'node-cron';
 
 import { Commands } from '../src/commands/index.js';
 import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
-import { sleep } from '../src/util/index.js';
 import { handleError } from './handleError.js';
+import { OPTIONS } from './options/index.js';
 import { notifyUpdate } from './notifyUpdate.js';
+import { scheduleCommand } from './scheduleCommand.js';
 
-// Options that can be saved with `login` or `config`.
-const configurableOptions = [
-  'exchange',
-  'key',
-  'secret',
-  'subaccount',
-  'colour',
-  'updateNotifications',
-  'reduceOnly',
-  'ioc',
-  'postOnly',
-  'retry',
-  'rateLimit',
-];
+/**
+ * Option value priority order:
+ *
+ * 1. Inline
+ * 2. Saved config
+ */
+function prioritiseOptionValue(option, inlineGlobalOptions) {
+  return inlineGlobalOptions[option] ?? CONFIG.USER.get(option);
+}
 
-function composeGlobalConfigOptions(inlineGlobalOptions) {
-  return Object.fromEntries(
-    configurableOptions.map((option) => [
-      option,
-
-      // Give priority to inline options, fall back to stored account/config.
-      inlineGlobalOptions[option] ?? CONFIG.USER.get(option),
-    ])
+function composeConfigurableGlobalOptions(inlineGlobalOptions) {
+  const configurable = OPTIONS.GLOBAL.filter(
+    ({ isConfigurable }) => isConfigurable
   );
+
+  const entries = configurable.map(({ name }) => [
+    name,
+    prioritiseOptionValue(name, inlineGlobalOptions),
+  ]);
+
+  return Object.fromEntries(entries);
 }
 
 function composeSchedule(schedule, compound) {
-  // Give `compound` option priority over `schedule` option.
-  if (compound) {
-    // Run at 59 minutes past every hour.
-    return { type: 'cron', cronExpression: '59 * * * *' };
-  }
-
-  return schedule;
+  return compound
+    ? // Run at 59 minutes past every hour (UTC/exchange time).
+      { type: 'cron', cronExpression: '59 * * * *', timezone: 'UTC' }
+    : schedule;
 }
 
-function composeGlobalOptions() {
+function composeGlobalOptions(compound) {
   const inlineGlobalOptions = program.opts();
-  const globalConfigOptions = composeGlobalConfigOptions(inlineGlobalOptions);
 
   return {
-    ...globalConfigOptions,
-    schedule: composeSchedule(inlineGlobalOptions.schedule),
+    ...composeConfigurableGlobalOptions(inlineGlobalOptions),
+    schedule: composeSchedule(inlineGlobalOptions.schedule, compound),
   };
 }
 
 function composeOptions(inlineCommandOptions) {
   return {
-    global: composeGlobalOptions(),
+    global: composeGlobalOptions(inlineCommandOptions.compound),
     command: inlineCommandOptions,
   };
-}
-
-function logWaiting() {
-  Logger.info('Waiting for schedule trigger');
-}
-
-async function scheduleCommand(run, options) {
-  if (options.global.schedule.type === 'date') {
-    logWaiting();
-    await sleep(options.global.schedule.millisecondsUntilDate);
-    await run(options);
-
-    return;
-  }
-
-  // TODO: Add method of ending schedule (e.g. `--schedule-end`).
-  cron.schedule(options.global.schedule.cronExpression, async () => {
-    await run(options);
-    logWaiting();
-  });
-
-  logWaiting();
 }
 
 async function runHandler(command, options) {
   const { run } = Commands[command];
 
-  if (options.global.schedule != null) {
-    await scheduleCommand(run, options);
-
-    return;
-  }
-
-  await run(options);
+  await (options.global.schedule == null
+    ? run(options)
+    : scheduleCommand(run, options));
 }
 
 async function runCommand(command, inlineCommandOptions) {

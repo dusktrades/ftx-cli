@@ -27,10 +27,12 @@ function parse(rateLimit) {
 }
 
 const RATE_LIMIT = {
+  name: 'rateLimit',
   FLAGS: '--rate-limit <rate limit>',
   DESCRIPTION:
     'Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).',
   PARSER: parse,
+  isConfigurable: true,
 };
 
 export { RATE_LIMIT };
