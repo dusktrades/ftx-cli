@@ -28,7 +28,7 @@
   - [Donate](#donate)
 - [Contact](#contact)
 - [Disclaimer](#disclaimer)
-- [License](#license)
+- [Licence](#licence)
 
 ![Divider](docs/images/divider.png)
 
