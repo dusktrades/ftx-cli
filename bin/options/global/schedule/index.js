@@ -78,6 +78,7 @@ function parse(schedule) {
 }
 
 const SCHEDULE = {
+  name: 'schedule',
   FLAGS: '--schedule <schedule>',
   DESCRIPTION:
     'Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.',

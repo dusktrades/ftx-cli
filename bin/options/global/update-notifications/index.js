@@ -1,8 +1,10 @@
 const UPDATE_NOTIFICATIONS = {
   ENABLE: {
+    name: 'updateNotifications',
     FLAGS: '--update-notifications',
     DESCRIPTION:
       'Enable update notifications. When an update is available, a notification will appear after command execution at most once a day.',
+    isConfigurable: true,
   },
   DISABLE: {
     FLAGS: '--no-update-notifications',
