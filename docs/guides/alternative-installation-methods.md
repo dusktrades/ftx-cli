@@ -2,19 +2,17 @@
 
 > ⚠️ This is for advanced users only.
 
-The following examples target Unix-like, macOS, WSL, etc. operating systems.
-
 ## Contents
 
-- [Versioned global package](#versioned-global-package)
+- [Versioned npm package](#versioned-npm-package)
 - [Build from release source](#build-from-release-source)
 - [Build from repository source](#build-from-repository-source)
 
 ![Divider](../images/divider.png)
 
-## Versioned global package
+## Versioned npm package
 
-Install a specific version of the package from npm.
+Install a specific version from [npm](https://www.npmjs.com/package/ftx-cli).
 
 ```sh
 # List available versions.
@@ -28,14 +26,11 @@ npm install -g ftx-cli@<version>
 
 ## Build from release source
 
-Download, install, and update the package manually from a [release](https://github.com/dusktrades/ftx-cli/releases). Here's what that may look like:
+Manually install a specific [GitHub release](https://github.com/dusktrades/ftx-cli/releases).
 
 ```sh
-# Download release gzipped tarball. Example version: `v1.0.0`.
-wget https://github.com/dusktrades/ftx-cli/archive/refs/tags/<version>.tar.gz
-
-# Install package globally.
-npm install -g ./<version>.tar.gz
+# Install package globally. Example version: `v1.0.0`.
+npm install -g https://github.com/dusktrades/ftx-cli/archive/refs/tags/<version>.tar.gz
 ```
 
 ![Divider](../images/divider.png)
@@ -44,19 +39,15 @@ npm install -g ./<version>.tar.gz
 
 > ⚠️ You should not need to install using this method unless you are actively developing. Source code that is not part of an official release may be unstable.
 
-Download, install, and update the package manually directly from the repository. Here's what that may look like:
+Manually install the current source code as-is from a repository branch. Here's what that may look like:
 
 ```sh
 # Clone source code.
 git clone https://github.com/dusktrades/ftx-cli
 
-# Enter the package directory.
+# Enter package directory.
 cd ftx-cli
 
 # Install package globally.
-npm install -g
-
-# When it's time to update: pull the updated source code and reinstall.
-git pull
 npm install -g
 ```
