@@ -143,108 +143,20 @@ Here are some best practices for keeping your API credentials secure:
 You can include these options with any command to modify its behaviour.
 
 ```
-General:
-  -v, --version                  Output the version number.
-  -h, --help                     Display help for command.
-
-Platform:
-  -e, --exchange <exchange>      FTX exchange platform.
-
-Account:
-  -k, --key <key>                FTX API key.
-  -x, --secret <secret>          FTX API secret.
-  -a, --subaccount <subaccount>  FTX subaccount name.
-
-Behaviour:
-  --schedule <schedule>          Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
-
-UI:
-  --[no-]colour                  Toggle coloured output.
-  --[no-]update-notifications    Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day.
+-v, --version                           Output the version number.
+-h, --help                              Display help for command.
+-e, --exchange (ftx | ftx-us)           FTX exchange platform [default: ftx].
+-k, --key <key>                         FTX API key.
+-x, --secret <secret>                   FTX API secret.
+-a, --subaccount (<subaccount> | main)  FTX subaccount name [default: main].
+    --schedule <schedule>               Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
+    --[no-]colour                       Toggle coloured output [default: enabled].
+    --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].
 ```
 
 > ℹ️ Inline options take priority over saved credentials (via [`login`](./docs/topics/accounts/README.md#login)) and configuration (via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
-
----
-
-#### Exchange
-
-```
--e, --exchange <exchange>  FTX exchange platform.
-```
-
-Optional (default: `ftx`).
-
-| Choice   |
-| -------- |
-| `ftx`    |
-| `ftx-us` |
-
----
-
-#### Key
-
-```
--k, --key <key>  FTX API key.
-```
-
-Optional.
-
----
-
-#### Secret
-
-```
--x, --secret <secret>  FTX API secret.
-```
-
-Optional.
-
----
-
-#### Subaccount
-
-```
--a, --subaccount <subaccount>  FTX subaccount name.
-```
-
-Optional (default: main account).
-
----
-
-#### Schedule
-
-```
---schedule <schedule>  Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
-```
-
-Optional (default: disabled).
-
-[Learn more about scheduled commands](./docs/guides/scheduled-commands.md).
-
----
-
-#### Colour
-
-```
---colour     Enable coloured output.
---no-colour  Disable coloured output.
-```
-
-Optional (default: enabled).
-
----
-
-#### Update notifications
-
-```
---update-notifications     Enable update notifications. When an update is available, a notification will appear after command execution at most once a day.
---no-update-notifications  Disable update notifications.
-```
-
-Optional (default: enabled).
-
----
+>
+> ℹ️ [Learn more about scheduled commands](./docs/guides/scheduled-commands.md).
 
 ### Topics
 
@@ -279,10 +191,6 @@ Visit the documentation for a topic to learn more about related commands:
 ![Divider](docs/images/divider.png)
 
 ## FAQ
-
-### Why do I need Node.js v14.13.0+?
-
-FTX CLI runs on Node.js – which is constantly evolving – and v14.13.0 just happens to have a slick, modern feature set that we like (notably: [named imports from CommonJS modules](https://github.com/nodejs/node/pull/35249)) while being LTS, and without the need to transpile or use experimental flags. We could certainly increase backwards compatibility by forgoing some of these built-in features, but we would still have to draw the line somewhere: so why not here? Please let us know about your use case if this is an issue.
 
 ### How are my API credentials used?
 

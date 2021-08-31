@@ -18,7 +18,7 @@ function getModifiedOptions(inlineGlobalOptions) {
   return commandOptions.filter((option) => inlineGlobalOptions[option] != null);
 }
 
-function setOptions() {
+function saveOptions() {
   const inlineGlobalOptions = program.opts();
   const modifiedOptions = getModifiedOptions(inlineGlobalOptions);
 
@@ -30,7 +30,7 @@ function setOptions() {
 }
 
 async function run() {
-  setOptions();
+  saveOptions();
   Logger.info('Saved configuration');
 }
 

@@ -46,6 +46,10 @@ function composeSignature(
     .digest('hex');
 }
 
+function hasSubaccount(subaccount) {
+  return subaccount !== 'main';
+}
+
 function composeAuthenticatedHeaders({
   exchange,
   endpoint,
@@ -74,7 +78,7 @@ function composeAuthenticatedHeaders({
     [`${prefix}-KEY`]: credentials.apiKey,
     [`${prefix}-TS`]: timestamp,
     [`${prefix}-SIGN`]: signature,
-    ...(credentials.subaccount != null && {
+    ...(hasSubaccount(credentials.subaccount) && {
       [`${prefix}-SUBACCOUNT`]: encodeURI(credentials.subaccount),
     }),
   };
