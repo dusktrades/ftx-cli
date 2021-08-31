@@ -7,7 +7,7 @@
   - [Examples](#examples)
   - [Resources](#resources)
 - [`logout`](#logout)
-- [`wallet`](#wallet)
+- [`🔐 wallet`](#-wallet)
 
 ![Divider](../../images/divider.png)
 
@@ -85,7 +85,7 @@ ftx logout  Remove FTX API credentials from your machine.
 
 ![Divider](../../images/divider.png)
 
-## `wallet`
+## 🔐 `wallet`
 
 ```sh
 ftx wallet [options]  Display wallet balances.
@@ -107,14 +107,14 @@ ftx wallet [options]  Display wallet balances.
 
 Optional (default: `currency`).
 
-| Choice                        | Aliases                  | Description                                               |
-| ----------------------------- | ------------------------ | --------------------------------------------------------- |
-| `currency`                    | `c`                      | Sort by currency symbol (A-Z).                            |
-| `available-with-borrowing`    | `awb`                    | Sort by available balance including borrowing (high-low). |
-| `available-without-borrowing` | `awob`                   | Sort by available balance excluding borrowing (high-low). |
-| `borrowed`                    | `b`                      | Sort by borrowed balance (high-low).                      |
-| `total`                       | `t`                      | Sort by total balance (high-low).                         |
-| `total-usd`                   | `usd`, `allocation`, `a` | Sort by total balance (USD) (high-low).                   |
+| Choice                        | Aliases | Description                                               |
+| ----------------------------- | ------- | --------------------------------------------------------- |
+| `currency`                    | `c`     | Sort by currency symbol (A-Z).                            |
+| `available-with-borrowing`    | `awb`   | Sort by available balance including borrowing (high-low). |
+| `available-without-borrowing` | `awob`  | Sort by available balance excluding borrowing (high-low). |
+| `borrowed`                    | `b`     | Sort by borrowed balance (high-low).                      |
+| `total`                       | `t`     | Sort by total balance (high-low).                         |
+| `total-usd`                   | `u`     | Sort by total balance (USD) (high-low).                   |
 
 ---
 
