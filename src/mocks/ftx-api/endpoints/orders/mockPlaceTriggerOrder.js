@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
+import nock from 'nock';
 
-import { MOCK_HOSTNAME } from '../mockHostname.js';
+import { COMMON_REQUEST_HEADERS, HOSTNAME } from '../../helpers/index.js';
 
 import {
   MARKET_NOT_FOUND_ERROR,
@@ -9,7 +10,7 @@ import {
   isValidReduceOnly,
   isValidSide,
   isValidSize,
-} from './common/index.js';
+} from './helpers/index.js';
 
 function isValidType(type) {
   return ['stop', 'trailingStop', 'takeProfit'].includes(type);
@@ -124,11 +125,18 @@ function isSuccessfulRequest(requestBody) {
 }
 
 function mockPlaceTriggerOrder() {
-  const ENDPOINT = '/api/conditional_orders';
+  const endpoint = '/api/conditional_orders';
 
-  MOCK_HOSTNAME.post(ENDPOINT, MARKET_NOT_FOUND_ERROR.REQUEST)
-    .reply(500, MARKET_NOT_FOUND_ERROR.RESPONSE)
-    .post(ENDPOINT, isSuccessfulRequest)
+  nock(HOSTNAME, {
+    reqheaders: {
+      ...COMMON_REQUEST_HEADERS,
+      'ftx-key': 'key',
+    },
+  })
+    .persist()
+    .post(endpoint, MARKET_NOT_FOUND_ERROR.request)
+    .reply(500, MARKET_NOT_FOUND_ERROR.response)
+    .post(endpoint, isSuccessfulRequest)
     .reply(200, { success: true, result: {} });
 }
 

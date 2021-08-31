@@ -36,7 +36,7 @@ const getColour = {
 };
 
 function formatYearlyPercentage(yearlyPercentage, type, enableColours) {
-  const formattedPercentage = formatPercentage(yearlyPercentage);
+  const formattedPercentage = formatPercentage(yearlyPercentage, 4);
 
   if (!enableColours) {
     return formattedPercentage;
@@ -50,7 +50,7 @@ function formatYearlyPercentage(yearlyPercentage, type, enableColours) {
 function formatRates(hourlyDecimal, type, enableColours) {
   const hourlyPercentage = convertDecimalToPercentage(hourlyDecimal);
   const yearlyPercentage = convertHourlyToYearly(hourlyPercentage);
-  const formattedHourlyPercentage = formatPercentage(hourlyPercentage);
+  const formattedHourlyPercentage = formatPercentage(hourlyPercentage, 4);
 
   const formattedYearlyPercentage = formatYearlyPercentage(
     yearlyPercentage,

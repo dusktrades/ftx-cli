@@ -240,6 +240,7 @@ Visit the documentation for a topic to learn more about related commands:
 - [Accounts](./docs/topics/accounts/README.md)
   - [`login`](./docs/topics/accounts/README.md#login)
   - [`logout`](./docs/topics/accounts/README.md#logout)
+  - [`wallet`](./docs/topics/accounts/README.md#wallet)
 - [Configuration](./docs/topics/configuration/README.md)
   - [`config`](./docs/topics/configuration/README.md#config)
 - [Markets](./docs/topics/markets/README.md)

@@ -1,8 +1,8 @@
 import { performance } from 'perf_hooks';
 import { createInterface } from 'readline';
 
-import { composeCommand } from './composeCommand.js';
-import { spawnTestChild } from './spawnTestChild.js';
+import { spawnTestChild } from '../../../helpers/index.js';
+import { composeTradeCommand } from './composeTradeCommand.js';
 
 /**
  * Calculate the number of milliseconds between the 'Placed order' logs of the
@@ -31,7 +31,7 @@ function calculateExpectationOffsetMilliseconds([
 
 async function expectToPlaceTwapOrder(baseOptions) {
   const options = `${baseOptions} --split 2 --duration 1s`;
-  const command = composeCommand(options);
+  const command = composeTradeCommand(options);
   const child = spawnTestChild(command);
 
   const matchedStdoutTimestamps = [];
