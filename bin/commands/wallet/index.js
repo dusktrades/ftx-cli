@@ -1,5 +1,6 @@
 import { composeSortOptionConfig } from '../../options/helpers/index.js';
 
+// TODO: Refactor sort options so we can parse it before passing to controller.
 const sortOption = composeSortOptionConfig([
   'currency',
   'c',
@@ -17,9 +18,7 @@ const sortOption = composeSortOptionConfig([
   't',
 
   'total-usd',
-  'usd',
-  'allocation',
-  'a',
+  'u',
 ]);
 
 const WALLET = {

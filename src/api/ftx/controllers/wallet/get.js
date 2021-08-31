@@ -85,7 +85,7 @@ function sortBalances(balances, sortBy) {
     );
   }
 
-  if (['total-usd', 'usd', 'allocation', 'a'].includes(sortBy)) {
+  if (['total-usd', 'u'].includes(sortBy)) {
     return alphabeticalBalances.sort((a, b) =>
       compareHighToLow(a.usdValue, b.usdValue)
     );

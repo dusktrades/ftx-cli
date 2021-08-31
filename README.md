@@ -9,7 +9,6 @@
 ## Contents
 
 - [Why FTX CLI?](#why-ftx-cli)
-- [Prerequisites](#prerequisites)
 - [Installation](#installation)
   - [Try it out](#try-it-out)
   - [Global package](#global-package)
@@ -46,31 +45,45 @@
 
 ![Divider](docs/images/divider.png)
 
-## Prerequisites
-
-- Node.js v14.13.0+ ([why?](#why-do-i-need-nodejs-v14130))
-
-It is recommended that you use a version manager to install and update Node.js, such as [nvm](https://github.com/nvm-sh/nvm) (Unix-like, macOS, WSL, etc.) or [nvm-windows](https://github.com/coreybutler/nvm-windows) (Windows).
-
-You can find other ways to install Node.js [here](https://nodejs.org).
-
-![Divider](docs/images/divider.png)
-
 ## Installation
 
-### Try it out
-
-Not sure whether you want to install yet? You can execute commands remotely from the npm registry with [`npx`](https://docs.npmjs.com/cli/v7/commands/npx), which is included with Node.js.
-
-Here's one that will display previous and current FTX lending rates for USD and USDT:
+[Node.js](https://nodejs.org/) v14.13.0+ is required. Run the following command to display your installed Node.js version:
 
 ```sh
-npx ftx-cli rates --currency usd,usdt
+node --version
 ```
 
-### Global package
+If you are running Node.js v14.13.0 or later, run the following command to install FTX CLI:
 
-The quickest and recommended way to install is from [npm](https://www.npmjs.com/package/ftx-cli), which is included with Node.js. By default, the latest version will be installed and you will be notified when an update is available.
+```sh
+npm install -g ftx-cli
+```
+
+If you are running an older version of Node.js, or don't have it installed, please follow the instructions for your operating system.
+
+Once you have installed FTX CLI, run the following command to verify:
+
+```sh
+ftx --version
+```
+
+### Linux and macOS
+
+> ℹ️ Please follow these instructions if you are running any Unix-like environment (e.g. Linux, macOS, Windows Subsystem for Linux, Git Bash, Cygwin).
+
+Run the following command block to install [nvm](https://github.com/nvm-sh/nvm), latest Node.js LTS, and FTX CLI:
+
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash &&
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")" &&
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&
+nvm install --lts &&
+npm install -g ftx-cli
+```
+
+### Windows
+
+Download and follow the [latest Node.js LTS Windows installer](https://nodejs.org/en/download/) and then run the following command to install FTX CLI:
 
 ```sh
 npm install -g ftx-cli
@@ -240,7 +253,7 @@ Visit the documentation for a topic to learn more about related commands:
 - [Accounts](./docs/topics/accounts/README.md)
   - [`login`](./docs/topics/accounts/README.md#login)
   - [`logout`](./docs/topics/accounts/README.md#logout)
-  - [`wallet`](./docs/topics/accounts/README.md#wallet)
+  - [`🔐 wallet`](./docs/topics/accounts/README.md#-wallet)
 - [Configuration](./docs/topics/configuration/README.md)
   - [`config`](./docs/topics/configuration/README.md#config)
 - [Markets](./docs/topics/markets/README.md)
