@@ -20,12 +20,12 @@ async function getNormalisedSubaccountBalances({ exchange, credentials }) {
   return { [credentials.subaccount]: balances };
 }
 
-async function getData({ exchange, credentials }) {
-  if (credentials.subaccount != null) {
-    return getNormalisedSubaccountBalances({ exchange, credentials });
+async function getData(options) {
+  if (options.credentials.subaccount === 'main') {
+    return wallet.getAllBalances(options);
   }
 
-  return wallet.getAllBalances({ exchange, credentials });
+  return getNormalisedSubaccountBalances(options);
 }
 
 function removeZeroBalances(balances) {
