@@ -1,9 +1,9 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 // Method of testing number shorthand arguments while only placing one order.
@@ -17,7 +17,7 @@ const MOCK_NUMBER_SHORTHAND_ARGUMENTS = {
 async function expectArgumentToBeInvalid(argument) {
   const options = `--market btc-perp --side buy --type market --size 1 --split ${argument}`;
 
-  const command = composeCommand(options);
+  const command = composeTradeCommand(options);
 
   const expectedChild = {
     stdoutArray: [],
@@ -54,7 +54,7 @@ describe('[OPTION] Split', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --split';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

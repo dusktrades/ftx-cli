@@ -10,6 +10,7 @@ import { rates } from './rates/index.js';
 import { spot } from './spot/index.js';
 import { stop } from './stop/index.js';
 import { trade } from './trade/index.js';
+import { wallet } from './wallet/index.js';
 
 const Commands = {
   cancel,
@@ -24,6 +25,7 @@ const Commands = {
   spot,
   stop,
   trade,
+  wallet,
 };
 
 export { Commands };

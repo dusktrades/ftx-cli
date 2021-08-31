@@ -1,10 +1,10 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToPlaceOrders,
   expectToPlaceSplitOrder,
   expectToPlaceTwapOrder,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 const BASE_OPTIONS =
@@ -40,7 +40,7 @@ describe('[ORDER TYPE] Trailing stop', () => {
     const options =
       '--market btc-perp --side buy --type trailing-stop --size 1';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],

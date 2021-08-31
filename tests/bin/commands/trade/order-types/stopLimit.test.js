@@ -1,11 +1,11 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToPlaceOrders,
   expectToPlaceScaledOrder,
   expectToPlaceSplitOrder,
   expectToPlaceTwapOrder,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 const BASE_OPTIONS =
@@ -42,7 +42,7 @@ describe('[ORDER TYPE] Stop limit', () => {
     const options =
       '--market btc-perp --side buy --type stop-limit --size 1 --trigger-price 10';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],
@@ -62,7 +62,7 @@ describe('[ORDER TYPE] Stop limit', () => {
     const options =
       '--market btc-perp --side buy --type stop-limit --size 1 --price 10';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],

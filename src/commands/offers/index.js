@@ -1,11 +1,11 @@
 import { Ftx } from '../../api/index.js';
-import { CliUi } from '../../common/index.js';
+import { createTable, Logger } from '../../common/index.js';
 import { formatCurrency } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatRates } from '../formatRates.js';
 
-function createTable() {
-  return CliUi.createTable([
+function composeTable() {
+  return createTable([
     'Currency',
     'Lendable size',
     'Offered size',
@@ -38,14 +38,14 @@ async function run(options) {
     sortBy: options.command.sort,
   });
 
-  const table = createTable();
+  const table = composeTable();
 
   const tableData = composeTableData(data, (entry) =>
     composeTableEntry(entry, options.global.colour)
   );
 
   table.push(...tableData);
-  CliUi.logTable(table);
+  Logger.table(table);
 }
 
 const offers = { run };

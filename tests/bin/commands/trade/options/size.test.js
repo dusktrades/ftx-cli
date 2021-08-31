@@ -1,9 +1,9 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 describe('[OPTION] Size', () => {
@@ -28,7 +28,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Missing required option', async () => {
     const options = '--market btc-perp --side buy --type market';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -43,7 +43,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Missing argument', async () => {
     const options = '--market btc-perp --side buy --type market --size';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -60,7 +60,7 @@ describe('[OPTION] Size', () => {
     const options =
       '--market btc-perp --side buy --type market --size invalid-size';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -77,7 +77,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Invalid argument (negative)', async () => {
     const options = '--market btc-perp --side buy --type market --size -1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -94,7 +94,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Invalid argument (zero)', async () => {
     const options = '--market btc-perp --side buy --type market --size 0';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -111,7 +111,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Invalid argument (negative zero)', async () => {
     const options = '--market btc-perp --side buy --type market --size -0';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -128,7 +128,7 @@ describe('[OPTION] Size', () => {
 
   test('FAILS: Invalid argument (shorthand zero)', async () => {
     const options = '--market btc-perp --side buy --type market --size 0k';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

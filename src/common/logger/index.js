@@ -1,11 +1,18 @@
 import chalk from 'chalk';
+import stripAnsi from 'strip-ansi';
 
-/**
- * TODO: Could we just create a 'before any output' hook and strip ANSI codes?
- * This would mean we can treat the entire codebase in terms of colours being
- * enabled, and only worry about the disabled option at the last second.
- */
 let enableColours = true;
+
+function getConsoleMethod({ text }) {
+  switch (text) {
+    case 'error':
+      return 'error';
+    case 'warn':
+      return 'warn';
+    default:
+      return 'log';
+  }
+}
 
 function formatLevel({ text, colour }) {
   const formattedLevel = text.toUpperCase().padEnd(5);
@@ -22,25 +29,25 @@ function formatLevel({ text, colour }) {
   return chalk[colour](formattedLevel);
 }
 
-function getConsoleMethod({ text }) {
-  switch (text) {
-    case 'error':
-      return 'error';
-    case 'warn':
-      return 'warn';
-    default:
-      return 'log';
-  }
+function composeMessageString(level, message) {
+  const formattedTimestamp = new Date().toISOString();
+  const formattedLevel = formatLevel(level);
+  const messageString = `${formattedTimestamp}  ${formattedLevel}  ${message}`;
+
+  return enableColours ? messageString : stripAnsi(messageString);
 }
 
 function log(level, message) {
-  const formattedTimestamp = new Date().toISOString();
-  const formattedLevel = formatLevel(level);
   const consoleMethod = getConsoleMethod(level);
+  const messageString = composeMessageString(level, message);
 
-  console[consoleMethod](
-    `${formattedTimestamp}  ${formattedLevel}  ${message}`
-  );
+  console[consoleMethod](messageString);
+}
+
+function table(tableData) {
+  const tableString = tableData.toString();
+
+  console.log(enableColours ? tableString : stripAnsi(tableString));
 }
 
 function setEnableColours(newEnableColours) {
@@ -57,6 +64,7 @@ const Logger = {
   error(message) {
     log({ text: 'error', colour: 'red' }, message);
   },
+  table,
   setEnableColours,
 };
 

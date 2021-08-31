@@ -1,9 +1,9 @@
 import { Ftx } from '../../api/index.js';
-import { CliUi } from '../../common/index.js';
+import { createTable, Logger } from '../../common/index.js';
 import { formatCurrency, formatUsd } from '../../util/index.js';
 
-function createTable() {
-  return CliUi.createTable([
+function composeTable() {
+  return createTable([
     'Currency',
     'Total interest earned\n(currency)',
     'Total interest earned\n(USD)',
@@ -25,7 +25,7 @@ function composeTableData(data) {
 
   const totalRow = [
     'Total',
-    { content: '', colSpan: 1 },
+    { colSpan: 1, content: '' },
     { hAlign: 'right', content: formatUsd(data.lendingInterestUsd) },
   ];
 
@@ -44,13 +44,11 @@ async function run(options) {
     credentials,
   });
 
-  const table = createTable();
+  const table = composeTable();
   const tableData = composeTableData(data);
 
   table.push(...tableData);
-
-  // TODO: Change to Logger.table().
-  CliUi.logTable(table);
+  Logger.table(table);
 }
 
 const earnings = { run };

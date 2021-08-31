@@ -1,9 +1,5 @@
-import {
-  composeCommand,
-  expectChildToMatch,
-  expectToPlaceOrders,
-  spawnTestChild,
-} from '../helpers/index.js';
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+import { composeTradeCommand, expectToPlaceOrders } from '../helpers/index.js';
 
 describe('[OPTION] Market', () => {
   test('SUCCEEDS: Long flag (--market)', async () => {
@@ -20,7 +16,7 @@ describe('[OPTION] Market', () => {
 
   test('FAILS: Missing required option', async () => {
     const options = '--side buy --type market --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -37,7 +33,7 @@ describe('[OPTION] Market', () => {
 
   test('FAILS: Missing argument', async () => {
     const options = '--market --side buy --type market --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],
@@ -52,7 +48,7 @@ describe('[OPTION] Market', () => {
 
   test('FAILS: Market not found', async () => {
     const options = '--market invalid-market --side buy --type market --size 1';
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [/.{24} {2}INFO {3}Processing order\(s\)/],

@@ -7,6 +7,7 @@
   - [Examples](#examples)
   - [Resources](#resources)
 - [`logout`](#logout)
+- [`🔐 wallet`](#-wallet)
 
 ![Divider](../../images/divider.png)
 
@@ -60,4 +61,49 @@ ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount YOUR_SUBACCOU
 
 ```
 ftx logout  Remove local FTX API credentials and subaccount.
+```
+
+![Divider](../../images/divider.png)
+
+## 🔐 `wallet`
+
+```sh
+ftx wallet [options]  Display wallet balances.
+```
+
+### Options
+
+```
+--sort <method>  Sorting method.
+```
+
+---
+
+#### Sort
+
+```
+--sort <method>  Sorting method.
+```
+
+Optional (default: `currency`).
+
+| Choice                        | Aliases | Description                                               |
+| ----------------------------- | ------- | --------------------------------------------------------- |
+| `currency`                    | `c`     | Sort by currency symbol (A-Z).                            |
+| `available-with-borrowing`    | `awb`   | Sort by available balance including borrowing (high-low). |
+| `available-without-borrowing` | `awob`  | Sort by available balance excluding borrowing (high-low). |
+| `borrowed`                    | `b`     | Sort by borrowed balance (high-low).                      |
+| `total`                       | `t`     | Sort by total balance (high-low).                         |
+| `total-usd`                   | `u`     | Sort by total balance (USD) (high-low).                   |
+
+---
+
+### Examples
+
+```sh
+# Display wallet balances.
+ftx wallet
+
+# Display wallet balances, sorted by total balance (USD).
+ftx wallet --sort total-usd
 ```

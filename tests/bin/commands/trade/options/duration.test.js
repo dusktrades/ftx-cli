@@ -1,14 +1,10 @@
-import {
-  composeCommand,
-  expectChildToMatch,
-  expectToPlaceOrders,
-  spawnTestChild,
-} from '../helpers/index.js';
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+import { composeTradeCommand, expectToPlaceOrders } from '../helpers/index.js';
 
 async function expectArgumentToBeInvalid(argument) {
   const options = `--market btc-perp --side buy --type market --size 1 --duration ${argument}`;
 
-  const command = composeCommand(options);
+  const command = composeTradeCommand(options);
 
   const expectedChild = {
     stdoutArray: [],
@@ -63,7 +59,7 @@ describe('[OPTION] Duration', () => {
     const options =
       '--market btc-perp --side buy --type market --size 1 --duration';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

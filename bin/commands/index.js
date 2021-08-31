@@ -10,6 +10,7 @@ import { RATES } from './rates/index.js';
 import { SPOT } from './spot/index.js';
 import { STOP } from './stop/index.js';
 import { TRADE } from './trade/index.js';
+import { WALLET } from './wallet/index.js';
 import { composeCommand } from './composeCommand.js';
 
 /**
@@ -17,9 +18,10 @@ import { composeCommand } from './composeCommand.js';
  * are grouped and then sorted by authentication and action type.
  */
 const COMMANDS = [
-  // Exchange/account commands.
+  // Account commands.
   LOGIN,
   LOGOUT,
+  WALLET,
 
   // Configuration commands.
   CONFIG,

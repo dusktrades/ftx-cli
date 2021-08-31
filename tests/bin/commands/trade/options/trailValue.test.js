@@ -1,15 +1,14 @@
+import { expectChildToMatch, spawnTestChild } from '../../../helpers/index.js';
+
 import {
-  composeCommand,
-  expectChildToMatch,
+  composeTradeCommand,
   expectToAcceptNumberShorthandArguments,
   expectToPlaceOrders,
-  spawnTestChild,
 } from '../helpers/index.js';
 
 async function expectArgumentToBeInvalid(argument) {
   const options = `--market btc-perp --side buy --type trailing-stop --size 1 --trail-value ${argument}`;
-
-  const command = composeCommand(options);
+  const command = composeTradeCommand(options);
 
   const expectedChild = {
     stdoutArray: [],
@@ -59,7 +58,7 @@ describe('[OPTION] Trail value', () => {
     const options =
       '--market btc-perp --side buy --type trailing-stop --size 1 --trail-value';
 
-    const command = composeCommand(options);
+    const command = composeTradeCommand(options);
 
     const expectedChild = {
       stdoutArray: [],

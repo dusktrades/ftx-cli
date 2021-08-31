@@ -10,10 +10,4 @@ function createTable(headings) {
   });
 }
 
-function logTable(table) {
-  console.log(table.toString());
-}
-
-const CliUi = { createTable, logTable };
-
-export { CliUi };
+export { createTable };
