@@ -98,7 +98,7 @@ alias x="ftx cancel"
 # Usage: `stables`
 stables() {
   ftx spot --currency usdt
-  ftx futures --currency usdt
+  ftx futures --underlying usdt
   ftx rates --currency usd,usdt
 }
 
