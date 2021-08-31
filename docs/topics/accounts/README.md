@@ -13,61 +13,41 @@
 ## `login`
 
 > ⚠️ If your machine is shared or unsecure, it is recommended that you save your API credentials elsewhere instead of using this command.
-
-```sh
-ftx login [options]  Save FTX API credentials on your machine. Previously saved credentials will be overwritten.
-```
-
-> ℹ️ Please refer to [Getting started](../../../README.md#getting-started) for instructions on creating and securing your API credentials.
-
-### Options
+>
+> ℹ️ Please refer to the [getting started section](../../../README.md#getting-started) for instructions on creating and securing your API credentials.
 
 ```
--k, --key <key>                FTX API key.
--x, --secret <secret>          FTX API secret.
--a, --subaccount <subaccount>  FTX subaccount name.
+ftx login <options>                     Save FTX API credentials and subaccount locally.
+
+Options:
+-k, --key <key>                         FTX API key.
+-x, --secret <secret>                   FTX API secret.
+-a, --subaccount (<subaccount> | main)  FTX subaccount name [default: main].
 ```
-
----
-
-#### Key
-
-```
--k, --key <key>  FTX API key.
-```
-
-Required.
-
----
-
-#### Secret
-
-```
--x, --secret <secret>  FTX API secret.
-```
-
-Required.
-
----
-
-#### Subaccount
-
-```
--a, --subaccount <subaccount>  FTX subaccount name.
-```
-
-Optional (default: main account).
-
----
 
 ### Examples
 
+#### Account-wide access
+
 ```sh
 # Save API credentials.
-ftx login --key API_KEY --secret API_SECRET
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET
 
 # Save API credentials and subaccount.
-ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount YOUR_SUBACCOUNT
+
+# Change to main account.
+ftx login --subaccount main
+
+# Change to subaccount.
+ftx login --subaccount YOUR_SUBACCOUNT
+```
+
+#### Subaccount-only access
+
+```sh
+# Save API credentials and subaccount.
+ftx login --key YOUR_API_KEY --secret YOUR_API_SECRET --subaccount YOUR_SUBACCOUNT
 ```
 
 ### Resources
@@ -78,6 +58,6 @@ ftx login --key API_KEY --secret API_SECRET --subaccount SUBACCOUNT
 
 ## `logout`
 
-```sh
-ftx logout  Remove FTX API credentials from your machine.
+```
+ftx logout  Remove local FTX API credentials and subaccount.
 ```

@@ -6,6 +6,7 @@ import { PACKAGE } from './package.js';
 
 const defaults = {
   exchange: 'ftx',
+  subaccount: 'main',
 
   colour: true,
   updateNotifications: true,
