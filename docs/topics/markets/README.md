@@ -67,13 +67,13 @@ Optional (default: all).
 
 Supports comma-separated list.
 
-| Choice             | Aliases |
-| ------------------ | ------- |
-| `coin`             |         |
-| `fiat`             |         |
-| `leveraged-token`  | `lev`   |
-| `volatility-token` | `vol`   |
-| `equity-token`     | `stock` |
+| Choice       | Aliases | Deprecated                |
+| ------------ | ------- | ------------------------- |
+| `coin`       | `c`     |                           |
+| `fiat`       | `f`     |                           |
+| `leveraged`  | `l`     | `leveraged-token`, `lev`  |
+| `volatility` | `v`     | `volatility-token`, `vol` |
+| `stock`      | `s`     | `equity-token`            |
 
 ---
 
@@ -104,13 +104,13 @@ Supports comma-separated list.
 
 Optional (default: `name`).
 
-| Choice       | Description                              |
-| ------------ | ---------------------------------------- |
-| `name`       | Sort by name (A-Z).                      |
-| `price`      | Sort by price (high-low).                |
-| `change-1h`  | Sort by 1-hour price change (high-low).  |
-| `change-24h` | Sort by 24-hour price change (high-low). |
-| `volume`     | Sort by 24-hour volume (high-low).       |
+| Choice       | Aliases | Description                              |
+| ------------ | ------- | ---------------------------------------- |
+| `name`       | `n`     | Sort by name (A-Z).                      |
+| `price`      | `p`     | Sort by price (high-low).                |
+| `change-1h`  | `c1`    | Sort by 1-hour price change (high-low).  |
+| `change-24h` | `c24`   | Sort by 24-hour price change (high-low). |
+| `volume`     | `v`     | Sort by 24-hour volume (high-low).       |
 
 ---
 
@@ -126,8 +126,8 @@ ftx spot --currency btc,eth
 # Display all fiat spot markets.
 ftx spot --type fiat
 
-# Display all volatility and equity token spot markets, sorted by 1-hour price change.
-ftx spot --type volatility-token,equity-token --sort change-1h
+# Display all volatility and stock spot markets, sorted by 1-hour price change.
+ftx spot --type volatility,stock --sort change-1h
 
 # Display BULL (3x) leveraged token traded against USDT spot markets, sorted by volume.
 ftx spot --quote-currency usdt --token-leverage bull --sort volume
@@ -144,24 +144,25 @@ ftx futures [options]  Display futures markets.
 ### Options
 
 ```
--c, --currency <currency>  Underlying currency symbol(s).
--t, --type <type>          Future type(s).
---sort <method>            Sorting method.
+-u, --underlying <currency>  Underlying currency symbol(s).
+-c, --currency <currency>    Deprecated. Underlying currency symbol(s).
+-t, --type <type>            Future type(s).
+--sort <method>              Sorting method.
 ```
 
 ---
 
-#### Currency
+#### Underlying
 
 ```
--c, --currency <currency>  Underlying currency symbol(s).
+-u, --underlying <currency>  Underlying currency symbol(s).
 ```
 
 Optional (default: all).
 
 Supports comma-separated list.
 
-Examples: `btc`, `btc-perp`, `tsla-0924,tsm-0924,twtr-0924`.
+Examples: `btc`, `usdt`, `omg,holy,shit`.
 
 ---
 
@@ -175,11 +176,11 @@ Optional (default: all).
 
 Supports comma-separated list.
 
-| Choice      | Aliases |
-| ----------- | ------- |
-| `perpetual` | `perp`  |
-| `quarterly` | `dated` |
-| `move`      |         |
+| Choice      | Aliases | Deprecated |
+| ----------- | ------- | ---------- |
+| `perpetual` | `p`     | `perp`     |
+| `quarterly` | `q`     | `dated`    |
+| `move`      | `m`     |            |
 
 ---
 
@@ -193,15 +194,15 @@ Optional (default: `name`).
 
 | Choice              | Aliases | Description                                     |
 | ------------------- | ------- | ----------------------------------------------- |
-| `name`              |         | Sort by name (A-Z).                             |
-| `last-price`        |         | Sort by last price (high-low).                  |
-| `mark-price`        |         | Sort by mark price (high-low).                  |
-| `change-1h`         |         | Sort by 1-hour price change (high-low).         |
-| `change-24h`        |         | Sort by 24-hour price change (high-low).        |
-| `volume`            |         | Sort by 24-hour volume (high-low).              |
+| `name`              | `n`     | Sort by name (A-Z).                             |
+| `last-price`        | `lp`    | Sort by last price (high-low).                  |
+| `mark-price`        | `mp`    | Sort by mark price (high-low).                  |
+| `change-1h`         | `c1`    | Sort by 1-hour price change (high-low).         |
+| `change-24h`        | `c24`   | Sort by 24-hour price change (high-low).        |
+| `volume`            | `v`     | Sort by 24-hour volume (high-low).              |
 | `open-interest`     | `oi`    | Sort by open interest (high-low).               |
-| `previous-funding`  |         | Sort by previous funding rate (high-low).       |
-| `estimated-funding` |         | Sort by estimated next funding rate (high-low). |
+| `previous-funding`  | `pf`    | Sort by previous funding rate (high-low).       |
+| `estimated-funding` | `ef`    | Sort by estimated next funding rate (high-low). |
 
 ---
 
@@ -212,7 +213,7 @@ Optional (default: `name`).
 ftx futures
 
 # Display all BTC and ETH underlying futures markets.
-ftx futures --currency btc,eth
+ftx futures --underlying btc,eth
 
 # Display all perpetual futures markets.
 ftx futures --type perpetual
@@ -221,5 +222,5 @@ ftx futures --type perpetual
 ftx futures --type perpetual --sort estimated-funding
 
 # Display BTC underlying quarterly and move futures markets, sorted by open interest.
-ftx futures --currency btc --type quarterly,move --sort open-interest
+ftx futures --underlying btc --type quarterly,move --sort open-interest
 ```

@@ -1,9 +1,10 @@
 import { parseChoiceList } from '../../helpers/index.js';
 
+// TODO: Remove deprecated options: `perp`, `dated`.
 const FUTURE_TYPES = [
-  { parsed: 'perpetual', options: ['perp', 'perpetual'] },
-  { parsed: 'future', options: ['dated', 'quarterly'] },
-  { parsed: 'move', options: ['move'] },
+  { parsed: 'perpetual', options: ['perpetual', 'p', 'perp'] },
+  { parsed: 'future', options: ['quarterly', 'q', 'dated'] },
+  { parsed: 'move', options: ['move', 'm'] },
 ];
 
 const ALLOWED_OPTIONS = FUTURE_TYPES.flatMap((entry) => entry.options);

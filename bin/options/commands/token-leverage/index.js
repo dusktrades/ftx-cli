@@ -1,10 +1,10 @@
 import { parseChoiceList } from '../../helpers/index.js';
 
 const TOKEN_LEVERAGES = [
-  { parsed: 'BULL', options: ['3x', 'bull'] },
-  { parsed: 'HALF', options: ['0.5x', 'half'] },
-  { parsed: 'HEDGE', options: ['-1x', 'hedge'] },
-  { parsed: 'BEAR', options: ['-3x', 'bear'] },
+  { parsed: 'BULL', options: ['bull', '3x'] },
+  { parsed: 'HALF', options: ['half', '0.5x'] },
+  { parsed: 'HEDGE', options: ['hedge', '-1x'] },
+  { parsed: 'BEAR', options: ['bear', '-3x'] },
 ];
 
 const ALLOWED_OPTIONS = TOKEN_LEVERAGES.flatMap((entry) => entry.options);

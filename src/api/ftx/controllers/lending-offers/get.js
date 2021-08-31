@@ -70,25 +70,25 @@ function sortData(data, sortBy) {
     compareAToZ(a.coin, b.coin)
   );
 
-  if (sortBy === 'lendable') {
+  if (['lendable', 'le'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.lendable, b.lendable)
     );
   }
 
-  if (sortBy === 'offered') {
+  if (['offered', 'o'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.offered, b.offered)
     );
   }
 
-  if (sortBy === 'locked') {
+  if (['locked', 'lo'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.locked, b.locked)
     );
   }
 
-  if (sortBy === 'min-rate') {
+  if (['min-rate', 'r'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.minRate, b.minRate)
     );

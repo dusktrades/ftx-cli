@@ -9,7 +9,7 @@ import {
 import { markets } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
 
-const FIAT_CURRENCIES = new Set([
+const fiatCurrencies = new Set([
   'BRZ',
   'CAD',
   'EUR',
@@ -20,54 +20,55 @@ const FIAT_CURRENCIES = new Set([
   'USDT',
 ]);
 
-const LEVERAGED_TOKEN_TYPES = ['BEAR', 'BULL', 'HALF', 'HEDGE'];
-const VOLATILITY_TOKEN_TYPES = ['BVOL', 'IBVOL'];
+const leveragedTokenTypes = ['BEAR', 'BULL', 'HALF', 'HEDGE'];
+const volatilityTokens = new Set(['BVOL', 'IBVOL']);
 
-function isFiat(entry) {
-  return FIAT_CURRENCIES.has(entry.baseCurrency);
+function isFiat(baseCurrency) {
+  return fiatCurrencies.has(baseCurrency);
 }
 
-function isLeveragedToken(entry) {
-  return LEVERAGED_TOKEN_TYPES.some((tokenType) =>
-    entry.baseCurrency.includes(tokenType)
+function isLeveragedToken(baseCurrency) {
+  return leveragedTokenTypes.some((tokenType) =>
+    baseCurrency.includes(tokenType)
   );
 }
 
-function isVolatilityToken(entry) {
-  return VOLATILITY_TOKEN_TYPES.some((tokenType) =>
-    entry.baseCurrency.includes(tokenType)
-  );
+function isVolatilityToken(baseCurrency) {
+  return volatilityTokens.has(baseCurrency);
 }
 
-function isEquityToken(entry) {
-  return Boolean(entry.tokenizedEquity);
+function isStock(flag) {
+  return Boolean(flag);
 }
 
-function isCoin(entry) {
-  return ![
-    isFiat(entry),
-    isLeveragedToken(entry),
-    isVolatilityToken(entry),
-    isEquityToken(entry),
-  ].includes(true);
-}
+function getType(entry) {
+  if (isFiat(entry.baseCurrency)) {
+    return 'fiat';
+  }
 
-const TOKEN_TYPE_VALIDATORS = {
-  coin: isCoin,
-  fiat: isFiat,
-  'leveraged-token': isLeveragedToken,
-  'volatility-token': isVolatilityToken,
-  'equity-token': isEquityToken,
-};
+  if (isLeveragedToken(entry.baseCurrency)) {
+    return 'leveraged';
+  }
+
+  if (isVolatilityToken(entry.baseCurrency)) {
+    return 'volatility';
+  }
+
+  if (isStock(entry.tokenizedEquity)) {
+    return 'stock';
+  }
+
+  return 'coin';
+}
 
 function allowType(allowedTypes, entry) {
   if (allowedTypes == null) {
     return true;
   }
 
-  return allowedTypes.some((allowedType) =>
-    TOKEN_TYPE_VALIDATORS[allowedType](entry)
-  );
+  const type = getType(entry);
+
+  return allowedTypes.includes(type);
 }
 
 function allowTokenLeverage(allowedTokenLeverages, baseCurrency) {
@@ -95,7 +96,7 @@ function filterData(data, filters) {
   );
 }
 
-function composeEntry(entry) {
+function normaliseEntry(entry) {
   return {
     name: entry.name,
     quoteCurrency: entry.quoteCurrency,
@@ -106,8 +107,8 @@ function composeEntry(entry) {
   };
 }
 
-function composeData(data) {
-  return data.map((entry) => composeEntry(entry));
+function normaliseData(data) {
+  return data.map((entry) => normaliseEntry(entry));
 }
 
 function sortData(data, sortBy) {
@@ -115,23 +116,23 @@ function sortData(data, sortBy) {
     compareAToZ(a.name, b.name)
   );
 
-  if (sortBy === 'price') {
+  if (['price', 'p'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) => compareHighToLow(a.price, b.price));
   }
 
-  if (sortBy === 'change-1h') {
+  if (['change-1h', 'c1'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.change1hPercentage, b.change1hPercentage)
     );
   }
 
-  if (sortBy === 'change-24h') {
+  if (['change-24h', 'c24'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.change24hPercentage, b.change24hPercentage)
     );
   }
 
-  if (sortBy === 'volume') {
+  if (['volume', 'v'].includes(sortBy)) {
     return alphabeticalData.sort((a, b) =>
       compareHighToLow(a.volumeUsd24h, b.volumeUsd24h)
     );
@@ -140,21 +141,16 @@ function sortData(data, sortBy) {
   return alphabeticalData;
 }
 
-function processData(data, filters, sortBy) {
+async function get({ exchange, filters, sortBy }) {
+  const data = await markets.getMarkets({ exchange });
   const filteredData = filterData(data, filters);
-  const composedData = composeData(filteredData);
+  const normalisedData = normaliseData(filteredData);
 
-  if (composedData.length === 0) {
+  if (normalisedData.length === 0) {
     throw new EmptyResultsError('No spot markets found');
   }
 
-  return sortData(composedData, sortBy);
-}
-
-async function get({ exchange, filters, sortBy }) {
-  const data = await markets.getMarkets({ exchange });
-
-  return processData(data, filters, sortBy);
+  return sortData(normalisedData, sortBy);
 }
 
 export { get };

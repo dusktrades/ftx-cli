@@ -1,11 +1,21 @@
 import { parseChoiceList } from '../../helpers/index.js';
 
+/**
+ * TODO: Remove deprecated options: `leveraged-token`, `lev`,
+ * `volatility-token`, `vol`, `equity-token`.
+ */
 const SPOT_TYPES = [
-  { parsed: 'coin', options: ['coin'] },
-  { parsed: 'fiat', options: ['fiat'] },
-  { parsed: 'leveraged-token', options: ['lev', 'leveraged-token'] },
-  { parsed: 'volatility-token', options: ['vol', 'volatility-token'] },
-  { parsed: 'equity-token', options: ['stock', 'equity-token'] },
+  { parsed: 'coin', options: ['coin', 'c'] },
+  { parsed: 'fiat', options: ['fiat', 'f'] },
+  {
+    parsed: 'leveraged',
+    options: ['leveraged', 'l', 'leveraged-token', 'lev'],
+  },
+  {
+    parsed: 'volatility',
+    options: ['volatility', 'v', 'volatility-token', 'vol'],
+  },
+  { parsed: 'stock', options: ['stock', 's', 'equity-token'] },
 ];
 
 const ALLOWED_OPTIONS = SPOT_TYPES.flatMap((entry) => entry.options);

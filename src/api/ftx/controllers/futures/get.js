@@ -8,7 +8,7 @@ function filterData(data, filters) {
 
   return data.filter(
     (entry) =>
-      allowValue(filters.currencies, entry.underlying) &&
+      allowValue(filters.underlying, entry.underlying) &&
       allowValue(filters.type, entry.type)
   );
 }

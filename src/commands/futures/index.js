@@ -10,7 +10,8 @@ async function getData(options) {
   return Ftx.futures.getStats({
     exchange: options.global.exchange,
     filters: {
-      currencies: options.command.currency,
+      // TODO: Remove deprecated currency option.
+      underlying: options.command.underlying ?? options.command.currency,
       type: options.command.type,
     },
     sortBy: options.command.sort,
