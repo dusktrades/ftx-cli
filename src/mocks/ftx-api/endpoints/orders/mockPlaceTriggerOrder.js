@@ -129,7 +129,7 @@ function mockPlaceTriggerOrder() {
 
   nock(HOSTNAME, {
     reqheaders: {
-      ...COMMON_REQUEST_HEADERS,
+      ...COMMON_REQUEST_HEADERS.authenticated,
       'ftx-key': 'key',
     },
   })

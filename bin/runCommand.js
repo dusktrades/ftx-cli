@@ -1,5 +1,6 @@
 import { program } from 'commander';
 
+import { setServerTimeOffset } from '../src/api/ftx/endpoints/request.js';
 import { Commands } from '../src/commands/index.js';
 import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
@@ -7,7 +8,6 @@ import { handleError } from './handleError.js';
 import { OPTIONS } from './options/index.js';
 import { notifyUpdate } from './notifyUpdate.js';
 import { scheduleCommand } from './scheduleCommand.js';
-import { syncTime } from './syncTime.js';
 
 /**
  * Option value priority order:
@@ -64,7 +64,6 @@ async function runHandler(command, options) {
 }
 
 async function runCommand(command, inlineCommandOptions) {
-  const cleanup = [];
   const options = composeOptions(inlineCommandOptions);
 
   Logger.setEnableColours(options.global.colour);
@@ -73,24 +72,11 @@ async function runCommand(command, inlineCommandOptions) {
     notifyUpdate(options.global.colour);
   }
 
-  if (options.global.syncIntervalMilliseconds != null) {
-    try {
-      const stopSyncTimeTimer = await syncTime(options.global);
-
-      cleanup.push(stopSyncTimeTimer);
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
   try {
+    await setServerTimeOffset({ exchange: options.global.exchange });
     await runHandler(command, options);
   } catch (error) {
     handleError(error);
-  } finally {
-    for (const cleanupEntry of cleanup) {
-      cleanupEntry();
-    }
   }
 }
 
