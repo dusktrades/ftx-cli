@@ -7,7 +7,7 @@ import { handleError } from './handleError.js';
 import { OPTIONS } from './options/index.js';
 import { notifyUpdate } from './notifyUpdate.js';
 import { scheduleCommand } from './scheduleCommand.js';
-import { syncServerTime } from './syncServerTime.js';
+import { syncTime } from './syncTime.js';
 
 /**
  * Option value priority order:
@@ -64,6 +64,7 @@ async function runHandler(command, options) {
 }
 
 async function runCommand(command, inlineCommandOptions) {
+  const cleanup = [];
   const options = composeOptions(inlineCommandOptions);
 
   Logger.setEnableColours(options.global.colour);
@@ -72,14 +73,24 @@ async function runCommand(command, inlineCommandOptions) {
     notifyUpdate(options.global.colour);
   }
 
-  try {
-    if (options.global.syncTimeIntervalMilliseconds != null) {
-      await syncServerTime(options.global);
-    }
+  if (options.global.syncIntervalMilliseconds != null) {
+    try {
+      const stopSyncTimeTimer = await syncTime(options.global);
 
+      cleanup.push(stopSyncTimeTimer);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  try {
     await runHandler(command, options);
   } catch (error) {
     handleError(error);
+  } finally {
+    for (const cleanupEntry of cleanup) {
+      cleanupEntry();
+    }
   }
 }
 

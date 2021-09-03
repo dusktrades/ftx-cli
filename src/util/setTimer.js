@@ -1,45 +1,48 @@
 import { performance } from 'perf_hooks';
 
-function calculateNext(interval, current, expected) {
+function calculateNextIntervalMilliseconds(interval, current, expected) {
   const difference = expected - current;
   const nextInterval = Math.round(interval + difference);
 
-  return {
-    nextIntervalMilliseconds: Math.max(nextInterval, 0),
-    nextExpectedMilliseconds: expected + interval,
-  };
+  return Math.max(nextInterval, 0);
+}
+
+function calculateNextExpectedMilliseconds(interval) {
+  return performance.now() + interval;
 }
 
 /**
  * Self-correcting, high-resolution timer to combat the drift and unreliability
  * of built-in JavaScript solutions.
  */
-function setTimer({
-  intervalMilliseconds,
-  expectedMilliseconds = performance.now(),
-  callback,
-}) {
-  const currentMilliseconds = performance.now();
+function setTimer({ intervalMilliseconds, callback }) {
+  let currentMilliseconds = performance.now();
+  let expectedMilliseconds = performance.now();
+  let currentTimeout = null;
 
-  if (callback != null) {
-    callback();
-  }
+  function step() {
+    currentMilliseconds = performance.now();
 
-  const { nextIntervalMilliseconds, nextExpectedMilliseconds } = calculateNext(
-    intervalMilliseconds,
-    currentMilliseconds,
-    expectedMilliseconds
-  );
+    const nextExpectedMilliseconds =
+      calculateNextExpectedMilliseconds(intervalMilliseconds);
 
-  function setNextTimer() {
-    setTimer({
+    if (callback != null) {
+      callback();
+    }
+
+    const nextIntervalMilliseconds = calculateNextIntervalMilliseconds(
       intervalMilliseconds,
-      expectedMilliseconds: nextExpectedMilliseconds,
-      callback,
-    });
+      currentMilliseconds,
+      expectedMilliseconds
+    );
+
+    currentTimeout = setTimeout(step, nextIntervalMilliseconds);
+    expectedMilliseconds = nextExpectedMilliseconds;
   }
 
-  setTimeout(setNextTimer, nextIntervalMilliseconds);
+  step();
+
+  return () => clearTimeout(currentTimeout);
 }
 
 export { setTimer };

@@ -1,15 +1,15 @@
 import { setServerTimeOffset } from '../src/api/ftx/endpoints/request.js';
 import { setTimer } from '../src/util/index.js';
 
-async function syncServerTime({ exchange, syncTimeIntervalMilliseconds }) {
+async function syncTime({ exchange, syncIntervalMilliseconds }) {
   // Wait for immediate server time sync before we send any command requests.
   await setServerTimeOffset({ exchange });
 
   // Set up recurring server time sync.
-  setTimer({
+  return setTimer({
     callback: () => setServerTimeOffset({ exchange }),
-    intervalMilliseconds: syncTimeIntervalMilliseconds,
+    intervalMilliseconds: syncIntervalMilliseconds,
   });
 }
 
-export { syncServerTime };
+export { syncTime };
