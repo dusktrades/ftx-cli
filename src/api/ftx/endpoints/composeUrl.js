@@ -1,19 +1,20 @@
-function composeTld(exchange) {
-  if (exchange === 'ftx-us') {
-    return 'us';
-  }
-
-  return 'com';
+function composeSubdomainString(subdomain) {
+  return subdomain == null ? '' : `${subdomain}.`;
 }
 
-function composeApiUrl(exchange) {
+function composeTld(exchange) {
+  return exchange === 'ftx-us' ? 'us' : 'com';
+}
+
+function composeApiUrl(subdomain, exchange) {
+  const subdomainString = composeSubdomainString(subdomain);
   const tld = composeTld(exchange);
 
-  return `https://ftx.${tld}/api`;
+  return `https://${subdomainString}ftx.${tld}/api`;
 }
 
-function composeUrl(exchange, endpoint) {
-  const apiUrl = composeApiUrl(exchange);
+function composeUrl({ subdomain, exchange, endpoint }) {
+  const apiUrl = composeApiUrl(subdomain, exchange);
 
   return `${apiUrl}/${endpoint}`;
 }

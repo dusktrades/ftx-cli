@@ -2,48 +2,70 @@ import crypto from 'crypto';
 
 import { CONFIG } from '../../../config/index.js';
 
-const USER_AGENT = `${CONFIG.PACKAGE.name}@${CONFIG.PACKAGE.version}`;
-
-const COMMON_HEADERS = {
+const commonHeaders = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  'User-Agent': USER_AGENT,
+  'User-Agent': `${CONFIG.PACKAGE.name}@${CONFIG.PACKAGE.version}`,
   'X-Requested-With': 'XMLHttpRequest',
 };
+
+function canAuthenticate(credentials) {
+  return credentials?.apiKey != null && credentials?.apiSecret != null;
+}
 
 function composePrefix(exchange) {
   return exchange === 'ftx-us' ? 'FTXUS' : 'FTX';
 }
 
-function encodeRequestBody(requestBody) {
-  if (requestBody == null) {
-    return '';
-  }
-
-  return JSON.stringify(requestBody);
+function composePath(endpoint) {
+  return `/api/${endpoint}`;
 }
 
-function composePayload(timestamp, endpoint, method, requestBody) {
-  const normalisedMethod = method.toUpperCase();
-  const path = `/api/${endpoint}`;
-  const encodedRequestBody = encodeRequestBody(requestBody);
+function encodeRequestBody(requestBody) {
+  return requestBody == null ? '' : JSON.stringify(requestBody);
+}
 
-  return `${timestamp}${normalisedMethod}${path}${encodedRequestBody}`;
+function calculateTimestamp(serverTimeOffsetMilliseconds) {
+  return Date.now() + serverTimeOffsetMilliseconds;
+}
+
+function composePayload(
+  endpoint,
+  method,
+  requestBody,
+  serverTimeOffsetMilliseconds
+) {
+  const normalisedMethod = method.toUpperCase();
+  const path = composePath(endpoint);
+  const encodedRequestBody = encodeRequestBody(requestBody);
+  const timestamp = calculateTimestamp(serverTimeOffsetMilliseconds);
+
+  return {
+    timestamp,
+    payload: `${timestamp}${normalisedMethod}${path}${encodedRequestBody}`,
+  };
 }
 
 function composeSignature(
-  timestamp,
   endpoint,
   method,
-  credentials,
-  requestBody
+  apiSecret,
+  requestBody,
+  serverTimeOffsetMilliseconds
 ) {
-  const payload = composePayload(timestamp, endpoint, method, requestBody);
+  const { timestamp, payload } = composePayload(
+    endpoint,
+    method,
+    requestBody,
+    serverTimeOffsetMilliseconds
+  );
 
-  return crypto
-    .createHmac('sha256', credentials.apiSecret)
+  const signature = crypto
+    .createHmac('sha256', apiSecret)
     .update(payload)
     .digest('hex');
+
+  return { timestamp, signature };
 }
 
 function hasSubaccount(subaccount) {
@@ -56,25 +78,20 @@ function composeAuthenticatedHeaders({
   method,
   credentials,
   requestBody,
+  serverTimeOffsetMilliseconds,
 }) {
-  // We can't authenticate without API key and secret.
-  if (credentials.apiKey == null || credentials.apiSecret == null) {
-    return COMMON_HEADERS;
-  }
-
   const prefix = composePrefix(exchange);
-  const timestamp = Date.now();
 
-  const signature = composeSignature(
-    timestamp,
+  const { timestamp, signature } = composeSignature(
     endpoint,
     method,
-    credentials,
-    requestBody
+    credentials.apiSecret,
+    requestBody,
+    serverTimeOffsetMilliseconds
   );
 
   return {
-    ...COMMON_HEADERS,
+    ...commonHeaders,
     [`${prefix}-KEY`]: credentials.apiKey,
     [`${prefix}-TS`]: timestamp,
     [`${prefix}-SIGN`]: signature,
@@ -85,12 +102,16 @@ function composeAuthenticatedHeaders({
 }
 
 function composeHeaders(options) {
-  // Credentials are passed for endpoints which require authentication headers.
-  if (options.credentials == null) {
-    return COMMON_HEADERS;
-  }
-
-  return composeAuthenticatedHeaders(options);
+  /**
+   * We can't authenticate if we are missing API key or secret, so we fail-fast
+   * and send the common, unauthenticated headers. This may be:
+   *
+   * - Intentional: the endpoint doesn't require authentication
+   * - Unintentional: the endpoint requires authentication but the user forgot
+   */
+  return !canAuthenticate(options.credentials)
+    ? commonHeaders
+    : composeAuthenticatedHeaders(options);
 }
 
 export { composeHeaders };

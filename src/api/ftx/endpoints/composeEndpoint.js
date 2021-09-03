@@ -1,12 +1,12 @@
 import { removeNullValues } from '../../../util/index.js';
 
-const NORMALISED_QUERY_PARAMETERS = {
+const normalisedQueryParameters = {
   startTime: 'start_time',
   endTime: 'end_time',
 };
 
 function normaliseParameterKey(key) {
-  return NORMALISED_QUERY_PARAMETERS[key] ?? key;
+  return normalisedQueryParameters[key] ?? key;
 }
 
 function normaliseParameters(parameters) {
@@ -23,11 +23,7 @@ function composeQueryString(queryParameters = {}) {
   const normalisedParameters = normaliseParameters(filteredParameters);
   const encodedParameters = new URLSearchParams(normalisedParameters);
 
-  if (encodedParameters == null) {
-    return '';
-  }
-
-  return `?${encodedParameters}`;
+  return encodedParameters == null ? '' : `?${encodedParameters}`;
 }
 
 // Raw endpoint means an endpoint without any query parameters.

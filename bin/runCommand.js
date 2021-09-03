@@ -7,6 +7,7 @@ import { handleError } from './handleError.js';
 import { OPTIONS } from './options/index.js';
 import { notifyUpdate } from './notifyUpdate.js';
 import { scheduleCommand } from './scheduleCommand.js';
+import { syncServerTime } from './syncServerTime.js';
 
 /**
  * Option value priority order:
@@ -72,6 +73,10 @@ async function runCommand(command, inlineCommandOptions) {
   }
 
   try {
+    if (options.global.syncTimeIntervalMilliseconds != null) {
+      await syncServerTime(options.global);
+    }
+
     await runHandler(command, options);
   } catch (error) {
     handleError(error);
