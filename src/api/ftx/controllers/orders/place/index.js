@@ -54,7 +54,13 @@ function calculatePrice(fromPrice, step, orderIndex) {
   return fromPrice.plus(offset);
 }
 
-function composeScaledRequest(exchange, credentials, data, step, orderIndex) {
+async function composeScaledRequest(
+  exchange,
+  credentials,
+  data,
+  step,
+  orderIndex
+) {
   const processedData = {
     ...data,
     price: calculatePrice(data.price.from, step, orderIndex),
@@ -119,7 +125,8 @@ async function composeScaledRequests(
     orderIndex < data.splitCount.toNumber();
     orderIndex += 1
   ) {
-    const request = composeScaledRequest(
+    // eslint-disable-next-line no-await-in-loop
+    const request = await composeScaledRequest(
       exchange,
       credentials,
       data,
@@ -156,7 +163,7 @@ async function composeSimpleRequests(
   intervalMilliseconds
 ) {
   const requests = [];
-  const request = composeRequest(exchange, credentials, data);
+  const request = await composeRequest(exchange, credentials, data);
 
   for (
     let orderIndex = 0;

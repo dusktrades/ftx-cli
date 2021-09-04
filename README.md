@@ -151,6 +151,7 @@ You can include these options with any command to modify its behaviour.
 -k, --key <key>                         FTX API key.
 -x, --secret <secret>                   FTX API secret.
 -a, --subaccount (<subaccount> | main)  FTX subaccount name [default: main].
+    --size-currency (base | quote)      Source currency for calculating size [default: base].
     --schedule <schedule>               Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
     --[no-]colour                       Toggle coloured output [default: enabled].
     --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].

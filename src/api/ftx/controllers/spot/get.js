@@ -82,10 +82,6 @@ function allowTokenLeverage(allowedTokenLeverages, baseCurrency) {
 }
 
 function filterData(data, filters) {
-  if (filters == null) {
-    return data;
-  }
-
   return data.filter(
     (entry) =>
       entry.type === 'spot' &&

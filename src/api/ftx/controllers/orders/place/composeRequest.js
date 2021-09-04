@@ -1,7 +1,7 @@
 import { composeRegularRequest } from './regular/index.js';
 import { composeTriggerRequest } from './trigger/index.js';
 
-const TRIGGER_ORDER_TYPES = new Set([
+const triggerOrderTypes = new Set([
   'stop-market',
   'stop-limit',
   'trailing-stop',
@@ -10,10 +10,10 @@ const TRIGGER_ORDER_TYPES = new Set([
 ]);
 
 function isTriggerOrder(type) {
-  return TRIGGER_ORDER_TYPES.has(type);
+  return triggerOrderTypes.has(type);
 }
 
-function composeRequest(exchange, credentials, data) {
+async function composeRequest(exchange, credentials, data) {
   return isTriggerOrder(data.type)
     ? composeTriggerRequest(exchange, credentials, data)
     : composeRegularRequest(exchange, credentials, data);

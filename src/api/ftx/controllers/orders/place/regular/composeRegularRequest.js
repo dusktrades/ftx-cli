@@ -1,5 +1,5 @@
 import { ApiError, Logger } from '../../../../../../common/index.js';
-import { orders } from '../../../../endpoints/index.js';
+import { markets, orders } from '../../../../endpoints/index.js';
 
 function normalisePrice({ type, price }) {
   // Exchange decides price for market orders.
@@ -23,8 +23,46 @@ function normalisePrice({ type, price }) {
   return price.toNumber();
 }
 
-function normaliseSize({ size, splitCount }) {
-  return size.dividedBy(splitCount).toNumber();
+/**
+ * Get the best available (i.e. closest to spread) limit price depending on
+ * order side.
+ *
+ * - Buy: ask price
+ * - Sell: bid price
+ */
+async function getBestLimitPrice(exchange, { market, side }) {
+  const data = await markets.getSingleMarket({
+    exchange,
+    pathParameters: { market },
+  });
+
+  return side === 'sell' ? data.bid : data.ask;
+}
+
+async function getPrice(exchange, data) {
+  return data.type === 'market'
+    ? getBestLimitPrice(exchange, data)
+    : data.price;
+}
+
+async function calculateBaseSize(exchange, data) {
+  if (data.sizeCurrency === 'base') {
+    return data.size;
+  }
+
+  const price = await getPrice(exchange, data);
+
+  return data.size.dividedBy(price);
+}
+
+function calculateIndividualSize(baseSize, splitCount) {
+  return baseSize.dividedBy(splitCount);
+}
+
+async function normaliseSize(exchange, data) {
+  const baseSize = await calculateBaseSize(exchange, data);
+
+  return calculateIndividualSize(baseSize, data.splitCount).toNumber();
 }
 
 function normaliseIoc({ type, enableIoc }) {
@@ -45,7 +83,7 @@ function normalisePostOnly({ type, enablePostOnly }) {
   return null;
 }
 
-function composeRequestBody(data) {
+async function composeRequestBody(exchange, data) {
   /**
    * Case not handled properly by API: unclear why an error isn't returned,
    * since execution should be impossible.
@@ -65,7 +103,7 @@ function composeRequestBody(data) {
     market: data.market,
     side: data.side,
     type: data.type,
-    size: normaliseSize(data),
+    size: await normaliseSize(exchange, data),
     price: normalisePrice(data),
     reduceOnly: data.enableReduceOnly,
     ...(ioc != null && { ioc }),
@@ -73,8 +111,8 @@ function composeRequestBody(data) {
   };
 }
 
-function composeRegularRequest(exchange, credentials, data) {
-  const requestBody = composeRequestBody(data);
+async function composeRegularRequest(exchange, credentials, data) {
+  const requestBody = await composeRequestBody(exchange, data);
 
   return () => orders.placeOrder({ exchange, credentials, requestBody });
 }
