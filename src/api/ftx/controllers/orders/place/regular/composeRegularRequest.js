@@ -23,6 +23,10 @@ function normalisePrice({ type, price }) {
   return price.toNumber();
 }
 
+function calculateIndividualSize({ size, splitCount }) {
+  return size.dividedBy(splitCount);
+}
+
 /**
  * Get the best available (i.e. closest to spread) limit price depending on
  * order side.
@@ -45,24 +49,21 @@ async function getPrice(exchange, data) {
     : data.price;
 }
 
-async function calculateBaseSize(exchange, data) {
+async function calculateBaseSize(exchange, data, individualSize) {
   if (data.sizeCurrency === 'base') {
-    return data.size;
+    return individualSize;
   }
 
   const price = await getPrice(exchange, data);
 
-  return data.size.dividedBy(price);
-}
-
-function calculateIndividualSize(baseSize, splitCount) {
-  return baseSize.dividedBy(splitCount);
+  return individualSize.dividedBy(price);
 }
 
 async function normaliseSize(exchange, data) {
-  const baseSize = await calculateBaseSize(exchange, data);
+  const individualSize = calculateIndividualSize(data);
+  const baseSize = await calculateBaseSize(exchange, data, individualSize);
 
-  return calculateIndividualSize(baseSize, data.splitCount).toNumber();
+  return baseSize.toNumber();
 }
 
 function normaliseIoc({ type, enableIoc }) {
