@@ -1,4 +1,4 @@
-async function settleOrderRequests(requests) {
+async function settleRequests(requests) {
   const responses = await Promise.allSettled(requests);
 
   for (const response of responses) {
@@ -8,4 +8,4 @@ async function settleOrderRequests(requests) {
   }
 }
 
-export { settleOrderRequests };
+export { settleRequests };

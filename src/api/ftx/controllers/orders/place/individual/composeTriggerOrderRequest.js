@@ -33,28 +33,6 @@ function normaliseRetryUntilFilled(enableRetry, simpleType) {
   return null;
 }
 
-function normalisePrice(price, simpleType) {
-  // Exchange decides price for market orders.
-  if (simpleType === 'market') {
-    return null;
-  }
-
-  /**
-   * User hasn't provided a price but the provided order type requires it; we
-   * should assume they have forgotten it instead of falling back to the API
-   * default of treating it as a market order.
-   */
-  if (price == null) {
-    const errorMessage = 'Limit orders must specify price';
-
-    Logger.error(`  Failed order: ${errorMessage}`);
-
-    throw new ApiError(errorMessage);
-  }
-
-  return price.toNumber();
-}
-
 function normaliseTriggerPrice(triggerPrice, normalisedType) {
   // Trigger price is only required for stop and take profit orders.
   if (!['stop', 'takeProfit'].includes(normalisedType)) {
@@ -90,11 +68,7 @@ function normaliseTrailValue(trailValue, normalisedType) {
   return trailValue.toNumber();
 }
 
-function normaliseSize({ size, splitCount }) {
-  return size.dividedBy(splitCount).toNumber();
-}
-
-function composeRequestBody(data) {
+async function composeRequestBody(data) {
   const typeObject = TYPES[data.type];
 
   const retryUntilFilled = normaliseRetryUntilFilled(
@@ -102,7 +76,7 @@ function composeRequestBody(data) {
     typeObject.simpleType
   );
 
-  const orderPrice = normalisePrice(data.price, typeObject.simpleType);
+  const orderPrice = await data.calculatePrice();
 
   const triggerPrice = normaliseTriggerPrice(
     data.triggerPrice,
@@ -118,7 +92,7 @@ function composeRequestBody(data) {
     market: data.market,
     side: data.side,
     type: typeObject.normalised,
-    size: normaliseSize(data),
+    size: await data.calculateSize(),
     reduceOnly: data.enableReduceOnly,
     ...(retryUntilFilled != null && { retryUntilFilled }),
     ...(orderPrice != null && { orderPrice }),
@@ -127,10 +101,10 @@ function composeRequestBody(data) {
   };
 }
 
-function composeTriggerRequest(exchange, credentials, data) {
-  const requestBody = composeRequestBody(data);
+async function composeTriggerOrderRequest(exchange, credentials, data) {
+  const requestBody = await composeRequestBody(data);
 
   return () => orders.placeTriggerOrder({ exchange, credentials, requestBody });
 }
 
-export { composeTriggerRequest };
+export { composeTriggerOrderRequest };

@@ -1,5 +1,5 @@
-import { cancel } from './cancel/index.js';
-import { place } from './place/index.js';
+import { cancel } from './cancel.js';
+import { place } from './place/place.js';
 
 const orders = {
   cancel,
