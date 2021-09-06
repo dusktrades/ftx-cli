@@ -4,23 +4,13 @@ function isValidUserAgent(userAgent) {
   );
 }
 
-function isValidTimestamp(timestamp) {
-  const parsedTimestamp = Number.parseInt(timestamp, 10);
-
-  return typeof parsedTimestamp === 'number' && !Number.isNaN(parsedTimestamp);
-}
-
-function isValidSignature(signature) {
-  return typeof signature === 'string';
-}
-
 const COMMON_REQUEST_HEADERS = {
   'user-agent': isValidUserAgent,
   accept: 'application/json',
   'content-type': 'application/json',
   'x-requested-with': 'XMLHttpRequest',
-  'ftx-ts': isValidTimestamp,
-  'ftx-sign': isValidSignature,
+
+  // TODO: Fix authentication headers.
   'accept-encoding': 'gzip, deflate, br',
 };
 
