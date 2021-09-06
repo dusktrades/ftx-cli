@@ -39,6 +39,7 @@ function mockGetSingleMarket() {
     interceptTestCase({
       ...testCase,
       method: 'get',
+      requiresAuthentication: false,
     });
   }
 }

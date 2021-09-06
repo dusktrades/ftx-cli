@@ -8,7 +8,7 @@
 |                  50% |                                                  ~64.87% |
 
 **\*Formula:** (1 + X / 8760)<sup>8760</sup> - 1\
-_X = Average annual lending rate_
+_X = Average annual interest rate_
 
 ## Conclusion
 
