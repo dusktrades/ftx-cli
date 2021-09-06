@@ -2,21 +2,13 @@ import { ApiError, Logger } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
 function normaliseIoc({ type, enableIoc }) {
-  // IOC mode only affects regular limit orders.
-  if (type === 'limit') {
-    return enableIoc;
-  }
-
-  return null;
+  // IOC mode only affects basic limit orders.
+  return type === 'limit' ? enableIoc : null;
 }
 
 function normalisePostOnly({ type, enablePostOnly }) {
-  // Post-Only mode only affects regular limit orders.
-  if (type === 'limit') {
-    return enablePostOnly;
-  }
-
-  return null;
+  // Post-Only mode only affects basic limit orders.
+  return type === 'limit' ? enablePostOnly : null;
 }
 
 async function composeRequestBody(data) {
@@ -34,14 +26,16 @@ async function composeRequestBody(data) {
 
   const ioc = normaliseIoc(data);
   const postOnly = normalisePostOnly(data);
+  const price = await data.calculatePrice();
 
   return {
     market: data.market,
     side: data.side,
     type: data.type,
-    size: await data.calculateSize(),
-    price: await data.calculatePrice(),
+    size: await data.calculateSize(price),
+    price,
     reduceOnly: data.enableReduceOnly,
+
     ...(ioc != null && { ioc }),
     ...(postOnly != null && { postOnly }),
   };

@@ -22,7 +22,7 @@ function composeOrderRequests({ exchange, credentials, data }) {
 
     const individualData = {
       ...data,
-      calculateSize: () => calculateSize(exchange, data),
+      calculateSize: (price) => calculateSize(exchange, data, price),
       calculatePrice: () => calculatePrice(data, priceStep, index),
     };
 

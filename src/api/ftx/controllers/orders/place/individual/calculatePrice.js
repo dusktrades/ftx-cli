@@ -1,10 +1,5 @@
 import { ApiError, Logger } from '../../../../../../common/index.js';
-
-const pricedOrderTypes = new Set(['limit', 'stop-limit', 'take-profit-limit']);
-
-function requiresPrice(type) {
-  return pricedOrderTypes.has(type);
-}
+import { requiresOption } from '../../../../structures/orderTypes.js';
 
 /**
  * User hasn't provided a price but the provided order type requires it; we
@@ -31,7 +26,7 @@ function calculateSteppedPrice(price, priceStep, orderIndex) {
 
 function calculatePrice({ price, type }, priceStep, orderIndex) {
   // If the order type doesn't require price, we shouldn't send price.
-  if (!requiresPrice(type)) {
+  if (!requiresOption(type, 'price')) {
     return null;
   }
 
@@ -40,7 +35,7 @@ function calculatePrice({ price, type }, priceStep, orderIndex) {
   }
 
   return price.type === 'range'
-    ? calculateSteppedPrice(price, priceStep, orderIndex)
+    ? calculateSteppedPrice(price, priceStep, orderIndex).toNumber()
     : price.value.toNumber();
 }
 

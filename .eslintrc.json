@@ -15,12 +15,6 @@
     "plugin:unicorn/recommended",
     "prettier"
   ],
-  "overrides": [
-    {
-      "files": ["*.test.js"],
-      "rules": { "sonarjs/no-duplicate-string": "off" }
-    }
-  ],
   "parserOptions": {
     "ecmaVersion": 2021,
     "sourceType": "module"
@@ -53,6 +47,7 @@
     "node/no-missing-import": ["error", { "allowModules": ["p-queue"] }],
     "node/no-unsupported-features/es-syntax": "off",
 
+    "sonarjs/no-duplicate-string": "off",
     "sonarjs/prefer-immediate-return": "error",
 
     "unicorn/better-regex": ["error", { "sortCharacterClasses": false }],

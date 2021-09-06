@@ -1,4 +1,5 @@
 import { markets } from '../../../../endpoints/index.js';
+import { ORDER_TYPES } from '../../../../structures/orderTypes.js';
 
 function calculateIndividualSize({ size, splitCount }) {
   return size.dividedBy(splitCount);
@@ -20,25 +21,42 @@ async function getBestLimitPrice(exchange, { market, side }) {
   return side === 'sell' ? data.bid : data.ask;
 }
 
-async function getPrice(exchange, data) {
-  return data.type === 'market'
+/**
+ * Get the price depending on order execution type.
+ *
+ * - Market: current bid/ask
+ * - Limit: provided/derived limit price
+ */
+async function getPrice(exchange, data, individualPrice) {
+  return ORDER_TYPES[data.type].executionType === 'market'
     ? getBestLimitPrice(exchange, data)
-    : data.price;
+    : individualPrice;
 }
 
-async function calculateBaseSize(exchange, data, individualSize) {
+async function calculateBaseSize(
+  exchange,
+  data,
+  individualSize,
+  individualPrice
+) {
   if (data.sizeCurrency === 'base') {
     return individualSize;
   }
 
-  const price = await getPrice(exchange, data);
+  const price = await getPrice(exchange, data, individualPrice);
 
   return individualSize.dividedBy(price);
 }
 
-async function calculateSize(exchange, data) {
+async function calculateSize(exchange, data, individualPrice) {
   const individualSize = calculateIndividualSize(data);
-  const baseSize = await calculateBaseSize(exchange, data, individualSize);
+
+  const baseSize = await calculateBaseSize(
+    exchange,
+    data,
+    individualSize,
+    individualPrice
+  );
 
   return baseSize.toNumber();
 }

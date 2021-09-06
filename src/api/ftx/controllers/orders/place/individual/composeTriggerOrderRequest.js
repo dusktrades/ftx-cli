@@ -1,41 +1,14 @@
 import { ApiError, Logger } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
-const TYPES = {
-  'stop-market': {
-    normalised: 'stop',
-    simpleType: 'market',
-  },
-  'stop-limit': {
-    normalised: 'stop',
-    simpleType: 'limit',
-  },
-  'trailing-stop': {
-    normalised: 'trailingStop',
-    simpleType: 'market',
-  },
-  'take-profit-market': {
-    normalised: 'takeProfit',
-    simpleType: 'market',
-  },
-  'take-profit-limit': {
-    normalised: 'takeProfit',
-    simpleType: 'limit',
-  },
-};
+import {
+  ORDER_TYPES,
+  requiresOption,
+} from '../../../../structures/orderTypes.js';
 
-function normaliseRetryUntilFilled(enableRetry, simpleType) {
-  // Retry-Until-Filled mode only affects market orders.
-  if (simpleType === 'market') {
-    return enableRetry;
-  }
-
-  return null;
-}
-
-function normaliseTriggerPrice(triggerPrice, normalisedType) {
+function normaliseTriggerPrice(triggerPrice, type) {
   // Trigger price is only required for stop and take profit orders.
-  if (!['stop', 'takeProfit'].includes(normalisedType)) {
+  if (!requiresOption(type, 'triggerPrice')) {
     return null;
   }
 
@@ -51,9 +24,9 @@ function normaliseTriggerPrice(triggerPrice, normalisedType) {
   return triggerPrice.toNumber();
 }
 
-function normaliseTrailValue(trailValue, normalisedType) {
+function normaliseTrailValue(trailValue, type) {
   // Trail value is only required for trailing stop orders.
-  if (normalisedType !== 'trailingStop') {
+  if (!requiresOption(type, 'trailValue')) {
     return null;
   }
 
@@ -68,36 +41,32 @@ function normaliseTrailValue(trailValue, normalisedType) {
   return trailValue.toNumber();
 }
 
+function normaliseRetryUntilFilled(enableRetry, type) {
+  // Retry-Until-Filled mode only affects market orders.
+  return ORDER_TYPES[type].executionType === 'market' ? enableRetry : null;
+}
+
 async function composeRequestBody(data) {
-  const typeObject = TYPES[data.type];
+  const orderPrice = await data.calculatePrice();
+  const triggerPrice = normaliseTriggerPrice(data.triggerPrice, data.type);
+  const trailValue = normaliseTrailValue(data.trailValue, data.type);
 
   const retryUntilFilled = normaliseRetryUntilFilled(
     data.enableRetry,
-    typeObject.simpleType
-  );
-
-  const orderPrice = await data.calculatePrice();
-
-  const triggerPrice = normaliseTriggerPrice(
-    data.triggerPrice,
-    typeObject.normalised
-  );
-
-  const trailValue = normaliseTrailValue(
-    data.trailValue,
-    typeObject.normalised
+    data.type
   );
 
   return {
     market: data.market,
     side: data.side,
-    type: typeObject.normalised,
-    size: await data.calculateSize(),
+    type: ORDER_TYPES[data.type].apiArgument,
+    size: await data.calculateSize(orderPrice),
     reduceOnly: data.enableReduceOnly,
-    ...(retryUntilFilled != null && { retryUntilFilled }),
+
     ...(orderPrice != null && { orderPrice }),
     ...(triggerPrice != null && { triggerPrice }),
     ...(trailValue != null && { trailValue }),
+    ...(retryUntilFilled != null && { retryUntilFilled }),
   };
 }
 
