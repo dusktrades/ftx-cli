@@ -55,6 +55,7 @@ function mockGetAllBalances() {
       ...testCase,
       endpoint: 'wallet/all_balances',
       method: 'get',
+      requiresAuthentication: true,
     });
   }
 }
