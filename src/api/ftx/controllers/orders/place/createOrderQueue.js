@@ -1,5 +1,34 @@
 import PQueue from 'p-queue';
 
+import { RateLimitError, Logger } from '../../../../../common/index.js';
+
+function handleRequestSuccess() {
+  Logger.info('  Placed order');
+}
+
+function handleRequestError(error, retry) {
+  if (error instanceof RateLimitError) {
+    // Order failed due to exceeding rate limit; retry with increased priority.
+    return retry();
+  }
+
+  // Order failed due to some other reason; log and rethrow.
+  Logger.error(`  Failed order: ${error.message}`);
+
+  throw error;
+}
+
+function add(request, queue, priority = 0) {
+  function retry() {
+    return add(request, queue, priority + 1);
+  }
+
+  return queue
+    .add(request, { priority })
+    .then(handleRequestSuccess)
+    .catch((error) => handleRequestError(error, retry));
+}
+
 /**
  * Do not send more than 6 orders total per 200ms by default.
  *
@@ -17,7 +46,7 @@ import PQueue from 'p-queue';
  *
  * Reference: https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX
  */
-function create({ limitPerInterval, intervalMilliseconds }) {
+function createOrderQueue({ limitPerInterval, intervalMilliseconds }) {
   const queue = new PQueue({
     interval: intervalMilliseconds,
     intervalCap: limitPerInterval,
@@ -50,9 +79,7 @@ function create({ limitPerInterval, intervalMilliseconds }) {
      */
   });
 
-  return queue;
+  return { add: (request) => add(request, queue) };
 }
 
-const orders = { create };
-
-export { orders };
+export { createOrderQueue };

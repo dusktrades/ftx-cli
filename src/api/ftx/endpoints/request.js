@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import got from 'got';
 
 import { ApiError, HttpError, RateLimitError } from '../../../common/index.js';
@@ -6,6 +7,9 @@ import { MAX_32_BIT_INTEGER } from '../../../util/index.js';
 import { composeEndpoint } from './composeEndpoint.js';
 import { composeHeaders } from './composeHeaders.js';
 import { composeUrl } from './composeUrl.js';
+import { time } from './time/index.js';
+
+let serverTimeOffsetMilliseconds = 0;
 
 /**
  * We should tag the request with our External Referral Program name if the
@@ -39,7 +43,11 @@ function composeRequestOptions(options) {
   return {
     timeout: { request: MAX_32_BIT_INTEGER },
     retry: 0,
-    headers: composeHeaders({ ...options, requestBody }),
+    headers: composeHeaders({
+      ...options,
+      requestBody,
+      serverTimeOffsetMilliseconds,
+    }),
     ...(requestBody != null && { json: requestBody }),
   };
 }
@@ -51,11 +59,7 @@ function composeRequestOptions(options) {
 function parseErrorMessage(error) {
   const responseBody = error?.response?.body;
 
-  if (responseBody == null) {
-    return null;
-  }
-
-  return JSON.parse(responseBody).error;
+  return responseBody == null ? null : JSON.parse(responseBody).error;
 }
 
 function handleError(error) {
@@ -76,7 +80,7 @@ async function request(options) {
     options.queryParameters
   );
 
-  const url = composeUrl(options.exchange, endpoint);
+  const url = composeUrl({ ...options, endpoint });
   const requestOptions = composeRequestOptions({ ...options, endpoint });
 
   try {
@@ -88,4 +92,25 @@ async function request(options) {
   }
 }
 
-export { request };
+function calculateServerTimeOffset(server, start, end) {
+  const offset = server - end;
+  const approximateRoundTripTime = end - start;
+  const approximateRequestTime = approximateRoundTripTime / 2;
+
+  return Math.round(offset + approximateRequestTime);
+}
+
+async function setServerTimeOffset(options) {
+  const startMilliseconds = Date.now();
+  const serverTime = await request(time.getServerTime(options));
+  const endMilliseconds = Date.now();
+  const serverMilliseconds = parseISO(serverTime).getTime();
+
+  serverTimeOffsetMilliseconds = calculateServerTimeOffset(
+    serverMilliseconds,
+    startMilliseconds,
+    endMilliseconds
+  );
+}
+
+export { request, setServerTimeOffset };

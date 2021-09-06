@@ -22,22 +22,23 @@ ftx trade [options]  Place order(s).
 
 ```
 Required:
-  -m, --market <market>      Market name.
-  --side <side>              Order side.
-  -t, --type <type>          Order type.
-  -s, --size <size>          Size to execute (spot: base currency; futures: underlying).
+  -m, --market <market>               Market name.
+      --side <side>                   Order side.
+  -t, --type <type>                   Order type.
+  -s, --size <size>                   Size to execute.
 
-Order-type-specific:
-  -p, --price <price>        Price that limit orders will be executed at.
-  --trigger-price <price>    Price that triggers stop or take profit orders.
-  --trail-value <value>      Distance the price must change direction and move in order to trigger trailing stop orders.
-  --split <count>            Splits the order into a number of smaller, equal-sized orders.
-  --duration <duration>      Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
-  --[no-]reduce-only         Toggle Reduce-Only mode. When enabled, orders will only reduce your position.
-  --[no-]ioc                 Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker.
-  --[no-]post-only           Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker.
-  --[no-]retry               Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled.
-  --rate-limit <rate limit>  Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
+Optional/order-type-specific:
+      --size-currency (base | quote)  Source currency for calculating size [default: base].
+  -p, --price <price>                 Price that limit orders will be executed at.
+      --trigger-price <price>         Price that triggers stop or take profit orders.
+      --trail-value <value>           Distance the price must change direction and move in order to trigger trailing stop orders.
+      --split <count>                 Splits the order into a number of smaller, equal-sized orders.
+      --duration <duration>           Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
+      --[no-]reduce-only              Toggle Reduce-Only mode. When enabled, orders will only reduce your position.
+      --[no-]ioc                      Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker.
+      --[no-]post-only                Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker.
+      --[no-]retry                    Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled.
+      --rate-limit <rate limit>       Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
 ```
 
 > ℹ️ FTX CLI allows you to place new advanced order types. [Learn more](./advanced-orders.md).
@@ -312,7 +313,7 @@ ftx cancel [options]  Cancel order(s).
 
 Optional.
 
-Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the `spot` and `futures` commands.
+Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
 
 Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 

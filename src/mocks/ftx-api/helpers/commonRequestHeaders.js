@@ -14,14 +14,21 @@ function isValidSignature(signature) {
   return typeof signature === 'string';
 }
 
-const COMMON_REQUEST_HEADERS = {
+const commonPublicRequestHeaders = {
   'user-agent': isValidUserAgent,
   accept: 'application/json',
   'content-type': 'application/json',
   'x-requested-with': 'XMLHttpRequest',
-  'ftx-ts': isValidTimestamp,
-  'ftx-sign': isValidSignature,
   'accept-encoding': 'gzip, deflate, br',
+};
+
+const COMMON_REQUEST_HEADERS = {
+  public: commonPublicRequestHeaders,
+  authenticated: {
+    ...commonPublicRequestHeaders,
+    'ftx-ts': isValidTimestamp,
+    'ftx-sign': isValidSignature,
+  },
 };
 
 export { COMMON_REQUEST_HEADERS };

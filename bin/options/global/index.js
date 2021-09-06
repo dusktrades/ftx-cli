@@ -8,6 +8,7 @@ import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { RETRY } from './retry/index.js';
 import { SCHEDULE } from './schedule/index.js';
+import { SIZE_CURRENCY } from './size-currency/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
 import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
@@ -22,6 +23,7 @@ const GLOBAL = [
   SUBACCOUNT,
 
   // Behaviour.
+  SIZE_CURRENCY,
   SCHEDULE,
 
   // UI.
