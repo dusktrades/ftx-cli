@@ -1,20 +1,35 @@
-import { parseNumber, parseNumberRange } from '../../helpers/index.js';
+import {
+  parseNumber,
+  parseNumberRange,
+  parseRelativeNumber,
+} from '../../helpers/index.js';
+
+const errorMessage =
+  'Price must be one of: number greater than zero, range of numbers greater than zero, non-zero additive relative number, non-zero additive relative percentage.';
 
 function getType(price) {
+  if (['%', '+', '-'].some((character) => price.includes(character))) {
+    return 'relative';
+  }
+
   return price.includes(':') ? 'range' : 'number';
 }
 
-function parseValue(type, price) {
-  const parser = type === 'range' ? parseNumberRange : parseNumber;
+function getNumberParser(type) {
+  return type === 'range' ? parseNumberRange : parseNumber;
+}
 
-  return parser(
-    price,
-    'Price must be a number, or range of numbers (format: X:Y), greater than zero.',
-    {
-      allowNegative: false,
-      allowZero: false,
-    }
-  );
+function parseValue(type, price) {
+  if (type === 'relative') {
+    return parseRelativeNumber(price, errorMessage, 'additive');
+  }
+
+  const numberParser = getNumberParser(type);
+
+  return numberParser(price, errorMessage, {
+    allowNegative: false,
+    allowZero: false,
+  });
 }
 
 function parse(price) {

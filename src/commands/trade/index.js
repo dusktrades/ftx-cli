@@ -15,6 +15,7 @@ async function run(options) {
     size: options.command.size,
     sizeCurrency: options.global.sizeCurrency,
     price: options.command.price,
+    priceHook: options.global.priceHook,
     triggerPrice: options.command.triggerPrice,
     trailValue: options.command.trailValue,
     splitCount: options.command.split,

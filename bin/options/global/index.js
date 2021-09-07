@@ -4,6 +4,7 @@ import { COLOUR } from './colour/index.js';
 import { EXCHANGE } from './exchange/index.js';
 import { IOC } from './ioc/index.js';
 import { POST_ONLY } from './post-only/index.js';
+import { PRICE_HOOK } from './price-hook/index.js';
 import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { RETRY } from './retry/index.js';
@@ -24,6 +25,7 @@ const GLOBAL = [
 
   // Behaviour.
   SIZE_CURRENCY,
+  PRICE_HOOK,
   SCHEDULE,
 
   // UI.

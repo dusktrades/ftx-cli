@@ -1,5 +1,15 @@
+import BigNumber from 'bignumber.js';
+
 import { ApiError, Logger } from '../../../../../../common/index.js';
+import { markets } from '../../../../endpoints/index.js';
 import { requiresOption } from '../../../../structures/orderTypes.js';
+
+const marketDataKeyByHookName = {
+  mark: 'price',
+  last: 'last',
+  bid: 'bid',
+  ask: 'ask',
+};
 
 /**
  * User hasn't provided a price but the provided order type requires it; we
@@ -14,6 +24,27 @@ function handleMissingPrice() {
   throw new ApiError(errorMessage);
 }
 
+async function calculateNamedHookRelativePrice(
+  exchange,
+  { price, priceHook, market }
+) {
+  const data = await markets.getSingleMarket({
+    exchange,
+    pathParameters: { market },
+  });
+
+  const key = marketDataKeyByHookName[priceHook.value];
+  const priceHookPrice = new BigNumber(data[key]);
+
+  return price.value(priceHookPrice);
+}
+
+async function calculateRelativePrice(exchange, data) {
+  return data.priceHook.type === 'named'
+    ? calculateNamedHookRelativePrice(exchange, data)
+    : data.price.value(data.priceHook.value);
+}
+
 function calculateOffset(priceStep, orderIndex) {
   return priceStep.multipliedBy(orderIndex);
 }
@@ -24,19 +55,35 @@ function calculateSteppedPrice(price, priceStep, orderIndex) {
   return price.value.from.plus(offset);
 }
 
-function calculatePrice({ price, type }, priceStep, orderIndex) {
+async function calculatePriceByType(exchange, data, priceStep, orderIndex) {
+  switch (data.price.type) {
+    case 'relative':
+      return calculateRelativePrice(exchange, data);
+    case 'range':
+      return calculateSteppedPrice(data.price, priceStep, orderIndex);
+    default:
+      return data.price.value;
+  }
+}
+
+async function calculatePrice(exchange, data, priceStep, orderIndex) {
   // If the order type doesn't require price, we shouldn't send price.
-  if (!requiresOption(type, 'price')) {
+  if (!requiresOption(data.type, 'price')) {
     return null;
   }
 
-  if (price == null) {
+  if (data.price == null) {
     handleMissingPrice();
   }
 
-  return price.type === 'range'
-    ? calculateSteppedPrice(price, priceStep, orderIndex).toNumber()
-    : price.value.toNumber();
+  const price = await calculatePriceByType(
+    exchange,
+    data,
+    priceStep,
+    orderIndex
+  );
+
+  return price.toNumber();
 }
 
 export { calculatePrice };

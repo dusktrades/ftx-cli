@@ -8,6 +8,7 @@ const defaults = {
   exchange: 'ftx',
   subaccount: 'main',
   sizeCurrency: 'base',
+  priceHook: { type: 'named', value: 'mark' },
 
   colour: true,
   updateNotifications: true,

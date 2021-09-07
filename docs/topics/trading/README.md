@@ -22,28 +22,29 @@ ftx trade [options]  Place order(s).
 
 ```
 Required:
-  -m, --market <market>               Market name.
-      --side <side>                   Order side.
-  -t, --type <type>                   Order type.
-  -s, --size <size>                   Size to execute.
+  -m, --market <market>                                     Market name.
+      --side <side>                                         Order side.
+  -t, --type <type>                                         Order type.
+  -s, --size <size>                                         Size to execute.
 
 Optional/order-type-specific:
-      --size-currency (base | quote)  Source currency for calculating size [default: base].
-  -p, --price <price>                 Price that limit orders will be executed at.
-      --trigger-price <price>         Price that triggers stop or take profit orders.
-      --trail-value <value>           Distance the price must change direction and move in order to trigger trailing stop orders.
-      --split <count>                 Splits the order into a number of smaller, equal-sized orders.
-      --duration <duration>           Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
-      --[no-]reduce-only              Toggle Reduce-Only mode. When enabled, orders will only reduce your position.
-      --[no-]ioc                      Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker.
-      --[no-]post-only                Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker.
-      --[no-]retry                    Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled.
-      --rate-limit <rate limit>       Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
+      --size-currency (base | quote)                        Source currency for calculating size [default: base].
+  -p, --price (<price> | <price range> | <relative price>)  Price that limit orders will be executed at.
+      --price-hook (<price> | <name>)                       Source price for calculating price if price is relative [default: mark].
+      --trigger-price <price>                               Price that triggers stop and take profit orders.
+      --trail-value <value>                                 Distance the price must change direction and move in order to trigger trailing stop orders.
+      --split <count>                                       Splits the order into a number of smaller, equal-sized orders.
+      --duration <duration>                                 Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
+      --[no-]reduce-only                                    Toggle Reduce-Only mode. When enabled, orders will only reduce your position.
+      --[no-]ioc                                            Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker.
+      --[no-]post-only                                      Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker.
+      --[no-]retry                                          Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled.
+      --rate-limit <rate limit>                             Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
 ```
 
 > ℹ️ FTX CLI allows you to place new advanced order types. [Learn more](./advanced-orders.md).
 >
-> ℹ️ You can save your order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
+> ℹ️ You can save your order behaviour (size currency, price hook), order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
 
 ---
 
