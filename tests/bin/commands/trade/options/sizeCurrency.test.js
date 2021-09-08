@@ -10,7 +10,7 @@ describe('[OPTION] Size currency', () => {
       test(`SUCCEEDS: --size-currency ${argumentChoice}`, async () => {
         const options = `${baseOptions} --size-currency ${argumentChoice}`;
 
-        return expectToPlaceOrders(options, 1);
+        await expectToPlaceOrders(options, 1);
       });
     }
   });

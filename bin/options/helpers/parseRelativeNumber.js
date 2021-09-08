@@ -16,7 +16,7 @@ function parseIsPercentage(percentage) {
 }
 
 function parseAdditiveParts(relativeNumber, errorMessage) {
-  const parts = relativeNumber.match(/^([+-])([^%]*)(%)?$/);
+  const parts = relativeNumber.match(/^([+-])([^%]+)(%)?$/);
 
   if (parts == null) {
     throw new InvalidOptionArgumentError(errorMessage);
@@ -45,7 +45,7 @@ function parseAdditiveRelativeNumber(relativeNumber, errorMessage) {
 }
 
 function parseMultiplicativeParts(relativeNumber, errorMessage) {
-  const parts = relativeNumber.match(/^([^%]*)(%)$/);
+  const parts = relativeNumber.match(/^([^%]+)(%)$/);
 
   if (parts == null) {
     throw new InvalidOptionArgumentError(errorMessage);

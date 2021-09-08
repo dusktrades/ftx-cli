@@ -1,11 +1,13 @@
 import { parseNumber } from '../../helpers/index.js';
 
 const namedHooks = [
-  { name: 'mark', choices: new Set(['mark', 'm']) },
-  { name: 'last', choices: new Set(['last', 'l']) },
-  { name: 'bid', choices: new Set(['bid', 'b']) },
-  { name: 'ask', choices: new Set(['ask', 'a']) },
+  { name: 'mark', choices: ['mark', 'm'] },
+  { name: 'last', choices: ['last', 'l'] },
+  { name: 'bid', choices: ['bid', 'b'] },
+  { name: 'ask', choices: ['ask', 'a'] },
 ];
+
+const NAMED_HOOK_CHOICES = namedHooks.flatMap(({ choices }) => choices);
 
 function parsePrice(price) {
   return parseNumber(
@@ -17,7 +19,7 @@ function parsePrice(price) {
 
 function parse(priceHook) {
   for (const { name, choices } of namedHooks) {
-    if (choices.has(priceHook)) {
+    if (choices.includes(priceHook)) {
       return { type: 'named', value: name };
     }
   }
@@ -34,4 +36,4 @@ const PRICE_HOOK = {
   isConfigurable: true,
 };
 
-export { PRICE_HOOK };
+export { PRICE_HOOK, NAMED_HOOK_CHOICES };
