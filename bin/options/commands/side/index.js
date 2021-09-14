@@ -1,17 +1,17 @@
 import { parseChoice } from '../../helpers/index.js';
 
-const SIDES = [
-  { parsed: 'buy', options: ['b', 'buy'] },
-  { parsed: 'sell', options: ['s', 'sell'] },
+const sides = [
+  { parsed: 'buy', options: ['buy', 'b'] },
+  { parsed: 'sell', options: ['sell', 's'] },
 ];
 
-const ALLOWED_OPTIONS = SIDES.flatMap((entry) => entry.options);
+const CHOICES = sides.flatMap((entry) => entry.options);
 
 function parse(side) {
   return parseChoice(
     side,
-    SIDES,
-    `Side must be one of: ${ALLOWED_OPTIONS.join(', ')}.`
+    sides,
+    `Side must be one of: ${CHOICES.join(', ')}.`
   );
 }
 
@@ -21,4 +21,4 @@ const SIDE = {
   PARSER: parse,
 };
 
-export { SIDE };
+export { SIDE, CHOICES };

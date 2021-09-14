@@ -1,39 +1,39 @@
 import { parseNumber } from '../../helpers/index.js';
 
-const namedHooks = [
-  { name: 'mark', choices: ['mark', 'm'] },
+const dynamicHooks = [
+  { name: 'market', choices: ['market', 'm'] },
   { name: 'last', choices: ['last', 'l'] },
   { name: 'bid', choices: ['bid', 'b'] },
   { name: 'ask', choices: ['ask', 'a'] },
 ];
 
-const NAMED_HOOK_CHOICES = namedHooks.flatMap(({ choices }) => choices);
+const DYNAMIC_HOOK_CHOICES = dynamicHooks.flatMap(({ choices }) => choices);
 
-function parsePrice(price) {
+function parseStatic(price) {
   return parseNumber(
     price,
-    'Price hook must be a number greater than or equal to zero or one of: mark, m, last, l, bid, b, ask, a.',
-    { allowNegative: false }
+    'Price hook must be a number greater than zero or one of: market, m, last, l, bid, b, ask, a.',
+    { allowNegative: false, allowZero: false }
   );
 }
 
 function parse(priceHook) {
-  for (const { name, choices } of namedHooks) {
+  for (const { name, choices } of dynamicHooks) {
     if (choices.includes(priceHook)) {
-      return { type: 'named', value: name };
+      return { type: 'dynamic', value: name };
     }
   }
 
-  return { type: 'price', value: parsePrice(priceHook) };
+  return { type: 'static', value: parseStatic(priceHook) };
 }
 
 const PRICE_HOOK = {
   name: 'priceHook',
   FLAGS: '--price-hook <hook>',
   DESCRIPTION:
-    'Source price for calculating price if price is relative [default: mark]',
+    'Source price for calculating price if price is relative [default: market].',
   PARSER: parse,
   isConfigurable: true,
 };
 
-export { PRICE_HOOK, NAMED_HOOK_CHOICES };
+export { PRICE_HOOK, DYNAMIC_HOOK_CHOICES };

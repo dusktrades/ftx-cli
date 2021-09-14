@@ -1,22 +1,53 @@
+import { markets } from '../../../../endpoints/index.js';
+import { isTrigger } from '../../../../structures/orderTypes.js';
 import { composeBasicOrderRequest } from './composeBasicOrderRequest.js';
 import { composeTriggerOrderRequest } from './composeTriggerOrderRequest.js';
 
-const triggerOrderTypes = new Set([
-  'stop-market',
-  'stop-limit',
-  'trailing-stop',
-  'take-profit-market',
-  'take-profit-limit',
-]);
-
-function isTriggerOrder(type) {
-  return triggerOrderTypes.has(type);
+function isDynamic(value) {
+  return value instanceof Function;
 }
 
-function composeIndividualOrderRequest(exchange, credentials, data) {
-  return isTriggerOrder(data.type)
-    ? composeTriggerOrderRequest(exchange, credentials, data)
-    : composeBasicOrderRequest(exchange, credentials, data);
+// Recalculate price if dynamic.
+async function recalculatePrice({ price, orderIndex }) {
+  return isDynamic(price) ? price(orderIndex) : price;
+}
+
+// Recalculate size if dynamic.
+async function recalculateSize(size, price) {
+  return isDynamic(size) ? size(price) : size;
+}
+
+async function composeIndividualOrderRequest(exchange, credentials, data) {
+  /**
+   * We fetch the market data here, after any delays, so that we can calculate
+   * any dynamic order parameters without redundant fetches.
+   */
+  const marketData = await markets.getSingleMarket({
+    exchange,
+    pathParameters: { market: data.market },
+  });
+
+  const recalculatedPrice = await recalculatePrice(data);
+
+  const recalculatedData = {
+    ...data,
+    price: recalculatedPrice,
+    size: await recalculateSize(data.size, recalculatedPrice),
+  };
+
+  return isTrigger(data.type)
+    ? composeTriggerOrderRequest(
+        exchange,
+        credentials,
+        recalculatedData,
+        marketData
+      )
+    : composeBasicOrderRequest(
+        exchange,
+        credentials,
+        recalculatedData,
+        marketData
+      );
 }
 
 export { composeIndividualOrderRequest };

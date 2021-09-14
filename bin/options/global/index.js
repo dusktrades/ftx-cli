@@ -10,6 +10,7 @@ import { REDUCE_ONLY } from './reduce-only/index.js';
 import { RETRY } from './retry/index.js';
 import { SCHEDULE } from './schedule/index.js';
 import { SIZE_CURRENCY } from './size-currency/index.js';
+import { SIZE_HOOK } from './size-hook/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
 import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
@@ -25,6 +26,7 @@ const GLOBAL = [
 
   // Behaviour.
   SIZE_CURRENCY,
+  SIZE_HOOK,
   PRICE_HOOK,
   SCHEDULE,
 

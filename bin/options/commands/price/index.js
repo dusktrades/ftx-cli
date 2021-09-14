@@ -5,7 +5,7 @@ import {
 } from '../../helpers/index.js';
 
 const errorMessage =
-  'Price must be one of: number greater than zero, range of numbers greater than zero, non-zero additive relative number, non-zero additive relative percentage.';
+  'Price must be one of: number greater than zero, range of numbers greater than zero, non-zero relative number, non-zero relative percentage.';
 
 function getType(price) {
   if (['%', '+', '-'].some((character) => price.includes(character))) {

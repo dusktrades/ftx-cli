@@ -6,6 +6,7 @@ import { CONFIG } from '../../config/index.js';
 const commandOptions = [
   'exchange',
   'sizeCurrency',
+  'sizeHook',
   'priceHook',
   'colour',
   'updateNotifications',

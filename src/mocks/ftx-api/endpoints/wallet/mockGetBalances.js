@@ -43,12 +43,22 @@ const testCases = [
   {
     additionalRequestHeaders: {
       'ftx-key': 'key',
-      'ftx-subaccount': 'invalid-subaccount',
+      'ftx-subaccount': 'invalid',
     },
     statusCode: 500,
     response: {
       success: false,
       error: 'No such subaccount',
+    },
+  },
+
+  // Catch-all success.
+  {
+    additionalRequestHeaders: { 'ftx-key': 'key' },
+    statusCode: 200,
+    response: {
+      success: true,
+      result: ['BTC', 'USD'].map((currency) => composeBalanceEntry(currency)),
     },
   },
 ];

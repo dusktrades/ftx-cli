@@ -1,4 +1,4 @@
-import { MOCK_INVALID_MARKET } from './mockInvalidMarket.js';
+import { MOCK_INVALID_MARKET } from '../../../helpers/index.js';
 
 function isValidMarket(market) {
   return market !== MOCK_INVALID_MARKET;

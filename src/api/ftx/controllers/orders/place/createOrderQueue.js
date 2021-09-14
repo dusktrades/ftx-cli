@@ -8,12 +8,14 @@ function handleRequestSuccess() {
 
 function handleRequestError(error, retry) {
   if (error instanceof RateLimitError) {
-    // Order failed due to exceeding rate limit; retry with increased priority.
+    // Order failed due to exceeding rate limit: retry with increased priority.
     return retry();
   }
 
-  // Order failed due to some other reason; log and rethrow.
-  Logger.error(`  Failed order: ${error.message}`);
+  // Order failed due to some other reason: notify and rethrow.
+  Logger.error(
+    `  Failed individual order: ${error?.message ?? 'Unhandled error'}`
+  );
 
   throw error;
 }

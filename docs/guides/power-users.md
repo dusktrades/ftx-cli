@@ -5,11 +5,7 @@ The following examples target Unix-like, macOS, WSL, etc. operating systems.
 ## Contents
 
 - [Number shorthands](#number-shorthands)
-  - [Usage](#usage)
-  - [Examples](#examples)
 - [Aliases](#aliases)
-  - [Usage](#usage-1)
-  - [Examples](#examples-1)
 
 ![Divider](../images/divider.png)
 
@@ -69,7 +65,7 @@ unalias YOUR_ALIAS
 
 #### Permanent alias
 
-These can be used in any shell session and managed in, or referenced from, your shell configuration file (e.g. `~/.bashrc`).
+These can be used in any shell session and are managed in, or referenced from, your shell configuration file (e.g. `~/.bashrc`).
 
 ```sh
 # ~/.ftx-cli-aliases

@@ -1,3 +1,4 @@
+export { account } from './account/index.js';
 export { futures } from './futures/index.js';
 export { markets } from './markets/index.js';
 export { orders } from './orders/index.js';

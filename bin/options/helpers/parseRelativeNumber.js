@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { InvalidOptionArgumentError } from 'commander';
 
 import { parseNumber } from './parseNumber.js';
@@ -62,10 +61,14 @@ function parseMultiplicativeParts(relativeNumber, errorMessage) {
 function parseMultiplicativeRelativeNumber(relativeNumber, errorMessage) {
   const { number } = parseMultiplicativeParts(relativeNumber, errorMessage);
 
-  return (hook) => new BigNumber(hook).multipliedBy(number.dividedBy(100));
+  return (hook) => hook.multipliedBy(number.dividedBy(100));
 }
 
 function parseRelativeNumber(relativeNumber, errorMessage, type) {
+  /**
+   * TODO: Parse all relative numbers to 'percentage' (X%), 'increase/decrease'
+   * (±X), and 'percentage increase/decrease' (±X%).
+   */
   return type === 'additive'
     ? parseAdditiveRelativeNumber(relativeNumber, errorMessage)
     : parseMultiplicativeRelativeNumber(relativeNumber, errorMessage);

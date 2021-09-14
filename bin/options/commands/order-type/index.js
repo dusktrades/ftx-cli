@@ -1,22 +1,22 @@
 import { parseChoice } from '../../helpers/index.js';
 
-const ORDER_TYPES = [
-  { parsed: 'market', options: ['m', 'market'] },
-  { parsed: 'limit', options: ['l', 'limit'] },
-  { parsed: 'stop-market', options: ['sm', 'stop-market'] },
-  { parsed: 'stop-limit', options: ['sl', 'stop-limit'] },
-  { parsed: 'trailing-stop', options: ['ts', 'trailing-stop'] },
-  { parsed: 'take-profit-market', options: ['tpm', 'take-profit-market'] },
-  { parsed: 'take-profit-limit', options: ['tpl', 'take-profit-limit'] },
+const types = [
+  { parsed: 'market', options: ['market', 'm'] },
+  { parsed: 'limit', options: ['limit', 'l'] },
+  { parsed: 'stop-market', options: ['stop-market', 'sm'] },
+  { parsed: 'stop-limit', options: ['stop-limit', 'sl'] },
+  { parsed: 'trailing-stop', options: ['trailing-stop', 'ts'] },
+  { parsed: 'take-profit-market', options: ['take-profit-market', 'tpm'] },
+  { parsed: 'take-profit-limit', options: ['take-profit-limit', 'tpl'] },
 ];
 
-const ALLOWED_OPTIONS = ORDER_TYPES.flatMap((entry) => entry.options);
+const CHOICES = types.flatMap((entry) => entry.options);
 
-function parse(orderType) {
+function parse(type) {
   return parseChoice(
-    orderType,
-    ORDER_TYPES,
-    `Order type must be one of: ${ALLOWED_OPTIONS.join(', ')}.`
+    type,
+    types,
+    `Order type must be one of: ${CHOICES.join(', ')}.`
   );
 }
 
@@ -26,4 +26,4 @@ const ORDER_TYPE = {
   PARSER: parse,
 };
 
-export { ORDER_TYPE };
+export { ORDER_TYPE, CHOICES };

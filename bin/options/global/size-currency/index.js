@@ -1,16 +1,17 @@
-import { InvalidOptionArgumentError } from 'commander';
+import { parseChoice } from '../../helpers/index.js';
+
+const sizeCurrencies = [
+  { parsed: 'base', options: ['base', 'b'] },
+  { parsed: 'quote', options: ['quote', 'q'] },
+];
+
+const CHOICES = sizeCurrencies.flatMap((entry) => entry.options);
 
 function parse(sizeCurrency) {
-  if (['base', 'b'].includes(sizeCurrency)) {
-    return 'base';
-  }
-
-  if (['quote', 'q'].includes(sizeCurrency)) {
-    return 'quote';
-  }
-
-  throw new InvalidOptionArgumentError(
-    'Size currency must be one of: base, b, quote, q.'
+  return parseChoice(
+    sizeCurrency,
+    sizeCurrencies,
+    `Size currency must be one of: ${CHOICES.join(', ')}.`
   );
 }
 
@@ -22,4 +23,4 @@ const SIZE_CURRENCY = {
   isConfigurable: true,
 };
 
-export { SIZE_CURRENCY };
+export { SIZE_CURRENCY, CHOICES };

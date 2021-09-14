@@ -18,9 +18,11 @@
   - [Save API credentials](#save-api-credentials)
   - [Secure API credentials](#secure-api-credentials)
 - [Usage](#usage)
+  - [Remarks](#remarks)
   - [Global options](#global-options)
   - [Topics](#topics)
   - [Guides](#guides)
+  - [Tips](#tips)
 - [FAQ](#faq)
 - [Support the project](#support-the-project)
   - [Contribute](#contribute)
@@ -61,7 +63,7 @@ If you are running Node.js v14.13.0 or later, run the following command to insta
 npm install -g ftx-cli
 ```
 
-If you are running an older version of Node.js, or don't have it installed, please follow the instructions for your operating system.
+If you are running an older version of Node.js and aren't sure how to update, or don't have it installed, please follow the instructions for your operating system below.
 
 Once you have installed FTX CLI, run the following command to verify:
 
@@ -140,6 +142,11 @@ Here are some best practices for keeping your API credentials secure:
 
 ## Usage
 
+### Remarks
+
+- You don't need to learn all of the commands and options immediately: start by running some of the simple examples and build your way up
+- Most documented examples are fully expanded to aid understanding: there are many features to make things quicker and easier once you are comfortable
+
 ### Global options
 
 You can include these options with any command to modify its behaviour.
@@ -150,15 +157,13 @@ You can include these options with any command to modify its behaviour.
 -e, --exchange (ftx | ftx-us)           FTX exchange platform [default: ftx].
 -k, --key <key>                         FTX API key.
 -x, --secret <secret>                   FTX API secret.
--a, --subaccount (<subaccount> | main)  FTX subaccount name [default: main].
+-a, --subaccount (main | <subaccount>)  FTX subaccount name [default: main].
     --schedule <schedule>               Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
     --[no-]colour                       Toggle coloured output [default: enabled].
     --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].
 ```
 
-> ℹ️ Inline options take priority over saved credentials (via [`login`](./docs/topics/accounts/README.md#login)) and configuration (via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
->
-> ℹ️ [Learn more about scheduled commands](./docs/guides/scheduled-commands.md).
+> ℹ️ Inline options take priority over saved credentials (saved via [`login`](./docs/topics/accounts/README.md#login)) and configuration (saved via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.
 
 ### Topics
 
@@ -183,12 +188,16 @@ Visit the documentation for a topic to learn more about related commands:
   - [🔐 `lend`](./docs/topics/lending/README.md#-lend)
   - [🔐 `stop`](./docs/topics/lending/README.md#-stop)
 
-> ℹ️ You can utilise subaccounts to isolate margin and manage risk.
+🔐: authentication required
 
 ### Guides
 
-- [Power users](./docs/guides/power-users.md): features aimed at increasing efficiency.
-- [Scheduled commands](./docs/guides/scheduled-commands.md): for when now is not the time.
+- [Power users](./docs/guides/power-users.md): features aimed at increasing efficiency
+- [Scheduled commands](./docs/guides/scheduled-commands.md): for when now is not the time
+
+### Tips
+
+- You can utilise subaccounts to isolate margin, manage risk, and restrict FTX CLI's access
 
 ![Divider](docs/images/divider.png)
 
@@ -200,7 +209,7 @@ Visit the documentation for a topic to learn more about related commands:
 
 ### Why did I get rate-limited?
 
-It is possible to hit the [rate limits set out by FTX](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX) if you attempt to execute large amounts of commands in a short period of time. Slow down!
+It is possible to hit [FTX's rate limits](https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX) if you attempt to execute large amounts of commands in a short period of time. Slow down!
 
 ### What's the screenshot setup?
 

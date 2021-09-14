@@ -7,8 +7,10 @@ import { PACKAGE } from './package.js';
 const defaults = {
   exchange: 'ftx',
   subaccount: 'main',
+
   sizeCurrency: 'base',
-  priceHook: { type: 'named', value: 'mark' },
+  sizeHook: { type: 'dynamic', value: 'default' },
+  priceHook: { type: 'dynamic', value: 'market' },
 
   colour: true,
   updateNotifications: true,

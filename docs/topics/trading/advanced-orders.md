@@ -155,13 +155,3 @@ ftx trade --market ftt/usdt --side buy --type market --size 100 --schedule daily
 # Limit buy 10,000 USDT-0924 at $0.995 every Wednesday at 19:45:00 (local timezone) in August.
 ftx trade --market usdt-0924 --side buy --type limit --size 10k --price 0.995 --schedule "45 19 * 8 3"
 ```
-
-![Divider](../../images/divider.png)
-
-## Notes
-
-It is possible for part of an advanced order to be rejected (e.g. connection loss, not enough margin). The current behaviour is to ignore rejected orders and continue, which may result in incomplete orders in some rare cases. We are looking into letting users customise this behaviour (e.g. prompt, ignore, cancel queued orders, cancel queued and placed orders).
-
-The sequence in which orders are placed cannot be guaranteed for split or scaled orders, as FTX CLI favours speed instead (i.e. sending orders in parallel as early as possible). TWAP orders can be used to increase seriality/predictability.
-
-FTX trading fees are charged per volume executed and not per trade executed, so multiple smaller orders will incur the same fees as if they were placed as a single large order.
