@@ -1,6 +1,6 @@
-import { parseNumber } from '../../helpers/index.js';
+import { parseChoice } from '../../helpers/index.js';
 
-const dynamicHooks = [
+const sizeHooks = [
   /**
    * - Spot: available wallet balance (<= total wallet balance)
    *   - Buy: X quote currency (converted to base currency at execution price)
@@ -8,44 +8,31 @@ const dynamicHooks = [
    * - Futures: collateral amount not used by open orders/positions (converted
    *   to underlying currency at market price)
    */
-  { name: 'default', choices: ['default', 'd'] },
+  { parsed: 'default', options: ['default', 'd'] },
 
   /**
    * - Spot: N/A
    * - Futures: absolute net position size in given market
    */
-  { name: 'position', choices: ['position', 'p'] },
+  { parsed: 'position', options: ['position', 'p'] },
 ];
 
-const DYNAMIC_HOOK_CHOICES = dynamicHooks.flatMap(({ choices }) => choices);
-
-function parseStatic(size) {
-  return parseNumber(
-    size,
-    `Size hook must be a number greater than zero or one of: ${DYNAMIC_HOOK_CHOICES.join(
-      ', '
-    )}`,
-    { allowNegative: false, allowZero: false }
-  );
-}
+const CHOICES = sizeHooks.flatMap(({ options }) => options);
 
 function parse(sizeHook) {
-  for (const { name, choices } of dynamicHooks) {
-    if (choices.includes(sizeHook)) {
-      return { type: 'dynamic', value: name };
-    }
-  }
-
-  return { type: 'static', value: parseStatic(sizeHook) };
+  return parseChoice(
+    sizeHook,
+    sizeHooks,
+    `Size hook must be one of: ${CHOICES.join(', ')}.`
+  );
 }
 
 const SIZE_HOOK = {
   name: 'sizeHook',
   FLAGS: '--size-hook <hook>',
-  DESCRIPTION:
-    'Source size for calculating size if size is relative [default: default]',
+  DESCRIPTION: 'Source size for calculating relative size [default: default]',
   PARSER: parse,
   isConfigurable: true,
 };
 
-export { SIZE_HOOK, DYNAMIC_HOOK_CHOICES };
+export { SIZE_HOOK, CHOICES };

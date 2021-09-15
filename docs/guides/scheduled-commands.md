@@ -62,17 +62,17 @@ A scheduled command is a command that is scheduled to run at a future date and t
 
 ```sh
 # Schedule to run on 1 January 2021 at 00:00:00 (local timezone).
-... --schedule 2021-01-01T00:00:00
+ftx <command> [options] --schedule 2021-01-01T00:00:00
 
 # Schedule to run on 18 February 2021 at 18:30:00 (UTC).
-... --schedule 2021-02-18T18:30:00Z
+ftx <command> [options] --schedule 2021-02-18T18:30:00Z
 
 # Schedule to run on 25 December 2021 at 07:46:39 (PST [UTC-08:00]).
-... --schedule 2021-12-25T07:46:39−08:00
+ftx <command> [options] --schedule 2021-12-25T07:46:39−08:00
 
 # Schedule to run every day at 00:00:00 (local timezone).
-... --schedule daily
+ftx <command> [options] --schedule daily
 
 # Schedule to run every Wednesday at 19:45:00 (local timezone) in August.
-... --schedule "45 19 * 8 3"
+ftx <command> [options] --schedule "45 19 * 8 3"
 ```

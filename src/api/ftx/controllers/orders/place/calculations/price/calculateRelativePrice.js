@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
-function getPriceHookKey(priceHookName) {
-  switch (priceHookName) {
+function getPriceHookKey(priceHook) {
+  switch (priceHook) {
     case 'last':
       return 'last';
     case 'bid':
@@ -14,17 +14,11 @@ function getPriceHookKey(priceHookName) {
   }
 }
 
-function calculateDynamicPrice({ price, priceHook }, marketData) {
-  const key = getPriceHookKey(priceHook.value);
+function calculateRelativePrice({ price, priceHook }, marketData) {
+  const key = getPriceHookKey(priceHook);
   const priceHookPrice = new BigNumber(marketData[key]);
 
   return price.value(priceHookPrice);
-}
-
-function calculateRelativePrice(data, marketData) {
-  return data.priceHook.type === 'dynamic'
-    ? calculateDynamicPrice(data, marketData)
-    : data.price.value(data.priceHook.value);
 }
 
 export { calculateRelativePrice };

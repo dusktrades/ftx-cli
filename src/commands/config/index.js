@@ -5,11 +5,11 @@ import { CONFIG } from '../../config/index.js';
 
 const commandOptions = [
   'exchange',
+  'colour',
+  'updateNotifications',
   'sizeCurrency',
   'sizeHook',
   'priceHook',
-  'colour',
-  'updateNotifications',
   'reduceOnly',
   'ioc',
   'postOnly',

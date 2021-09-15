@@ -27,7 +27,7 @@ function getExecutionPrice({ side, type, price }, marketData) {
 function convertExecutionQuoteSizeToBaseSize(orderData, marketData) {
   const executionPrice = getExecutionPrice(orderData, marketData);
 
-  return orderData.size.value.dividedBy(executionPrice);
+  return orderData.size.dividedBy(executionPrice);
 }
 
 export { convertExecutionQuoteSizeToBaseSize };

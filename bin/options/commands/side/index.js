@@ -5,7 +5,7 @@ const sides = [
   { parsed: 'sell', options: ['sell', 's'] },
 ];
 
-const CHOICES = sides.flatMap((entry) => entry.options);
+const CHOICES = sides.flatMap(({ options }) => options);
 
 function parse(side) {
   return parseChoice(

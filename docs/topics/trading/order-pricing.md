@@ -5,8 +5,6 @@
 - [Basic price](#basic-price)
 - [Scaled price](#scaled-price)
 - [Relative price](#relative-price)
-  - [Static hook](#static-hook)
-  - [Dynamic hook](#dynamic-hook)
 - [Resources](#resources)
 
 ![Divider](../../images/divider.png)
@@ -19,16 +17,16 @@ Order(s) will be placed at a single, basic limit price.
 
 ```sh
 # Place order(s) at 0.0001.
-ftx trade [options] --price 0.0001
+ftx trade <options> --price 0.0001
 
 # Place order(s) at 10.
-ftx trade [options] --price 10
+ftx trade <options> --price 10
 
 # Place order(s) at 100,000.
-ftx trade [options] --price 100k
+ftx trade <options> --price 100k
 
 # Place order(s) at 100,100.
-ftx trade [options] --price 100.1k
+ftx trade <options> --price 100.1k
 ```
 
 ![Divider](../../images/divider.png)
@@ -47,53 +45,27 @@ Scaled orders can be used to minimise market impact or obtain a better average p
 
 ```sh
 # Place 3 individual orders from 0.0001 to 0.001.
-ftx trade [options] --price 0.0001:0.001 --split 3
+ftx trade <options> --price 0.0001:0.001 --split 3
 
 # Place 3 individual orders from 10 to 11.
-ftx trade [options] --price 10:11 --split 3
+ftx trade <options> --price 10:11 --split 3
 
 # Place 3 individual orders from 100,000 to 110,000.
-ftx trade [options] --price 100k:110k --split 3
+ftx trade <options> --price 100k:110k --split 3
 
 # Place 3 individual orders from 100,200 to 100,100.
-ftx trade [options] --price 100.2k:100.1k --split 3
+ftx trade <options> --price 100.2k:100.1k --split 3
 ```
 
 ![Divider](../../images/divider.png)
 
 ## Relative price
 
-Order(s) will be placed at a single limit price relative to a hook.
-
 > ⚠️ Relative prices cannot currently be used with price ranges.
 
-### Static hook
+Order(s) will be placed at a single limit price relative to a dynamic price, according to the current market state.
 
-Order(s) will be placed relative to a [basic price](#basic-price).
-
-These can be used with piping to create custom price hooks.
-
-#### Examples
-
-```sh
-# Place order(s) at 10 above 1,000.
-ftx trade [options] --price +10 --price-hook 1k
-
-# Place order(s) at 10 below 1,000.
-ftx trade [options] --price -10 --price-hook 1k
-
-# Place order(s) at 10% above 11,000.
-ftx trade [options] --price +10% --price-hook 11k
-
-# Place order(s) at 10% below 11,000.
-ftx trade [options] --price -10% --price-hook 11k
-```
-
-### Dynamic hook
-
-Order(s) will be placed relative to a dynamic price, according to the current market state.
-
-> ⚠️ Time-based orders (e.g. timed split limit) are not currently supported in an intuitive way: the price hook is only calculated at the beginning of order placement, so subsequent individual order prices will be calculated using stale data.
+Hooks are recalculated before each individual order if the order is timed so that live data does not become stale.
 
 | Choice   | Aliases | Description                    |
 | -------- | ------- | ------------------------------ |
@@ -102,20 +74,20 @@ Order(s) will be placed relative to a dynamic price, according to the current ma
 | `bid`    | `b`     | Market's current bid price.    |
 | `ask`    | `a`     | Market's current ask price.    |
 
-#### Examples
+### Examples
 
 ```sh
 # Place order(s) at 10 above the current market price.
-ftx trade [options] --price +10 --price-hook market
+ftx trade <options> --price +10 --price-hook market
 
 # Place order(s) at 10 below the current last price.
-ftx trade [options] --price -10 --price-hook last
+ftx trade <options> --price -10 --price-hook last
 
 # Place order(s) at 10% above the current bid price.
-ftx trade [options] --price +10% --price-hook bid
+ftx trade <options> --price +10% --price-hook bid
 
 # Place order(s) at 10% below the current ask price.
-ftx trade [options] --price -10% --price-hook ask
+ftx trade <options> --price -10% --price-hook ask
 ```
 
 ![Divider](../../images/divider.png)

@@ -8,13 +8,12 @@ const defaults = {
   exchange: 'ftx',
   subaccount: 'main',
 
-  sizeCurrency: 'base',
-  sizeHook: { type: 'dynamic', value: 'default' },
-  priceHook: { type: 'dynamic', value: 'market' },
-
   colour: true,
   updateNotifications: true,
 
+  sizeCurrency: 'base',
+  sizeHook: 'default',
+  priceHook: 'market',
   reduceOnly: false,
   ioc: false,
   postOnly: true,

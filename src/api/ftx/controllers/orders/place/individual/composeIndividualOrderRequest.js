@@ -3,51 +3,43 @@ import { isTrigger } from '../../../../structures/orderTypes.js';
 import { composeBasicOrderRequest } from './composeBasicOrderRequest.js';
 import { composeTriggerOrderRequest } from './composeTriggerOrderRequest.js';
 
-function isDynamic(value) {
-  return value instanceof Function;
+/**
+ * If the order has duration then we need to refetch market data before
+ * composing each individual request to stop the data used in calculations from
+ * becoming stale.
+ */
+async function composeCurrentMarketData(
+  exchange,
+  { market, duration },
+  initialMarketData
+) {
+  return duration == null
+    ? initialMarketData
+    : markets.getSingleMarket({
+        exchange,
+        pathParameters: { market },
+      });
 }
 
-// Recalculate price if dynamic.
-async function recalculatePrice({ price, orderIndex }) {
-  return isDynamic(price) ? price(orderIndex) : price;
-}
-
-// Recalculate size if dynamic.
-async function recalculateSize(size, price) {
-  return isDynamic(size) ? size(price) : size;
-}
-
-async function composeIndividualOrderRequest(exchange, credentials, data) {
-  /**
-   * We fetch the market data here, after any delays, so that we can calculate
-   * any dynamic order parameters without redundant fetches.
-   */
-  const marketData = await markets.getSingleMarket({
+async function composeIndividualOrderRequest(
+  exchange,
+  credentials,
+  data,
+  initialMarketData
+) {
+  const currentMarketData = await composeCurrentMarketData(
     exchange,
-    pathParameters: { market: data.market },
-  });
+    data,
+    initialMarketData
+  );
 
-  const recalculatedPrice = await recalculatePrice(data);
-
-  const recalculatedData = {
-    ...data,
-    price: recalculatedPrice,
-    size: await recalculateSize(data.size, recalculatedPrice),
-  };
+  const price = await data.calculateIndividualPrice(currentMarketData);
+  const size = await data.calculateIndividualSize(currentMarketData, price);
+  const staticData = { ...data, price, size };
 
   return isTrigger(data.type)
-    ? composeTriggerOrderRequest(
-        exchange,
-        credentials,
-        recalculatedData,
-        marketData
-      )
-    : composeBasicOrderRequest(
-        exchange,
-        credentials,
-        recalculatedData,
-        marketData
-      );
+    ? composeTriggerOrderRequest(exchange, credentials, staticData)
+    : composeBasicOrderRequest(exchange, credentials, staticData);
 }
 
 export { composeIndividualOrderRequest };

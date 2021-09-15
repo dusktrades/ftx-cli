@@ -3,5 +3,6 @@ export { calculateIntervalMilliseconds } from './calculateIntervalMilliseconds.j
 export { calculatePriceStep } from './calculatePriceStep.js';
 export { calculateRelativePrice } from './price/calculateRelativePrice.js';
 export { calculateSteppedPrice } from './price/calculateSteppedPrice.js';
-export { calculateRelativeSize } from './size/calculateRelativeSize.js';
+export { calculateIndividualRelativeSize } from './size/calculateIndividualRelativeSize.js';
+export { calculateTotalRelativeSize } from './size/calculateTotalRelativeSize.js';
 export { convertExecutionQuoteSizeToBaseSize } from './size/convertExecutionQuoteSizeToBaseSize.js';

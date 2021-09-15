@@ -7,7 +7,7 @@ function hasPosition(position) {
   return Boolean(position?.size > 0);
 }
 
-async function calculatePositionSize(exchange, credentials, market) {
+async function fetchPositionSize(exchange, credentials, market) {
   const positions = await account.getPositions({ exchange, credentials });
   const position = positions.find(({ future }) => future === market);
 
@@ -22,11 +22,7 @@ function hasAvailableCollateral(availableCollateral) {
   return availableCollateral > 0;
 }
 
-async function calculateCollateralInUnderlying(
-  exchange,
-  credentials,
-  marketPrice
-) {
+async function fetchAvailableCollateral(exchange, credentials) {
   const { freeCollateral } = await account.getAccountInformation({
     exchange,
     credentials,
@@ -36,24 +32,19 @@ async function calculateCollateralInUnderlying(
     throw new ApiError('No available collateral found');
   }
 
-  return new BigNumber(freeCollateral).dividedBy(marketPrice);
+  return new BigNumber(freeCollateral);
 }
 
-async function calculateHook(exchange, credentials, data, marketPrice) {
-  return data.sizeHook.value === 'position'
-    ? calculatePositionSize(exchange, credentials, data.market)
-    : calculateCollateralInUnderlying(exchange, credentials, marketPrice);
+async function fetchHook(exchange, credentials, data) {
+  return data.sizeHook === 'position'
+    ? fetchPositionSize(exchange, credentials, data.market)
+    : fetchAvailableCollateral(exchange, credentials);
 }
 
-async function calculateFuturesRelativeSize(
-  exchange,
-  credentials,
-  data,
-  marketPrice
-) {
-  const hook = await calculateHook(exchange, credentials, data, marketPrice);
+async function fetchTotalFuturesRelativeSize(exchange, credentials, data) {
+  const hook = await fetchHook(exchange, credentials, data);
 
   return data.size.value(hook);
 }
 
-export { calculateFuturesRelativeSize };
+export { fetchTotalFuturesRelativeSize };
