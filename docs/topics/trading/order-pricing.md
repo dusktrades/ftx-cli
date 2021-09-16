@@ -65,7 +65,7 @@ ftx trade <options> --price 100.2k:100.1k --split 3
 
 Order(s) will be placed at a single limit price relative to a dynamic price, according to the current market state.
 
-Hooks are recalculated before each individual order if the order is timed so that live data does not become stale.
+Price hooks are recalculated before each individual order if the order is timed, so that live price data does not become stale.
 
 | Choice   | Aliases | Description                    |
 | -------- | ------- | ------------------------------ |

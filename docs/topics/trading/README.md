@@ -5,8 +5,8 @@
 - [🔐 `trade`](#-trade)
   - [Options](#options)
   - [Examples](#examples)
-  - [Resources](#resources)
   - [Notes](#notes)
+  - [Resources](#resources)
 - [🔐 `cancel`](#-cancel)
   - [Options](#options-1)
   - [Examples](#examples-1)
@@ -28,15 +28,19 @@ Required:
   -t, --type <type>              Order type.
   -s, --size <size>              Size to execute.
 
-Optional/order-type-specific:
-      --size-currency <source>   Source currency for calculating size [default: base].
-      --size-hook <hook>         Source size for calculating size if size is relative [default: default].
+Order-type-specific:
   -p, --price <price>            Price that limit orders will be executed at.
-      --price-hook <hook>        Source price for calculating price if price is relative [default: market].
       --trigger-price <price>    Price that triggers stop and take profit orders.
       --trail-value <value>      Distance the price must change direction and move in order to trigger trailing stop orders.
+
+Optional:
       --split <count>            Splits the order into a number of smaller, equal-sized orders.
       --duration <duration>      Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total order placement duration.
+
+Configurable:
+      --size-currency <source>   Source currency for calculating size [default: base].
+      --size-hook <hook>         Source size for calculating relative size [default: default].
+      --price-hook <hook>        Source price for calculating relative price [default: market].
       --[no-]reduce-only         Toggle Reduce-Only mode. When enabled, orders will only reduce your position [default: disabled].
       --[no-]ioc                 Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker [default: disabled].
       --[no-]post-only           Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker [default: enabled].
@@ -79,15 +83,15 @@ Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 -t, --type <type>  Order type.
 ```
 
-| Choice               | Aliases | Additional required options                          |
-| -------------------- | ------- | ---------------------------------------------------- |
-| `market`             | `m`     |                                                      |
-| `limit`              | `l`     | [`price`](#price)                                    |
-| `stop-market`        | `sm`    | [`trigger-price`](#trigger-price)                    |
-| `stop-limit`         | `sl`    | [`price`](#price), [`trigger-price`](#trigger-price) |
-| `trailing-stop`      | `ts`    | [`trail-value`](#trail-value)                        |
-| `take-profit-market` | `tpm`   | [`trigger-price`](#trigger-price)                    |
-| `take-profit-limit`  | `tpl`   | [`price`](#price), [`trigger-price`](#trigger-price) |
+| Choice               | Aliases | Additional required options                            |
+| -------------------- | ------- | ------------------------------------------------------ |
+| `market`             | `m`     |                                                        |
+| `limit`              | `l`     | [`price`](#pricing)                                    |
+| `stop-market`        | `sm`    | [`trigger-price`](#trigger-price)                      |
+| `stop-limit`         | `sl`    | [`price`](#pricing), [`trigger-price`](#trigger-price) |
+| `trailing-stop`      | `ts`    | [`trail-value`](#trail-value)                          |
+| `take-profit-market` | `tpm`   | [`trigger-price`](#trigger-price)                      |
+| `take-profit-limit`  | `tpl`   | [`price`](#pricing), [`trigger-price`](#trigger-price) |
 
 ---
 
@@ -110,8 +114,6 @@ Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
     --price-hook <hook>  Source price for calculating price if price is relative [default: market].
 ```
 
-Required for order types: `limit`, `stop-limit`, `take-profit-limit`.
-
 [Learn more about order pricing](./order-pricing.md).
 
 ---
@@ -122,8 +124,6 @@ Required for order types: `limit`, `stop-limit`, `take-profit-limit`.
 --trigger-price <price>  Price that triggers stop or take profit orders.
 ```
 
-Required for order types: `stop-market`, `stop-limit`, `take-profit-market`, `take-profit-limit`.
-
 Examples: `0.001`, `10`, `100k`.
 
 ---
@@ -133,8 +133,6 @@ Examples: `0.001`, `10`, `100k`.
 ```
 --trail-value <value>  Distance the price must change direction and move in order to trigger trailing stop orders.
 ```
-
-Required for order types: `trailing-stop`.
 
 Positive value for `buy` orders (i.e. the price must increase by the value without making a new low); negative value for `sell` orders (i.e. the price must decrease by the value without making a new high).
 
@@ -159,7 +157,7 @@ Examples: `1`, `100`, `1k`.
 #### Duration
 
 ```
---duration <duration>  Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total order placement duration.
+--duration <duration>  Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total order duration.
 ```
 
 Timed orders can be combined with market orders to create TWAP orders: these can be used to minimise market impact. Timed orders can also be combined with limit orders to delay individual order placement: these can be used to show smaller parts of an order in the orderbook at once.
@@ -221,8 +219,6 @@ Compatible order types: `stop-market`, `trailing-stop`, `take-profit-market`.
 ```
 
 `6/200` means 'send a maximum of `6` order placement requests every `200` milliseconds'.
-
-Compatible with all order types.
 
 Examples: `2/200`, `6/200`, `24/200`.
 

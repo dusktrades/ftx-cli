@@ -39,8 +39,6 @@ ftx trade <options> --size 100.1k --size-currency quote
 
 Order(s) will be placed with total size relative to a dynamic size, according to the current account state.
 
-Hooks are recalculated before each individual order if the order is timed so that live data does not become stale.
-
 | Choice     | Aliases | Description                                                                                                                       |
 | ---------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `default`  | `d`     | **Spot:** available wallet balance (without borrowing).<br>**Futures:** available collateral (not used by open orders/positions). |
