@@ -15,8 +15,8 @@
 
 ## 🔐 `trade`
 
-```sh
-ftx trade [options]  Place order(s).
+```
+ftx trade <options>  Place order(s).
 ```
 
 ### Options
@@ -30,12 +30,12 @@ Required:
 
 Order-type-specific:
   -p, --price <price>            Price that limit orders will be executed at.
-      --trigger-price <price>    Price that triggers stop and take profit orders.
-      --trail-value <value>      Distance the price must change direction and move in order to trigger trailing stop orders.
+      --trigger-price <price>    Price that triggers stop or take profit orders.
+      --trail-value <value>      Distance that price must change direction and move in order to trigger trailing stop orders.
 
 Optional:
-      --split <count>            Splits the order into a number of smaller, equal-sized orders.
-      --duration <duration>      Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total order placement duration.
+      --split <count>            Splits the order into a number of smaller, equal-sized individual orders.
+      --duration <duration>      Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
 
 Configurable:
       --size-currency <source>   Source currency for calculating size [default: base].
@@ -58,7 +58,7 @@ Configurable:
 -m, --market <market>  Market name.
 ```
 
-Case-insensitive but must be formatted as it is on the FTX platform. You can find lists of available markets using the `spot` and `futures` commands.
+Case-insensitive but must be formatted as it is on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
 
 Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 
@@ -100,7 +100,7 @@ Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 ```
 -s, --size <size>             Size to execute.
     --size-currency <source>  Source currency for calculating size [default: base].
-    --size-hook <hook>        Source size for calculating size if size is relative [default: default].
+    --size-hook <hook>        Source size for calculating relative size [default: default].
 ```
 
 [Learn more about order sizing](./order-sizing.md).
@@ -111,7 +111,7 @@ Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 
 ```
 -p, --price <price>      Price that orders executed at limit will be placed at.
-    --price-hook <hook>  Source price for calculating price if price is relative [default: market].
+    --price-hook <hook>  Source price for calculating relative price [default: market].
 ```
 
 [Learn more about order pricing](./order-pricing.md).
@@ -131,7 +131,7 @@ Examples: `0.001`, `10`, `100k`.
 #### Trail value
 
 ```
---trail-value <value>  Distance the price must change direction and move in order to trigger trailing stop orders.
+--trail-value <value>  Distance that price must change direction and move in order to trigger trailing stop orders.
 ```
 
 Positive value for `buy` orders (i.e. the price must increase by the value without making a new low); negative value for `sell` orders (i.e. the price must decrease by the value without making a new high).
@@ -157,7 +157,7 @@ Examples: `1`, `100`, `1k`.
 #### Duration
 
 ```
---duration <duration>  Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total order duration.
+--duration <duration>  Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
 ```
 
 Timed orders can be combined with market orders to create TWAP orders: these can be used to minimise market impact. Timed orders can also be combined with limit orders to delay individual order placement: these can be used to show smaller parts of an order in the orderbook at once.
@@ -248,45 +248,25 @@ FTX trading fees are charged per volume executed, and not per trade executed, so
 
 ## 🔐 `cancel`
 
-```sh
+```
 ftx cancel [options]  Cancel order(s).
 ```
 
 ### Options
 
 ```
--m, --market <market>  Market name.
---side <side>          Order side.
+Optional:
+  -m, --market <market>  Market name.
+      --side <side>      Order side.
 ```
 
 ---
 
-#### Market
-
-```
--m, --market <market>  Market name.
-```
-
-Optional.
-
-Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
-
-Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
+#### [Market](#market)
 
 ---
 
-#### Side
-
-```
---side <side>  Order side.
-```
-
-Optional.
-
-| Choice | Aliases |
-| ------ | ------- |
-| `buy`  | `b`     |
-| `sell` | `s`     |
+#### [Side](#side)
 
 ---
 
