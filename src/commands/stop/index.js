@@ -1,6 +1,5 @@
 import { Ftx } from '../../api/index.js';
 import { Logger } from '../../common/index.js';
-import { offers } from '../offers/index.js';
 
 async function run(options) {
   const credentials = {
@@ -16,9 +15,6 @@ async function run(options) {
   });
 
   Logger.info('Withdrew lending offer(s)');
-
-  // Show updated offer list.
-  await offers.run(options);
 }
 
 const stop = { run };

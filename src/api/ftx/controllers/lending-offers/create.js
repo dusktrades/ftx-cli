@@ -1,7 +1,16 @@
+import { ApiError } from '../../../../common/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { get } from './get.js';
 
+function isSupportedSize(size) {
+  return size == null || size.type === 'number';
+}
+
 function normaliseSize({ size, lendableSize }) {
+  if (!isSupportedSize(size)) {
+    throw new ApiError('This command currently only supports number sizes');
+  }
+
   /**
    * Priority:
    *
@@ -9,7 +18,7 @@ function normaliseSize({ size, lendableSize }) {
    * 2. Per-currency lendable size (safe)
    * 3. 0 (TODO: Error out instead?)
    */
-  return size ?? lendableSize ?? 0;
+  return size?.value ?? lendableSize ?? 0;
 }
 
 function composeRequestBody(currency, data) {

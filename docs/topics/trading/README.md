@@ -48,7 +48,7 @@ Configurable:
       --rate-limit <rate limit>  Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds) [default: 6/200].
 ```
 
-> ℹ️ You can save your order behaviour (size currency, size hook, price hook), order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the [`config`](../configuration/README.md#config) command.
+> ℹ️ You can set configurable option defaults using the [`config`](../configuration/README.md#config) command.
 
 ---
 
