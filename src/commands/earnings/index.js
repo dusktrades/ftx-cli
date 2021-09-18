@@ -1,6 +1,7 @@
 import { Ftx } from '../../api/index.js';
 import { createTable, Logger } from '../../common/index.js';
 import { formatCurrency, formatUsd } from '../../util/index.js';
+import { outputData } from '../outputData.js';
 
 function composeTable() {
   return createTable([
@@ -32,6 +33,35 @@ function composeTableData(data) {
   return [...rows, totalRow];
 }
 
+function outputTableData(data) {
+  const table = composeTable();
+  const tableData = composeTableData(data);
+
+  table.push(...tableData);
+  Logger.table(table);
+}
+
+function composeJsonData({ lendingInterestByCoin, lendingInterestUsd }) {
+  const interestByCurrency = lendingInterestByCoin.map(
+    ({ coin, value, valueUsd }) => ({
+      currency: coin,
+      value,
+      valueUsd,
+    })
+  );
+
+  return {
+    interestByCurrency,
+    totalInterestUsd: lendingInterestUsd,
+  };
+}
+
+function outputJsonData(data) {
+  const jsonData = composeJsonData(data);
+
+  Logger.json(jsonData);
+}
+
 async function run(options) {
   const credentials = {
     apiKey: options.global.key,
@@ -44,11 +74,10 @@ async function run(options) {
     credentials,
   });
 
-  const table = composeTable();
-  const tableData = composeTableData(data);
-
-  table.push(...tableData);
-  Logger.table(table);
+  outputData(data, options.global.output, {
+    table: outputTableData,
+    json: outputJsonData,
+  });
 }
 
 const earnings = { run };

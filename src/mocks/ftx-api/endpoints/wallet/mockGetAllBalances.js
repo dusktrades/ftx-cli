@@ -47,6 +47,13 @@ const testCases = [
       },
     },
   },
+
+  // Account without balances.
+  {
+    additionalRequestHeaders: { 'ftx-key': 'account-without-balances' },
+    statusCode: 200,
+    response: { success: true, result: { main: [] } },
+  },
 ];
 
 function mockGetAllBalances() {

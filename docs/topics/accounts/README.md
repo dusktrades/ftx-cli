@@ -74,7 +74,8 @@ ftx wallet [options]  Display wallet balances.
 ### Options
 
 ```
---sort <method>  Sorting method.
+Optional:
+  --sort <method>  Sorting method [default: currency].
 ```
 
 ---
@@ -82,16 +83,14 @@ ftx wallet [options]  Display wallet balances.
 #### Sort
 
 ```
---sort <method>  Sorting method.
+--sort <method>  Sorting method [default: currency].
 ```
-
-Optional (default: `currency`).
 
 | Choice                        | Aliases | Description                                               |
 | ----------------------------- | ------- | --------------------------------------------------------- |
 | `currency`                    | `c`     | Sort by currency symbol (A-Z).                            |
-| `available-with-borrowing`    | `awb`   | Sort by available balance including borrowing (high-low). |
 | `available-without-borrowing` | `awob`  | Sort by available balance excluding borrowing (high-low). |
+| `available-with-borrowing`    | `awb`   | Sort by available balance including borrowing (high-low). |
 | `borrowed`                    | `b`     | Sort by borrowed balance (high-low).                      |
 | `total`                       | `t`     | Sort by total balance (high-low).                         |
 | `total-usd`                   | `u`     | Sort by total balance (USD) (high-low).                   |

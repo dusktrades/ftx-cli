@@ -153,14 +153,15 @@ You can include these options with any command to modify its behaviour.
 
 ```
 -v, --version                           Output the version number.
--h, --help                              Display help for command.
+    --output (table | json)             Output format [default: table].
+    --[no-]colour                       Toggle coloured output [default: enabled].
+    --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].
 -e, --exchange (ftx | ftx-us)           FTX exchange platform [default: ftx].
 -k, --key <key>                         FTX API key.
 -x, --secret <secret>                   FTX API secret.
 -a, --subaccount (main | <subaccount>)  FTX subaccount name [default: main].
     --schedule <schedule>               Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.
-    --[no-]colour                       Toggle coloured output [default: enabled].
-    --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].
+-h, --help                              Display help for command.
 ```
 
 > ℹ️ Inline options take priority over saved credentials (saved via [`login`](./docs/topics/accounts/README.md#login)) and configuration (saved via [`config`](./docs/topics/configuration/README.md#config)), meaning you can set your defaults and then override them on a per-command basis where necessary.

@@ -1,12 +1,16 @@
-import BigNumber from 'bignumber.js';
-
 import { Ftx } from '../../api/index.js';
 import { createTable, Logger } from '../../common/index.js';
-import { shorthandNumber } from '../../util/index.js';
+
+import {
+  formatNormalNumberNotation,
+  shorthandNumber,
+} from '../../util/index.js';
+
 import { composeTableData } from '../composeTableData.js';
 import { formatChange } from '../formatChange.js';
+import { outputData } from '../outputData.js';
 
-async function getData(options) {
+async function fetchData(options) {
   return Ftx.spot.get({
     exchange: options.global.exchange,
     filters: {
@@ -22,34 +26,40 @@ async function getData(options) {
 function composeTable() {
   return createTable([
     'Name',
-    'Price',
+    'Market price',
     'Change\n(hour/24 hours)',
     'Volume\n(USD, 24 hours)',
   ]);
 }
 
-function composeTableEntry(entry, enableColours) {
+function composeTableEntry(entry) {
   return [
     entry.name,
-
-    // BigNumber has its own toFixed method.
-    // eslint-disable-next-line unicorn/require-number-to-fixed-digits-argument
-    `${BigNumber(entry.price).toFixed()} ${entry.quoteCurrency}`,
-    formatChange(entry, enableColours),
+    `${formatNormalNumberNotation(entry.marketPrice)} ${entry.quoteCurrency}`,
+    formatChange(entry),
     `$${shorthandNumber(entry.volumeUsd24h)}`,
   ];
 }
 
-async function run(options) {
-  const data = await getData(options);
+function outputTableData(data) {
   const table = composeTable();
-
-  const tableData = composeTableData(data, (entry) =>
-    composeTableEntry(entry, options.global.colour)
-  );
+  const tableData = composeTableData(data, (entry) => composeTableEntry(entry));
 
   table.push(...tableData);
   Logger.table(table);
+}
+
+function outputJsonData(data) {
+  Logger.json(data);
+}
+
+async function run(options) {
+  const data = await fetchData(options);
+
+  outputData(data, options.global.output, {
+    table: outputTableData,
+    json: outputJsonData,
+  });
 }
 
 const spot = { run };

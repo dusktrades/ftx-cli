@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 
@@ -62,6 +63,10 @@ function table(data) {
   console.info(enableColours ? tableString : stripAnsi(tableString));
 }
 
+function json(data) {
+  console.info(JSON.stringify(data));
+}
+
 function setEnableColours(newEnableColours) {
   enableColours = newEnableColours;
 }
@@ -71,6 +76,7 @@ const Logger = {
   warn,
   error,
   table,
+  json,
   setEnableColours,
 };
 

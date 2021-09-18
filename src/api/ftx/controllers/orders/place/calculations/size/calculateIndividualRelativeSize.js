@@ -9,13 +9,13 @@ function calculateBaseBalance(data, marketData) {
 }
 
 function calculateSizeMinusFee(size, { makerFee, takerFee }) {
-  const minimumFeeMultiplier = new BigNumber(1).minus(
-    BigNumber.maximum(makerFee, takerFee)
+  const minFeeMultiplier = new BigNumber(1).minus(
+    BigNumber.max(makerFee, takerFee)
   );
 
-  const minimumSizeMultiplier = BigNumber.minimum(minimumFeeMultiplier, 1);
+  const minSizeMultiplier = BigNumber.min(minFeeMultiplier, 1);
 
-  return size.multipliedBy(minimumSizeMultiplier);
+  return size.multipliedBy(minSizeMultiplier);
 }
 
 function calculateSpotSize(data, marketData, accountData) {

@@ -6,6 +6,7 @@ export { convertDecimalToPercentage } from './convertDecimalToPercentage.js';
 export { convertHourlyToYearly } from './convertHourlyToYearly.js';
 export { convertIsoToUnix } from './convertIsoToUnix.js';
 export { formatCurrency } from './formatCurrency.js';
+export { formatNormalNumberNotation } from './formatNormalNumberNotation.js';
 export { formatPercentage } from './formatPercentage.js';
 export { formatPercentageChange } from './formatPercentageChange.js';
 export { formatUsd } from './formatUsd.js';

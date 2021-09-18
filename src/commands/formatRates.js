@@ -35,27 +35,21 @@ const getColour = {
   lending: getColourByLending,
 };
 
-function formatYearlyPercentage(yearlyPercentage, type, enableColours) {
+function formatYearlyPercentage(yearlyPercentage, type) {
   const formattedPercentage = formatPercentage(yearlyPercentage, 4);
-
-  if (!enableColours) {
-    return formattedPercentage;
-  }
-
   const colour = getColour[type](yearlyPercentage);
 
   return chalk[colour](formattedPercentage);
 }
 
-function formatRates(hourlyDecimal, type, enableColours) {
+function formatRates(hourlyDecimal, type) {
   const hourlyPercentage = convertDecimalToPercentage(hourlyDecimal);
   const yearlyPercentage = convertHourlyToYearly(hourlyPercentage);
   const formattedHourlyPercentage = formatPercentage(hourlyPercentage, 4);
 
   const formattedYearlyPercentage = formatYearlyPercentage(
     yearlyPercentage,
-    type,
-    enableColours
+    type
   );
 
   return `${formattedHourlyPercentage} / ${formattedYearlyPercentage}`;

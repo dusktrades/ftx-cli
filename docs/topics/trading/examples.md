@@ -205,7 +205,7 @@ ftx trade -m btc/usd --side s -t m -s 50% --split 10 --duration 20m
 Later on, Sam #2 sees that Sam is still selling BTC and decides it's time to teach him about [permanent shell aliases](../../guides/power-users.md#permanent-alias). He puts the following in his shell configuration file:
 
 ```sh
-alias ngmi=ftx trade --market btc/usd --side sell --type market --size 50% --split 10 --duration 20m
+alias ngmi="ftx trade --market btc/usd --side sell --type market --size 50% --split 10 --duration 20m"
 ```
 
 Now, Sam can run his favourite command by simply running:

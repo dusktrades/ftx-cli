@@ -5,64 +5,70 @@ import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
 
+function allowActive(filter, { offered, locked }) {
+  return filter == null ? true : offered > 0 || locked > 0;
+}
+
+function allowLendable(filter, lendable) {
+  return filter == null ? true : lendable > 0;
+}
+
+function allowOffered(filter, offered) {
+  return filter == null ? true : offered > 0;
+}
+
+function filterData(data, filters) {
+  return filters == null
+    ? data
+    : data.filter(
+        (entry) =>
+          allowValue(filters.currencies, entry.coin) &&
+          allowActive(filters.active, entry) &&
+          allowLendable(filters.lendable, entry.lendable) &&
+          allowOffered(filters.offered, entry.offered)
+      );
+}
+
 /**
  * Lendable size is problematic and untrustworthy:
  *
  * - Unpredictable slightly inconsistent values sometimes returned
  * - 'Size too large' errors despite size being under lendable size
  *
- * We 'fix' this (i.e. greatly reduce number of unexpected errors) by rounding
- * lendable size down to 6 decimal places. The FTX UI also does this.
+ * We 'correct' this (i.e. greatly reduce number of unexpected errors) by
+ * rounding lendable size down to 6 decimal places. The FTX UI also does this.
  */
-function fixLendableSize(lendableSize) {
-  const parsedLendableSize = new BigNumber(lendableSize);
-
-  return parsedLendableSize.decimalPlaces(6, BigNumber.ROUND_DOWN).toNumber();
+function correctLendable(lendable) {
+  return new BigNumber(lendable)
+    .decimalPlaces(6, BigNumber.ROUND_DOWN)
+    .toNumber();
 }
 
 function normaliseData(data) {
   return data.map((entry) => ({
     ...entry,
-    lendable: fixLendableSize(entry.lendable),
+    lendableCorrected: correctLendable(entry.lendable),
   }));
 }
 
-function allowActive(filter = false, entry) {
-  if (!filter) {
-    return true;
+function composeCompareFunction(sortBy) {
+  if (['lendable', 'le'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.lendable, b.lendable);
   }
 
-  return entry.offered > 0 || entry.locked > 0;
-}
-
-function allowLendable(filter = false, lendableSize) {
-  if (!filter) {
-    return true;
+  if (['offered', 'o'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.offered, b.offered);
   }
 
-  return lendableSize > 0;
-}
-
-function allowOffered(filter = false, offeredSize) {
-  if (!filter) {
-    return true;
+  if (['locked', 'lo'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.locked, b.locked);
   }
 
-  return offeredSize > 0;
-}
-
-function filterData(data, filters) {
-  if (filters == null) {
-    return data;
+  if (['min-rate', 'r'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.minRate, b.minRate);
   }
 
-  return data.filter(
-    (entry) =>
-      allowValue(filters.currencies, entry.coin) &&
-      allowActive(filters.active, entry) &&
-      allowLendable(filters.lendable, entry.lendable) &&
-      allowOffered(filters.offered, entry.offered)
-  );
+  return null;
 }
 
 function sortData(data, sortBy) {
@@ -70,42 +76,23 @@ function sortData(data, sortBy) {
     compareAToZ(a.coin, b.coin)
   );
 
-  if (['lendable', 'le'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.lendable, b.lendable)
-    );
-  }
+  const compareFunction = composeCompareFunction(sortBy);
 
-  if (['offered', 'o'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.offered, b.offered)
-    );
-  }
-
-  if (['locked', 'lo'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.locked, b.locked)
-    );
-  }
-
-  if (['min-rate', 'r'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.minRate, b.minRate)
-    );
-  }
-
-  return alphabeticalData;
+  return compareFunction == null
+    ? alphabeticalData
+    : alphabeticalData.sort(compareFunction);
 }
 
 function collateData(data, filters, sortBy) {
-  const normalisedData = normaliseData(data);
-  const filteredData = filterData(normalisedData, filters);
+  const filteredData = filterData(data, filters);
 
   if (filteredData.length === 0) {
     throw new EmptyResultsError('No lending offers found');
   }
 
-  return sortData(filteredData, sortBy);
+  const normalisedData = normaliseData(filteredData);
+
+  return sortData(normalisedData, sortBy);
 }
 
 async function get({ exchange, credentials, filters, sortBy }) {

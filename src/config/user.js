@@ -5,12 +5,18 @@ import { MockUserConfig } from '../mocks/user-config/index.js';
 import { PACKAGE } from './package.js';
 
 const defaults = {
-  exchange: 'ftx',
-  subaccount: 'main',
-
+  // UI.
+  output: 'table',
   colour: true,
   updateNotifications: true,
 
+  // Platform.
+  exchange: 'ftx',
+
+  // Account.
+  subaccount: 'main',
+
+  // Command.
   sizeCurrency: 'base',
   sizeHook: 'default',
   priceHook: 'market',
@@ -18,10 +24,7 @@ const defaults = {
   ioc: false,
   postOnly: true,
   retry: true,
-  rateLimit: {
-    limitPerInterval: 6,
-    intervalMilliseconds: 200,
-  },
+  rateLimit: { limitPerInterval: 6, intervalMilliseconds: 200 },
 };
 
 function composeUserConfig() {

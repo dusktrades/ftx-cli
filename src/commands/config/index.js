@@ -4,9 +4,12 @@ import { Logger } from '../../common/index.js';
 import { CONFIG } from '../../config/index.js';
 
 const commandOptions = [
-  'exchange',
+  'output',
   'colour',
   'updateNotifications',
+
+  'exchange',
+
   'sizeCurrency',
   'sizeHook',
   'priceHook',
