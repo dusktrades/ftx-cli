@@ -3,31 +3,38 @@ import { createTable, Logger } from '../../common/index.js';
 import { formatCurrency, formatUsd } from '../../util/index.js';
 import { outputData } from '../outputData.js';
 
-function composeTable() {
-  return createTable([
-    'Currency',
-    'Total interest earned\n(currency)',
-    'Total interest earned\n(USD)',
-  ]);
+async function fetchData(options) {
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
+
+  return Ftx.lendingEarnings.get({
+    exchange: options.global.exchange,
+    credentials,
+  });
 }
 
-function composeTableEntry(entry) {
+function composeTable() {
+  return createTable(['Currency', 'Interest earned', 'Interest earned (USD)']);
+}
+
+function composeTableEntry({ currency, value, valueUsd }) {
   return [
-    entry.coin,
-    { hAlign: 'right', content: formatCurrency(entry.value) },
-    { hAlign: 'right', content: formatUsd(entry.valueUsd) },
+    currency,
+    { hAlign: 'right', content: formatCurrency(value) },
+    { hAlign: 'right', content: formatUsd(valueUsd) },
   ];
 }
 
-function composeTableData(data) {
-  const rows = data.lendingInterestByCoin.map((entry) =>
-    composeTableEntry(entry)
-  );
+function composeTableData({ currencies, totalUsd }) {
+  const rows = currencies.map((entry) => composeTableEntry(entry));
 
   const totalRow = [
     'Total',
     { colSpan: 1, content: '' },
-    { hAlign: 'right', content: formatUsd(data.lendingInterestUsd) },
+    { hAlign: 'right', content: formatUsd(totalUsd) },
   ];
 
   return [...rows, totalRow];
@@ -41,38 +48,12 @@ function outputTableData(data) {
   Logger.table(table);
 }
 
-function composeJsonData({ lendingInterestByCoin, lendingInterestUsd }) {
-  const interestByCurrency = lendingInterestByCoin.map(
-    ({ coin, value, valueUsd }) => ({
-      currency: coin,
-      value,
-      valueUsd,
-    })
-  );
-
-  return {
-    interestByCurrency,
-    totalInterestUsd: lendingInterestUsd,
-  };
-}
-
 function outputJsonData(data) {
-  const jsonData = composeJsonData(data);
-
-  Logger.json(jsonData);
+  Logger.json(data);
 }
 
 async function run(options) {
-  const credentials = {
-    apiKey: options.global.key,
-    apiSecret: options.global.secret,
-    subaccount: options.global.subaccount,
-  };
-
-  const data = await Ftx.userRewards.get({
-    exchange: options.global.exchange,
-    credentials,
-  });
+  const data = await fetchData(options);
 
   outputData(data, options.global.output, {
     table: outputTableData,

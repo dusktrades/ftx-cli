@@ -1,6 +1,14 @@
 import { spotMargin } from '../../endpoints/index.js';
 import { get } from './get.js';
 
+async function fetchOffered({ exchange, credentials, filters }) {
+  return get({
+    exchange,
+    credentials,
+    filters: { ...filters, offered: true },
+  });
+}
+
 function composeRequestBody(currency) {
   return {
     coin: currency,
@@ -15,31 +23,17 @@ function composeRequest(currency, exchange, credentials) {
   return spotMargin.createLendingOffer({ exchange, credentials, requestBody });
 }
 
-function composeRequests(exchange, credentials, filters, offeredCurrencies) {
-  if (filters.currencies != null) {
-    return filters.currencies.map((currency) =>
-      composeRequest(currency, exchange, credentials)
-    );
-  }
-
-  return offeredCurrencies.map((entry) =>
-    composeRequest(entry.coin, exchange, credentials)
-  );
+function composeRequests({ exchange, credentials, filters }, offered) {
+  return filters.currencies == null
+    ? offered.map(({ coin }) => composeRequest(coin, exchange, credentials))
+    : filters.currencies.map((currency) =>
+        composeRequest(currency, exchange, credentials)
+      );
 }
 
-async function stop({ exchange, credentials, filters }) {
-  const offeredCurrencies = await get({
-    exchange,
-    credentials,
-    filters: { ...filters, offered: true },
-  });
-
-  const requests = composeRequests(
-    exchange,
-    credentials,
-    filters,
-    offeredCurrencies
-  );
+async function stop(options) {
+  const offered = await fetchOffered(options);
+  const requests = composeRequests(options, offered);
 
   await Promise.all(requests);
 }
