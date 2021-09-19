@@ -25,6 +25,7 @@ const defaults = {
   postOnly: true,
   retry: true,
   rateLimit: { limitPerInterval: 6, intervalMilliseconds: 200 },
+  retryExchangeUnavailable: false,
 };
 
 function composeUserConfig() {

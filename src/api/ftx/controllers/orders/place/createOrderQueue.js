@@ -1,14 +1,32 @@
 import PQueue from 'p-queue';
 
-import { RateLimitError, Logger } from '../../../../../common/index.js';
+import {
+  ExchangeUnavailableError,
+  RateLimitError,
+  Logger,
+} from '../../../../../common/index.js';
+
+let queue = null;
+let shouldRetryExchangeUnavailable = false;
 
 function handleRequestSuccess() {
   Logger.info('  Placed order');
 }
 
-function handleRequestError(error, retry) {
+function shouldRetryRequest(error) {
+  // Always retry requests which exceed the rate limit.
   if (error instanceof RateLimitError) {
-    // Order failed due to exceeding rate limit: retry with increased priority.
+    return true;
+  }
+
+  // Retry requests when the exchange is unavailable if user has configured it.
+  return (
+    error instanceof ExchangeUnavailableError && shouldRetryExchangeUnavailable
+  );
+}
+
+function handleRequestError(error, retry) {
+  if (shouldRetryRequest(error)) {
     return retry();
   }
 
@@ -20,9 +38,10 @@ function handleRequestError(error, retry) {
   throw error;
 }
 
-function add(request, queue, priority = 0) {
+function add(request, priority = 0) {
+  // Retry with increased priority.
   function retry() {
-    return add(request, queue, priority + 1);
+    return add(request, priority + 1);
   }
 
   return queue
@@ -48,10 +67,12 @@ function add(request, queue, priority = 0) {
  *
  * Reference: https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX
  */
-function createOrderQueue({ limitPerInterval, intervalMilliseconds }) {
-  const queue = new PQueue({
-    interval: intervalMilliseconds,
-    intervalCap: limitPerInterval,
+function createOrderQueue({ rateLimit, retryExchangeUnavailable }) {
+  shouldRetryExchangeUnavailable = retryExchangeUnavailable;
+
+  queue = new PQueue({
+    interval: rateLimit.intervalMilliseconds,
+    intervalCap: rateLimit.limitPerInterval,
 
     /**
      * If the next interval begins with pending promises, they will carry over
@@ -81,7 +102,7 @@ function createOrderQueue({ limitPerInterval, intervalMilliseconds }) {
      */
   });
 
-  return { add: (request) => add(request, queue) };
+  return { add };
 }
 
 export { createOrderQueue };

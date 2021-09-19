@@ -4,12 +4,15 @@ import { Logger } from '../../common/index.js';
 import { CONFIG } from '../../config/index.js';
 
 const commandOptions = [
+  // UI.
   'output',
   'colour',
   'updateNotifications',
 
+  // Platform.
   'exchange',
 
+  // Command.
   'sizeCurrency',
   'sizeHook',
   'priceHook',
@@ -18,6 +21,7 @@ const commandOptions = [
   'postOnly',
   'retry',
   'rateLimit',
+  'retryExchangeUnavailable',
 ];
 
 function getModifiedOptions(inlineGlobalOptions) {

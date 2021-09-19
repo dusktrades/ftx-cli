@@ -1,7 +1,13 @@
 import { parseISO } from 'date-fns';
 import got from 'got';
 
-import { ApiError, HttpError, RateLimitError } from '../../../common/index.js';
+import {
+  ApiError,
+  ExchangeUnavailableError,
+  HttpError,
+  RateLimitError,
+} from '../../../common/index.js';
+
 import { CONFIG } from '../../../config/index.js';
 import { MAX_32_BIT_INTEGER } from '../../../util/index.js';
 import { composeEndpoint } from './composeEndpoint.js';
@@ -62,6 +68,22 @@ function parseErrorMessage(error) {
   return responseBody == null ? null : JSON.parse(responseBody).error;
 }
 
+function isRateLimitError(statusCode) {
+  return statusCode === 429;
+}
+
+function isExchangeUnavailableError(message) {
+  const broadMatchers = ['unexpected error', 'retry request', 'try again'];
+
+  return broadMatchers.some((matcher) =>
+    message.toLowerCase().includes(matcher)
+  );
+}
+
+/**
+ * TODO: Refactor so an 'errors' file is the source of truth for errors and
+ * their matchers.
+ */
 function handleError(error) {
   const message = parseErrorMessage(error);
 
@@ -69,9 +91,15 @@ function handleError(error) {
     throw new HttpError(error);
   }
 
-  throw error.response.statusCode === 429
-    ? new RateLimitError(message)
-    : new ApiError(message);
+  if (isRateLimitError(error.response.statusCode)) {
+    throw new RateLimitError(message);
+  }
+
+  if (isExchangeUnavailableError(message)) {
+    throw new ExchangeUnavailableError(message);
+  }
+
+  throw new ApiError(message);
 }
 
 async function request(options) {

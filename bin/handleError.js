@@ -1,6 +1,7 @@
 import {
   ApiError,
   EmptyResultsError,
+  ExchangeUnavailableError,
   HttpError,
   Logger,
   RateLimitError,
@@ -10,6 +11,7 @@ function isHandled(error) {
   const handledErrors = [
     ApiError,
     EmptyResultsError,
+    ExchangeUnavailableError,
     HttpError,
     RateLimitError,
   ];
