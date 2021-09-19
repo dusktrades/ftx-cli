@@ -155,7 +155,7 @@ You can include these options with any command to modify its behaviour.
 -v, --version                           Output the version number.
     --output (table | json)             Output format [default: table].
     --[no-]colour                       Toggle coloured output [default: enabled].
-    --[no-]update-notifications         Toggle update notifications. When enabled and an update is available, a notification will appear after command execution at most once a day [default: enabled].
+    --[no-]update-notifications         Toggle update notifications. When enabled, in table output mode, and an update is available: a notification will appear after command execution at most once a day [default: enabled].
 -e, --exchange (ftx | ftx-us)           FTX exchange platform [default: ftx].
 -k, --key <key>                         FTX API key.
 -x, --secret <secret>                   FTX API secret.
