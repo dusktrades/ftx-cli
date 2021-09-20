@@ -4,11 +4,21 @@ import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
 
 function filterData(data, filters) {
-  if (filters == null) {
-    return data;
+  return filters == null
+    ? data
+    : data.filter(({ coin }) => allowValue(filters.currencies, coin));
+}
+
+function composeCompareFunction(sortBy) {
+  if (['previous', 'p'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.previous, b.previous);
   }
 
-  return data.filter((entry) => allowValue(filters.currencies, entry.coin));
+  if (['estimated', 'e'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.estimate, b.estimate);
+  }
+
+  return null;
 }
 
 function sortData(data, sortBy) {
@@ -16,24 +26,23 @@ function sortData(data, sortBy) {
     compareAToZ(a.coin, b.coin)
   );
 
-  if (['previous', 'p'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.previous, b.previous)
-    );
-  }
+  const compareFunction = composeCompareFunction(sortBy);
 
-  if (['estimated', 'e'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.estimate, b.estimate)
-    );
-  }
-
-  return alphabeticalData;
+  return compareFunction == null
+    ? alphabeticalData
+    : alphabeticalData.sort(compareFunction);
 }
 
-// TODO: Reuse.
-function processData(data, filters, sortBy) {
+function collateData(data, filters, sortBy) {
   const filteredData = filterData(data, filters);
+
+  /**
+   * TODO: Deal with empty results client-side. Should output minimal 'No
+   * matching records found.' table row or empty array as JSON.
+   */
+  if (filteredData.length === 0) {
+    throw new EmptyResultsError('No lending rates found');
+  }
 
   return sortData(filteredData, sortBy);
 }
@@ -41,11 +50,7 @@ function processData(data, filters, sortBy) {
 async function get({ exchange, filters, sortBy }) {
   const data = await spotMargin.getLendingRates({ exchange });
 
-  if (data.length === 0) {
-    throw new EmptyResultsError('No lending rates found');
-  }
-
-  return processData(data, filters, sortBy);
+  return collateData(data, filters, sortBy);
 }
 
 export { get };

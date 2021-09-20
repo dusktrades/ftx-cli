@@ -7,6 +7,7 @@
 ## Contents
 
 - [Basic order](#basic-order)
+- [Relative order](#relative-order)
 - [Split order](#split-order)
 - [Scaled order](#scaled-order)
 - [TWAP order](#twap-order)
@@ -52,29 +53,38 @@ ftx trade --market btc/usd --side buy --type take-profit-limit --size 1k --size-
 
 ![Divider](../../images/divider.png)
 
+## Relative order
+
+```sh
+# Market buy 50% of available USD wallet balance worth of BTC/USD.
+ftx trade --market btc/usd --side buy --type market --size 50%
+
+# Market sell 50% of available BTC wallet balance worth of BTC/USD.
+ftx trade --market btc/usd --side sell --type market --size 50%
+
+# Market buy 50% of available collateral worth of BTC-PERP.
+ftx trade --market btc-perp --side buy --type market --size 50%
+
+# Market sell 50% of net BTC-PERP position.
+ftx trade --market btc-perp --side sell --type market --size 50% --size-hook position
+
+# Limit buy 50% of available USD wallet balance worth of BTC/USD at $1,000 below the current market price.
+ftx trade --market btc/usd --side buy --type limit --size 50% --price -1k
+
+# Limit sell 50% of available collateral worth of BTC-PERP at 10% above the current last price.
+ftx trade --market btc-perp --side sell --type limit --size 50% --price +10% --price-hook last
+```
+
+![Divider](../../images/divider.png)
+
 ## Split order
 
 ```sh
-# Market buy 1 BTC/USD, split into 2 individual orders.
-ftx trade --market btc/usd --side buy --type market --size 1 --split 2
+# Market buy 1 BTC/USD, split into 3 individual orders.
+ftx trade --market btc/usd --side buy --type market --size 1 --split 3
 
-# Limit buy $1,000 worth of BTC/USD at $10,000, split into 3 individual orders.
-ftx trade --market btc/usd --side buy --type limit --size 1k --size-currency quote --price 10k --split 3
-
-# Stop market buy 1 BTC/USD, triggering at $11,000, split into 5 individual orders.
-ftx trade --market btc/usd --side buy --type stop-market --size 1 --trigger-price 11k --split 5
-
-# Stop limit buy $1,000 worth of BTC/USD at $10,000, triggering at $11,000, split into 10 individual orders.
-ftx trade --market btc/usd --side buy --type stop-limit --size 1k --size-currency quote --price 10k --trigger-price 11k --split 10
-
-# Trailing stop buy 1 BTC/USD, trailing by $500, split into 20 individual orders.
-ftx trade --market btc/usd --side buy --type trailing-stop --size 1 --trail-value 500 --split 20
-
-# Take profit market buy $1,000 worth of BTC/USD, triggering at $11,000, split into 50 individual orders.
-ftx trade --market btc/usd --side buy --type take-profit-market --size 1k --size-currency quote --trigger-price 11k --split 50
-
-# Take profit limit buy 1 BTC/USD at $10,000, triggering at $11,000, split into 100 individual orders.
-ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 10k --trigger-price 11k --split 100
+# Limit buy $1,000 worth of BTC/USD at $10,000, split into 10 individual orders.
+ftx trade --market btc/usd --side buy --type limit --size 1k --size-currency quote --price 10k --split 10
 ```
 
 ![Divider](../../images/divider.png)
@@ -82,27 +92,26 @@ ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 
 ## Scaled order
 
 ```sh
-# Limit buy 1 BTC/USD from $9,000 to $10,000, split into 2 individual orders.
+# Limit buy 1 BTC/USD from $9,000 to $10,000, split into 3 individual orders.
 #
-# Individual order #1: Limit buy 0.5 BTC/USD at $9,000.
-# Individual order #2: Limit buy 0.5 BTC/USD at $10,000.
-ftx trade --market btc/usd --side buy --type limit --size 1 --price 9k:10k --split 2
+# Individual order #1: Limit buy 0.3333 BTC/USD at $9,000.
+# Individual order #2: Limit buy 0.3333 BTC/USD at $9,500.
+# Individual order #3: Limit buy 0.3333 BTC/USD at $10,000.
+ftx trade --market btc/usd --side buy --type limit --size 1 --price 9k:10k --split 3
 
-# Stop limit buy $1,000 worth of BTC/USD from $9,000 to $10,000, triggering at $11,000, split into 3 individual orders.
+# Stop limit buy $30,000 worth of BTC/USD from $9,000 to $10,000, triggering at $11,000, split into 3 individual orders.
 #
-# Individual order #1: Stop limit buy 0.3333 BTC/USD at $9,000, triggering at $11,000.
-# Individual order #2: Stop limit buy 0.3333 BTC/USD at $9,500, triggering at $11,000.
-# Individual order #3: Stop limit buy 0.3333 BTC/USD at $10,000, triggering at $11,000.
-ftx trade --market btc/usd --side buy --type stop-limit --size 1k --size-currency quote --price 9k:10k --split 3
+# Individual order #1: Stop limit buy $10,000 worth of BTC/USD at $9,000, triggering at $11,000.
+# Individual order #2: Stop limit buy $10,000 worth of BTC/USD at $9,500, triggering at $11,000.
+# Individual order #3: Stop limit buy $10,000 worth of BTC/USD at $10,000, triggering at $11,000.
+ftx trade --market btc/usd --side buy --type stop-limit --size 30k --size-currency quote --price 9k:10k --split 3
 
-# Take profit limit buy 1 BTC/USD from $10,000 to $9,000, triggering at $11,000, split into 5 individual orders.
+# Take profit limit buy 1 BTC/USD from $10,000 to $9,000, triggering at $11,000, split into 3 individual orders.
 #
-# Individual order #1: Take profit limit buy 0.2 BTC/USD at $10,000, triggering at $11,000.
-# Individual order #2: Take profit limit buy 0.2 BTC/USD at $9,750, triggering at $11,000.
-# Individual order #3: Take profit limit buy 0.2 BTC/USD at $9,500, triggering at $11,000.
-# Individual order #4: Take profit limit buy 0.2 BTC/USD at $9,250, triggering at $11,000.
-# Individual order #5: Take profit limit buy 0.2 BTC/USD at $9,000, triggering at $11,000.
-ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 10k:9k --split 5
+# Individual order #1: Take profit limit buy 0.3333 BTC/USD at $10,000, triggering at $11,000.
+# Individual order #2: Take profit limit buy 0.3333 BTC/USD at $9,500, triggering at $11,000.
+# Individual order #3: Take profit limit buy 0.3333 BTC/USD at $9,000, triggering at $11,000.
+ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 10k:9k --split 3
 ```
 
 ![Divider](../../images/divider.png)
@@ -126,7 +135,7 @@ ftx trade --market btc/usd --side buy --type market --size 1 --split 3 --duratio
 # Individual order #5 (after 10 minutes):           Market sell $200 worth of BTC/USD.
 ftx trade --market btc/usd --side sell --type market --size 1 --split 5 --duration 10m
 
-# Market buy 100% of available USD wallet balance, split into 4 individual orders, over a duration of 3 minutes.
+# Market buy 100% of available USD wallet balance worth of BTC/USD, split into 4 individual orders, over a duration of 3 minutes.
 #
 # Individual order #1 (now):             Market buy 25% of available USD wallet balance worth of BTC/USD.
 # Individual order #2 (after 1 minute):  Market buy 25% of available USD wallet balance worth of BTC/USD.
@@ -134,7 +143,7 @@ ftx trade --market btc/usd --side sell --type market --size 1 --split 5 --durati
 # Individual order #4 (after 3 minutes): Market buy 25% of available USD wallet balance worth of BTC/USD.
 ftx trade --market btc/usd --side buy --type market --size 100% --split 4 --duration 3m
 
-# Market sell 100% of available BTC wallet balance, split into 4 individual orders, over a duration of 4 minutes.
+# Market sell 100% of available BTC wallet balance worth of BTC/USD, split into 4 individual orders, over a duration of 4 minutes.
 #
 # Individual order #1 (now):             Market sell 25% of available BTC wallet balance worth of BTC/USD.
 # Individual order #2 (after 1 minute):  Market sell 25% of available BTC wallet balance worth of BTC/USD.
@@ -205,7 +214,7 @@ ftx trade -m btc/usd --side s -t m -s 50% --split 10 --duration 20m
 Later on, Sam #2 sees that Sam is still selling BTC and decides it's time to teach him about [permanent shell aliases](../../guides/power-users.md#permanent-alias). He puts the following in his shell configuration file:
 
 ```sh
-alias ngmi=ftx trade --market btc/usd --side sell --type market --size 50% --split 10 --duration 20m
+alias ngmi="ftx trade --market btc/usd --side sell --type market --size 50% --split 10 --duration 20m"
 ```
 
 Now, Sam can run his favourite command by simply running:

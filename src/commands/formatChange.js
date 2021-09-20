@@ -1,36 +1,30 @@
 import chalk from 'chalk';
 
-import { formatPercentageChange } from '../util/index.js';
+import {
+  convertDecimalToPercentage,
+  formatPercentageChange,
+} from '../util/index.js';
 
-function getChangePercentageColour(changePercentage) {
-  if (changePercentage > 0) {
-    return 'green';
-  }
-
-  if (changePercentage < 0) {
-    return 'red';
-  }
-
-  return 'white';
+function shouldColour(change) {
+  return change != null && change !== 0;
 }
 
-function formatChangePercentage(changePercentage, enableColours) {
+function getColour(change) {
+  return change < 0 ? 'red' : 'green';
+}
+
+function formatChangePercentage(change) {
+  const changePercentage = convertDecimalToPercentage(change);
   const formattedChangePercentage = formatPercentageChange(changePercentage);
 
-  if (!enableColours) {
-    return formattedChangePercentage;
-  }
-
-  const colour = getChangePercentageColour(changePercentage);
-
-  return chalk[colour](formattedChangePercentage);
+  return shouldColour(change)
+    ? chalk[getColour(change)](formattedChangePercentage)
+    : formattedChangePercentage;
 }
 
-function formatChange(entry, enableColours) {
-  return [entry.change1hPercentage, entry.change24hPercentage]
-    .map((changePercentage) =>
-      formatChangePercentage(changePercentage, enableColours)
-    )
+function formatChange({ change1h, change24h }) {
+  return [change1h, change24h]
+    .map((change) => formatChangePercentage(change))
     .join(' / ');
 }
 

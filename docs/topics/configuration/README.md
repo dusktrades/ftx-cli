@@ -17,14 +17,15 @@ ftx config [options]  Save configuration options on your machine.
 ### Options
 
 ```
-Platform:
-  -e, --exchange <exchange>
-
 UI:
+      --output (table | json)
       --[no-]colour
       --[no-]update-notifications
 
-Trading:
+Platform:
+  -e, --exchange (ftx | ftx-us)
+
+Command:
       --size-currency <source>
       --size-hook <hook>
       --price-hook <hook>

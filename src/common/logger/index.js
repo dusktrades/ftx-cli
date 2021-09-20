@@ -62,6 +62,10 @@ function table(data) {
   console.info(enableColours ? tableString : stripAnsi(tableString));
 }
 
+function json(data) {
+  console.info(JSON.stringify(data));
+}
+
 function setEnableColours(newEnableColours) {
   enableColours = newEnableColours;
 }
@@ -71,6 +75,7 @@ const Logger = {
   warn,
   error,
   table,
+  json,
   setEnableColours,
 };
 

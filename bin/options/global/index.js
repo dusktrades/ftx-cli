@@ -3,6 +3,7 @@ import { API_SECRET } from './api-secret/index.js';
 import { COLOUR } from './colour/index.js';
 import { EXCHANGE } from './exchange/index.js';
 import { IOC } from './ioc/index.js';
+import { OUTPUT } from './output/index.js';
 import { POST_ONLY } from './post-only/index.js';
 import { PRICE_HOOK } from './price-hook/index.js';
 import { RATE_LIMIT } from './rate-limit/index.js';
@@ -16,6 +17,13 @@ import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
 // The order here is the order options will appear in help outputs.
 const GLOBAL = [
+  // UI.
+  OUTPUT,
+  COLOUR.ENABLE,
+  COLOUR.DISABLE,
+  UPDATE_NOTIFICATIONS.ENABLE,
+  UPDATE_NOTIFICATIONS.DISABLE,
+
   // Platform.
   EXCHANGE,
 
@@ -30,13 +38,10 @@ const GLOBAL = [
   PRICE_HOOK,
   SCHEDULE,
 
-  // UI.
-  COLOUR.ENABLE,
-  COLOUR.DISABLE,
-  UPDATE_NOTIFICATIONS.ENABLE,
-  UPDATE_NOTIFICATIONS.DISABLE,
-
-  // Trading.
+  // Command.
+  SIZE_CURRENCY,
+  SIZE_HOOK,
+  PRICE_HOOK,
   IOC.ENABLE,
   IOC.DISABLE,
   POST_ONLY.ENABLE,

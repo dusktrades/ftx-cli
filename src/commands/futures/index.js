@@ -5,8 +5,9 @@ import { composeTableData } from '../composeTableData.js';
 import { formatChange } from '../formatChange.js';
 import { formatPrice } from '../formatPrice.js';
 import { formatRates } from '../formatRates.js';
+import { outputData } from '../outputData.js';
 
-async function getData(options) {
+async function fetchData(options) {
   return Ftx.futures.getStats({
     exchange: options.global.exchange,
     filters: {
@@ -33,39 +34,44 @@ function composeTable() {
   ]);
 }
 
-function formatFundingRates(fundingRate, enableColours) {
-  if (fundingRate == null) {
-    return '-';
-  }
-
-  return formatRates(fundingRate, 'funding', enableColours);
+function formatFundingRates(fundingRate) {
+  return fundingRate == null ? '-' : formatRates(fundingRate, 'funding');
 }
 
-function composeTableEntry(entry, enableColours) {
+function composeTableEntry(entry) {
   return [
     entry.name,
     formatPrice(entry.lastPrice),
     formatPrice(entry.markPrice),
-    formatChange(entry, enableColours),
+    formatChange(entry),
     `${shorthandNumber(entry.volume24h)} ${entry.underlying}`,
     `$${shorthandNumber(entry.volumeUsd24h)}`,
     `${shorthandNumber(entry.openInterest)} ${entry.underlying}`,
     `$${shorthandNumber(entry.openInterestUsd)}`,
-    formatFundingRates(entry.previousFundingRate, enableColours),
-    formatFundingRates(entry.nextFundingRate, enableColours),
+    formatFundingRates(entry.previousFundingRate),
+    formatFundingRates(entry.nextFundingRate),
   ];
 }
 
-async function run(options) {
-  const data = await getData(options);
+function outputTableData(data) {
   const table = composeTable();
-
-  const tableData = composeTableData(data, (entry) =>
-    composeTableEntry(entry, options.global.colour)
-  );
+  const tableData = composeTableData(data, (entry) => composeTableEntry(entry));
 
   table.push(...tableData);
   Logger.table(table);
+}
+
+function outputJsonData(data) {
+  Logger.json(data);
+}
+
+async function run(options) {
+  const data = await fetchData(options);
+
+  outputData(data, options.global.output, {
+    table: outputTableData,
+    json: outputJsonData,
+  });
 }
 
 const futures = { run };

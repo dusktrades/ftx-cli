@@ -6,11 +6,11 @@ import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { handleError } from './handleError.js';
 import { OPTIONS } from './options/index.js';
-import { notifyUpdate } from './notifyUpdate.js';
+import { queueUpdateNotification } from './queueUpdateNotification.js';
 import { scheduleCommand } from './scheduleCommand.js';
 
 /**
- * Option value priority order:
+ * Option argument priority order:
  *
  * 1. Inline
  * 2. Saved config
@@ -55,6 +55,10 @@ function composeOptions(inlineCommandOptions) {
   };
 }
 
+function shouldNotifyUpdate({ updateNotifications, output }) {
+  return updateNotifications && output === 'table';
+}
+
 async function runHandler(command, options) {
   const { run } = Commands[command];
 
@@ -68,8 +72,8 @@ async function runCommand(command, inlineCommandOptions) {
 
   Logger.setEnableColours(options.global.colour);
 
-  if (options.global.updateNotifications) {
-    notifyUpdate(options.global.colour);
+  if (shouldNotifyUpdate(options.global)) {
+    queueUpdateNotification(options.global.colour);
   }
 
   try {

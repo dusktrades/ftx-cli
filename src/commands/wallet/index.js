@@ -4,28 +4,45 @@ import { Ftx } from '../../api/index.js';
 import { createTable, Logger } from '../../common/index.js';
 
 import {
+  convertDecimalToPercentage,
   formatCurrency,
   formatPercentage,
   formatUsd,
 } from '../../util/index.js';
 
+import { outputData } from '../outputData.js';
+
 const columnHeadingRow = [
   'Currency',
-  'Available with borrowing',
   'Available without borrowing',
+  'Available with borrowing',
   'Borrowed',
   'Total',
   'Total (USD)',
   'Allocation',
-];
+].map((heading) => chalk.bold(heading));
 
-const emptyBalancesRow = [
+const emptySectionRow = [
   {
     colSpan: columnHeadingRow.length,
     hAlign: 'center',
     content: chalk.yellow('No balances found.'),
   },
 ];
+
+async function fetchData(options) {
+  const credentials = {
+    apiKey: options.global.key,
+    apiSecret: options.global.secret,
+    subaccount: options.global.subaccount,
+  };
+
+  return Ftx.wallet.get({
+    exchange: options.global.exchange,
+    credentials,
+    sortBy: options.command.sort,
+  });
+}
 
 function composeSubaccountHeading(subaccount) {
   return chalk.magenta(
@@ -35,22 +52,21 @@ function composeSubaccountHeading(subaccount) {
   );
 }
 
-function composeAccountHeadingRow(content) {
+function composeSubheadingRow(content) {
   return [{ colSpan: columnHeadingRow.length, hAlign: 'center', content }];
 }
 
 function composeBalanceRow(entry) {
+  const allocationPercentage = convertDecimalToPercentage(entry.allocation);
+
   return [
-    entry.coin,
-    `${formatCurrency(entry.free)} ${entry.coin}`,
-    `${formatCurrency(entry.availableWithoutBorrow)} ${entry.coin}`,
-    `${formatCurrency(entry.spotBorrow)} ${entry.coin}`,
-    `${formatCurrency(entry.total)} ${entry.coin}`,
-    { hAlign: 'right', content: formatUsd(entry.usdValue) },
-    {
-      hAlign: 'right',
-      content: formatPercentage(entry.allocationPercentage, 2),
-    },
+    entry.currency,
+    `${formatCurrency(entry.availableWithoutBorrowing)} ${entry.currency}`,
+    `${formatCurrency(entry.availableWithBorrowing)} ${entry.currency}`,
+    `${formatCurrency(entry.borrowed)} ${entry.currency}`,
+    `${formatCurrency(entry.total)} ${entry.currency}`,
+    { hAlign: 'right', content: formatUsd(entry.totalUsd) },
+    { hAlign: 'right', content: formatPercentage(allocationPercentage, 2) },
   ];
 }
 
@@ -58,77 +74,62 @@ function composeBalanceRows(balances) {
   return balances.map((entry) => composeBalanceRow(entry));
 }
 
-function composeTotalRow(totalBalanceUsd) {
+function composeTotalRow(totalUsd) {
   return [
-    'Total',
+    chalk.bold('Total'),
     { colSpan: 4, content: '' },
-    { hAlign: 'right', content: chalk.bold(formatUsd(totalBalanceUsd)) },
+    { hAlign: 'right', content: chalk.bold(formatUsd(totalUsd)) },
   ];
 }
 
-function composeSubaccountTableData({
-  subaccount,
-  balances,
-  subaccountBalanceUsd,
-}) {
-  const subaccountHeading = composeSubaccountHeading(subaccount);
-  const accountHeadingRow = composeAccountHeadingRow(subaccountHeading);
-
+function composeTableDataSection({ balances, totalUsd }) {
   if (balances.length === 0) {
-    return [accountHeadingRow, emptyBalancesRow];
+    return [emptySectionRow];
   }
 
   const balanceRows = composeBalanceRows(balances);
-  const totalRow = composeTotalRow(subaccountBalanceUsd);
+  const totalRow = composeTotalRow(totalUsd);
 
-  return [accountHeadingRow, ...balanceRows, totalRow];
+  return [...balanceRows, totalRow];
 }
 
-function composeTotalAccountTableData({ balances, totalAccountBalanceUsd }) {
-  const accountHeadingRow = composeAccountHeadingRow(chalk.bold.cyan('Total'));
+function composeAllSubaccountsTableData({ subaccounts, total }) {
+  const subaccountsData = subaccounts.flatMap((entry) => [
+    composeSubheadingRow(composeSubaccountHeading(entry.subaccount)),
+    ...composeTableDataSection(entry),
+  ]);
 
-  const balanceRows = composeBalanceRows(balances);
-  const totalRow = composeTotalRow(totalAccountBalanceUsd);
+  const totalData = [
+    composeSubheadingRow(chalk.bold.cyan('Total')),
+    ...composeTableDataSection(total),
+  ];
 
-  return [accountHeadingRow, ...balanceRows, totalRow];
+  return [...subaccountsData, ...totalData];
 }
 
-function composeTableData({ subaccounts, totalAccount }) {
-  const tableData = [];
-
-  if (subaccounts.length > 1) {
-    const totalAccountTableData = composeTotalAccountTableData(totalAccount);
-
-    tableData.push(...totalAccountTableData);
-  }
-
-  for (const subaccountEntry of subaccounts) {
-    const subaccountTableData = composeSubaccountTableData(subaccountEntry);
-
-    tableData.push(...subaccountTableData);
-  }
-
-  return tableData;
-}
-
-async function run(options) {
-  const credentials = {
-    apiKey: options.global.key,
-    apiSecret: options.global.secret,
-    subaccount: options.global.subaccount,
-  };
-
-  const data = await Ftx.wallet.get({
-    exchange: options.global.exchange,
-    credentials,
-    sortBy: options.command.sort,
-  });
-
+function outputTableData(data) {
   const table = createTable(columnHeadingRow);
-  const tableData = composeTableData(data);
+
+  const tableData =
+    data.subaccounts == null
+      ? composeTableDataSection(data)
+      : composeAllSubaccountsTableData(data);
 
   table.push(...tableData);
   Logger.table(table);
+}
+
+function outputJsonData(data) {
+  Logger.json(data);
+}
+
+async function run(options) {
+  const data = await fetchData(options);
+
+  outputData(data, options.global.output, {
+    table: outputTableData,
+    json: outputJsonData,
+  });
 }
 
 const wallet = { run };

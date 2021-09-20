@@ -1,11 +1,5 @@
 import { EmptyResultsError } from '../../../../common/index.js';
-
-import {
-  compareAToZ,
-  compareHighToLow,
-  convertDecimalToPercentage,
-} from '../../../../util/index.js';
-
+import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { futures } from '../../endpoints/index.js';
 import { get } from './get.js';
 import { getPreviousFunding } from './getPreviousFunding.js';
@@ -15,16 +9,16 @@ function composeRequest(exchange, name) {
 }
 
 function composeRequests(exchange, futuresList) {
-  return futuresList.map((entry) => composeRequest(exchange, entry.name));
+  return futuresList.map(({ name }) => composeRequest(exchange, name));
 }
 
-async function getIncompleteStats(exchange, futuresList) {
+async function fetchIncompleteStats(exchange, futuresList) {
   const requests = composeRequests(exchange, futuresList);
 
   return Promise.all(requests);
 }
 
-async function getFuturesInfo(exchange, filters) {
+async function fetchFuturesInfo(exchange, filters) {
   const requests = [
     get({ exchange, filters }),
     getPreviousFunding({ exchange }),
@@ -33,8 +27,8 @@ async function getFuturesInfo(exchange, filters) {
   return Promise.all(requests);
 }
 
-async function getDataSources(exchange, filters) {
-  const [futuresList, previousFunding] = await getFuturesInfo(
+async function fetchData(exchange, filters) {
+  const [futuresList, previousFunding] = await fetchFuturesInfo(
     exchange,
     filters
   );
@@ -43,36 +37,31 @@ async function getDataSources(exchange, filters) {
     throw new EmptyResultsError('No futures found');
   }
 
-  const incompleteStats = await getIncompleteStats(exchange, futuresList);
+  const incompleteStats = await fetchIncompleteStats(exchange, futuresList);
 
   return { futuresList, previousFunding, incompleteStats };
 }
 
-function findPreviousFundingEntry(futureEntry, previousFunding) {
-  return previousFunding.find((entry) => entry.future === futureEntry.name);
-}
-
-function composeEntry(futureEntry, previousFunding, incompleteStats, index) {
-  const previousFundingEntry = findPreviousFundingEntry(
-    futureEntry,
-    previousFunding
+function composeEntry(futuresEntry, previousFunding, incompleteStats, index) {
+  const previousFundingEntry = previousFunding.find(
+    ({ future }) => future === futuresEntry.name
   );
 
-  const incompleteStatsEntry = incompleteStats[index];
+  const { nextFundingRate } = incompleteStats[index];
 
   return {
-    name: futureEntry.name,
-    underlying: futureEntry.underlying,
-    lastPrice: futureEntry.last,
-    markPrice: futureEntry.mark,
-    change1hPercentage: convertDecimalToPercentage(futureEntry.change1h),
-    change24hPercentage: convertDecimalToPercentage(futureEntry.change24h),
-    volume24h: futureEntry.volume,
-    volumeUsd24h: futureEntry.volumeUsd24h,
-    openInterest: futureEntry.openInterest,
-    openInterestUsd: futureEntry.openInterestUsd,
-    previousFundingRate: previousFundingEntry?.rate,
-    nextFundingRate: incompleteStatsEntry.nextFundingRate,
+    name: futuresEntry.name,
+    underlying: futuresEntry.underlying,
+    lastPrice: futuresEntry.last,
+    markPrice: futuresEntry.mark,
+    change1h: futuresEntry.change1h,
+    change24h: futuresEntry.change24h,
+    volume24h: futuresEntry.volume,
+    volumeUsd24h: futuresEntry.volumeUsd24h,
+    openInterest: futuresEntry.openInterest,
+    openInterestUsd: futuresEntry.openInterestUsd,
+    previousFundingRate: previousFundingEntry?.rate ?? null,
+    nextFundingRate: nextFundingRate ?? null,
   };
 }
 
@@ -82,67 +71,67 @@ function composeData({ futuresList, previousFunding, incompleteStats }) {
   );
 }
 
+function composeCompareFunction(sortBy) {
+  if (['last-price', 'lp'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.lastPrice, b.lastPrice);
+  }
+
+  if (['mark-price', 'mp'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.markPrice, b.markPrice);
+  }
+
+  if (['change-1h', 'c1'].includes(sortBy)) {
+    return (a, b) =>
+      compareHighToLow(a.change1hPercentage, b.change1hPercentage);
+  }
+
+  if (['change-24h', 'c24'].includes(sortBy)) {
+    return (a, b) =>
+      compareHighToLow(a.change24hPercentage, b.change24hPercentage);
+  }
+
+  if (['volume', 'v'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.volumeUsd24h, b.volumeUsd24h);
+  }
+
+  if (['open-interest', 'oi'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.openInterestUsd, b.openInterestUsd);
+  }
+
+  if (['previous-funding', 'pf'].includes(sortBy)) {
+    return (a, b) =>
+      compareHighToLow(a.previousFundingRate, b.previousFundingRate);
+  }
+
+  if (['estimated-funding', 'ef'].includes(sortBy)) {
+    return (a, b) => compareHighToLow(a.nextFundingRate, b.nextFundingRate);
+  }
+
+  return null;
+}
+
 function sortData(data, sortBy) {
   const alphabeticalData = [...data].sort((a, b) =>
     compareAToZ(a.name, b.name)
   );
 
-  if (['last-price', 'lp'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.lastPrice, b.lastPrice)
-    );
-  }
+  const compareFunction = composeCompareFunction(sortBy);
 
-  if (['mark-price', 'mp'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.markPrice, b.markPrice)
-    );
-  }
+  return compareFunction == null
+    ? alphabeticalData
+    : alphabeticalData.sort(compareFunction);
+}
 
-  if (['change-1h', 'c1'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.change1hPercentage, b.change1hPercentage)
-    );
-  }
+function collateData(data, sortBy) {
+  const composedData = composeData(data);
 
-  if (['change-24h', 'c24'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.change24hPercentage, b.change24hPercentage)
-    );
-  }
-
-  if (['volume', 'v'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.volumeUsd24h, b.volumeUsd24h)
-    );
-  }
-
-  if (['open-interest', 'oi'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.openInterestUsd, b.openInterestUsd)
-    );
-  }
-
-  if (['previous-funding', 'pf'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.previousFundingRate, b.previousFundingRate)
-    );
-  }
-
-  if (['estimated-funding', 'ef'].includes(sortBy)) {
-    return alphabeticalData.sort((a, b) =>
-      compareHighToLow(a.nextFundingRate, b.nextFundingRate)
-    );
-  }
-
-  return alphabeticalData;
+  return sortData(composedData, sortBy);
 }
 
 async function getStats({ exchange, filters, sortBy }) {
-  const dataSources = await getDataSources(exchange, filters);
-  const data = composeData(dataSources);
+  const data = await fetchData(exchange, filters);
 
-  return sortData(data, sortBy);
+  return collateData(data, sortBy);
 }
 
 export { getStats };
