@@ -33,6 +33,9 @@ const GLOBAL = [
   SUBACCOUNT,
 
   // Behaviour.
+  SIZE_CURRENCY,
+  SIZE_HOOK,
+  PRICE_HOOK,
   SCHEDULE,
 
   // Command.
