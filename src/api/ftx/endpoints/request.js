@@ -66,13 +66,10 @@ function parseErrorMessage(error) {
   const responseBody = error?.response?.body;
 
   return responseBody == null ? null : JSON.parse(responseBody).error;
-<<<<<<< HEAD
 }
 
 function isRateLimitError(statusCode) {
   return statusCode === 429;
-=======
->>>>>>> master
 }
 
 function isExchangeUnavailableError(message) {

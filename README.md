@@ -195,10 +195,11 @@ Visit the documentation for a topic to learn more about related commands:
 
 - [Power users](./docs/guides/power-users.md): features aimed at increasing efficiency
 - [Scheduled commands](./docs/guides/scheduled-commands.md): for when now is not the time
+- [Troubleshooting](./docs/guides/troubleshooting.md): common issues and fixes
 
 ### Tips
 
-- You can utilise subaccounts to isolate margin, manage risk, and restrict FTX CLI's access
+- You can utilise subaccounts to isolate margin, manage risk, and restrict FTX CLI's access to your account
 
 ![Divider](docs/images/divider.png)
 

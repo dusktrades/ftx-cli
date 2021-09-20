@@ -119,11 +119,7 @@ async function composeOrderRequestArray(
   data,
   initialMarketData
 ) {
-<<<<<<< HEAD
   const queue = createOrderQueue(data);
-=======
-  const queue = createOrderQueue(data.rateLimit);
->>>>>>> master
   const intervalMilliseconds = calculateIntervalMilliseconds(data);
 
   const calculateIndividualSize = await composeIndividualSizeCalculator(
