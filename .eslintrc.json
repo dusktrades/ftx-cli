@@ -23,7 +23,6 @@
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "curly": ["error", "all"],
-    "no-console": "off",
     "no-mixed-operators": "error",
     "no-nested-ternary": "error",
     "no-param-reassign": ["error", { "props": false }],

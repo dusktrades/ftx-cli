@@ -1,4 +1,4 @@
-import { interceptTestCase } from '../../helpers/index.js';
+import { interceptTestCase, MOCK_INVALID_MARKET } from '../../helpers/index.js';
 
 const testCases = [
   // Valid market.
@@ -30,6 +30,16 @@ const testCases = [
         underlying: null,
         volumeUsd24h: 500_000_000,
       },
+    },
+  },
+
+  // Invalid market.
+  {
+    endpoint: `markets/${MOCK_INVALID_MARKET}`,
+    statusCode: 500,
+    response: {
+      success: false,
+      error: `No such market: ${MOCK_INVALID_MARKET} `,
     },
   },
 ];

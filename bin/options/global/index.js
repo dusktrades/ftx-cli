@@ -4,11 +4,13 @@ import { COLOUR } from './colour/index.js';
 import { EXCHANGE } from './exchange/index.js';
 import { IOC } from './ioc/index.js';
 import { POST_ONLY } from './post-only/index.js';
+import { PRICE_HOOK } from './price-hook/index.js';
 import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { RETRY } from './retry/index.js';
 import { SCHEDULE } from './schedule/index.js';
 import { SIZE_CURRENCY } from './size-currency/index.js';
+import { SIZE_HOOK } from './size-hook/index.js';
 import { SUBACCOUNT } from './subaccount/index.js';
 import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 
@@ -24,6 +26,8 @@ const GLOBAL = [
 
   // Behaviour.
   SIZE_CURRENCY,
+  SIZE_HOOK,
+  PRICE_HOOK,
   SCHEDULE,
 
   // UI.

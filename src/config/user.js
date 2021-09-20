@@ -12,6 +12,9 @@ const defaults = {
   colour: true,
   updateNotifications: true,
 
+  sizeCurrency: 'base',
+  sizeHook: 'default',
+  priceHook: 'market',
   reduceOnly: false,
   ioc: false,
   postOnly: true,

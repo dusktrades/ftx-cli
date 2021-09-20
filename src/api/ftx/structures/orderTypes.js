@@ -4,6 +4,7 @@ const ORDER_TYPES = {
     optionArgument: 'market',
     apiArgument: 'market',
     executionType: 'market',
+    isTrigger: false,
   },
 
   // Limit order.
@@ -12,6 +13,7 @@ const ORDER_TYPES = {
     apiArgument: 'limit',
     executionType: 'limit',
     additionalRequiredOptions: new Set(['price']),
+    isTrigger: false,
   },
 
   // Stop market order.
@@ -20,6 +22,7 @@ const ORDER_TYPES = {
     apiArgument: 'stop',
     executionType: 'market',
     additionalRequiredOptions: new Set(['triggerPrice']),
+    isTrigger: true,
   },
 
   // Stop limit order.
@@ -28,6 +31,7 @@ const ORDER_TYPES = {
     apiArgument: 'stop',
     executionType: 'limit',
     additionalRequiredOptions: new Set(['price', 'triggerPrice']),
+    isTrigger: true,
   },
 
   // Trailing stop order.
@@ -36,6 +40,7 @@ const ORDER_TYPES = {
     apiArgument: 'trailingStop',
     executionType: 'market',
     additionalRequiredOptions: new Set(['trailValue']),
+    isTrigger: true,
   },
 
   // Take profit market order.
@@ -44,6 +49,7 @@ const ORDER_TYPES = {
     apiArgument: 'takeProfit',
     executionType: 'market',
     additionalRequiredOptions: new Set(['triggerPrice']),
+    isTrigger: true,
   },
 
   // Take profit limit order.
@@ -52,11 +58,16 @@ const ORDER_TYPES = {
     apiArgument: 'takeProfit',
     executionType: 'limit',
     additionalRequiredOptions: new Set(['price', 'triggerPrice']),
+    isTrigger: true,
   },
 };
+
+function isTrigger(type) {
+  return ORDER_TYPES[type].isTrigger;
+}
 
 function requiresOption(type, option) {
   return ORDER_TYPES[type].additionalRequiredOptions?.has(option) ?? false;
 }
 
-export { ORDER_TYPES, requiresOption };
+export { ORDER_TYPES, isTrigger, requiresOption };

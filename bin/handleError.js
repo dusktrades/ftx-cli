@@ -6,15 +6,18 @@ import {
   RateLimitError,
 } from '../src/common/index.js';
 
-const HANDLED_ERRORS = [ApiError, EmptyResultsError, HttpError, RateLimitError];
-
 function isHandled(error) {
-  return HANDLED_ERRORS.some((handledError) => error instanceof handledError);
+  const handledErrors = [
+    ApiError,
+    EmptyResultsError,
+    HttpError,
+    RateLimitError,
+  ];
+
+  return handledErrors.some((handledError) => error instanceof handledError);
 }
 
 function handleError(error) {
-  process.exitCode = 1;
-
   /**
    * A handled error occurred. We should have an error message so user can learn
    * how to solve the issue.

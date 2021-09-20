@@ -1,5 +1,15 @@
+function composeOptionString(command, options) {
+  if (options == null) {
+    return '';
+  }
+
+  return command === 'trade'
+    ? ` ${options} --key key --secret secret`
+    : ` ${options}`;
+}
+
 function composeCommand(command, options) {
-  const optionString = options == null ? '' : ` ${options}`;
+  const optionString = composeOptionString(command, options);
 
   /**
    * Force uncoloured output so we can match output strings without stepping

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { InvalidOptionArgumentError } from 'commander';
 
-const DEFAULT_OPTIONS = {
+const defaultOptions = {
   allowPositive: true,
   allowNegative: true,
   allowZero: true,
@@ -11,41 +11,41 @@ const DEFAULT_OPTIONS = {
 
 function normaliseOptions(options) {
   return {
-    ...DEFAULT_OPTIONS,
+    ...defaultOptions,
     ...options,
   };
 }
 
-function isThousandNumberShorthand(number) {
-  return /^-?\d+(?:\.\d+)?k$/i.test(number);
+function isShorthand(number) {
+  return ['k', 'm'].some((character) => number.includes(character));
 }
 
-function parseThousandNumberShorthand(numberShorthand) {
-  const [multiplier] = numberShorthand.split(/k/i);
-
-  return new BigNumber(multiplier).multipliedBy(1000);
+function parseShorthandParts([, number, character]) {
+  return {
+    number: new BigNumber(number),
+    multiplier: character === 'm' ? 1_000_000 : 1000,
+  };
 }
 
-function isMillionNumberShorthand(number) {
-  return /^-?\d+(?:\.\d+)?m$/i.test(number);
-}
+function parseShorthand(shorthand, errorMessage) {
+  const parts = shorthand.match(/^([^km]+)([km])$/);
 
-function parseMillionNumberShorthand(numberShorthand) {
-  const [multiplier] = numberShorthand.split(/m/i);
-
-  return new BigNumber(multiplier).multipliedBy(1_000_000);
-}
-
-function parseNumberShorthand(number, allowShorthand) {
-  if (allowShorthand && isThousandNumberShorthand(number)) {
-    return parseThousandNumberShorthand(number);
+  if (parts == null) {
+    throw new InvalidOptionArgumentError(errorMessage);
   }
 
-  if (allowShorthand && isMillionNumberShorthand(number)) {
-    return parseMillionNumberShorthand(number);
-  }
+  const { number, multiplier } = parseShorthandParts(parts);
 
-  return new BigNumber(number);
+  return number.multipliedBy(multiplier);
+}
+
+function calculateNumber(number, allowShorthand, errorMessage) {
+  const lowercaseNumber = number.toLowerCase();
+  const shouldParseShorthand = allowShorthand && isShorthand(lowercaseNumber);
+
+  return shouldParseShorthand
+    ? parseShorthand(lowercaseNumber, errorMessage)
+    : new BigNumber(number);
 }
 
 function isValid(parsedNumber, options) {
@@ -75,9 +75,10 @@ function isValid(parsedNumber, options) {
 function parseNumber(number, errorMessage, options = {}) {
   const normalisedOptions = normaliseOptions(options);
 
-  const parsedNumber = parseNumberShorthand(
+  const parsedNumber = calculateNumber(
     number,
-    normalisedOptions.allowShorthand
+    normalisedOptions.allowShorthand,
+    errorMessage
   );
 
   if (!isValid(parsedNumber, normalisedOptions)) {

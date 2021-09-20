@@ -5,6 +5,7 @@
 - [🔐 `trade`](#-trade)
   - [Options](#options)
   - [Examples](#examples)
+  - [Notes](#notes)
   - [Resources](#resources)
 - [🔐 `cancel`](#-cancel)
   - [Options](#options-1)
@@ -14,36 +15,40 @@
 
 ## 🔐 `trade`
 
-```sh
-ftx trade [options]  Place order(s).
+```
+ftx trade <options>  Place order(s).
 ```
 
 ### Options
 
 ```
 Required:
-  -m, --market <market>               Market name.
-      --side <side>                   Order side.
-  -t, --type <type>                   Order type.
-  -s, --size <size>                   Size to execute.
+  -m, --market <market>          Market name.
+      --side <side>              Order side.
+  -t, --type <type>              Order type.
+  -s, --size <size>              Size to execute.
 
-Optional/order-type-specific:
-      --size-currency (base | quote)  Source currency for calculating size [default: base].
-  -p, --price <price>                 Price that limit orders will be executed at.
-      --trigger-price <price>         Price that triggers stop or take profit orders.
-      --trail-value <value>           Distance the price must change direction and move in order to trigger trailing stop orders.
-      --split <count>                 Splits the order into a number of smaller, equal-sized orders.
-      --duration <duration>           Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
-      --[no-]reduce-only              Toggle Reduce-Only mode. When enabled, orders will only reduce your position.
-      --[no-]ioc                      Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker.
-      --[no-]post-only                Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker.
-      --[no-]retry                    Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled.
-      --rate-limit <rate limit>       Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
+Order-type-specific:
+  -p, --price <price>            Price that limit orders will be executed at.
+      --trigger-price <price>    Price that triggers stop or take profit orders.
+      --trail-value <value>      Distance that price must change direction and move in order to trigger trailing stop orders.
+
+Optional:
+      --split <count>            Splits the order into a number of smaller, equal-sized individual orders.
+      --duration <duration>      Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
+
+Configurable:
+      --size-currency <source>   Source currency for calculating size [default: base].
+      --size-hook <hook>         Source size for calculating relative size [default: default].
+      --price-hook <hook>        Source price for calculating relative price [default: market].
+      --[no-]reduce-only         Toggle Reduce-Only mode. When enabled, orders will only reduce your position [default: disabled].
+      --[no-]ioc                 Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker [default: disabled].
+      --[no-]post-only           Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker [default: enabled].
+      --[no-]retry               Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled [default: enabled].
+      --rate-limit <rate limit>  Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds) [default: 6/200].
 ```
 
-> ℹ️ FTX CLI allows you to place new advanced order types. [Learn more](./advanced-orders.md).
->
-> ℹ️ You can save your order mode (IOC, Post-Only, Reduce-Only, Retry-Until-Filled) and rate limit preferences using the `config` command.
+> ℹ️ You can set configurable option defaults using the [`config`](../configuration/README.md#config) command.
 
 ---
 
@@ -53,9 +58,7 @@ Optional/order-type-specific:
 -m, --market <market>  Market name.
 ```
 
-Required.
-
-Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the `spot` and `futures` commands.
+Case-insensitive but must be formatted as it is on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
 
 Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 
@@ -66,8 +69,6 @@ Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
 ```
 --side <side>  Order side.
 ```
-
-Required.
 
 | Choice | Aliases |
 | ------ | ------- |
@@ -82,45 +83,38 @@ Required.
 -t, --type <type>  Order type.
 ```
 
-Required.
-
-| Choice               | Aliases | Additional required options                          |
-| -------------------- | ------- | ---------------------------------------------------- |
-| `market`             | `m`     |                                                      |
-| `limit`              | `l`     | [`price`](#price)                                    |
-| `stop-market`        | `sm`    | [`trigger-price`](#trigger-price)                    |
-| `stop-limit`         | `sl`    | [`price`](#price), [`trigger-price`](#trigger-price) |
-| `trailing-stop`      | `ts`    | [`trail-value`](#trail-value)                        |
-| `take-profit-market` | `tpm`   | [`trigger-price`](#trigger-price)                    |
-| `take-profit-limit`  | `tpl`   | [`price`](#price), [`trigger-price`](#trigger-price) |
+| Choice               | Aliases | Additional required options                            |
+| -------------------- | ------- | ------------------------------------------------------ |
+| `market`             | `m`     |                                                        |
+| `limit`              | `l`     | [`price`](#pricing)                                    |
+| `stop-market`        | `sm`    | [`trigger-price`](#trigger-price)                      |
+| `stop-limit`         | `sl`    | [`price`](#pricing), [`trigger-price`](#trigger-price) |
+| `trailing-stop`      | `ts`    | [`trail-value`](#trail-value)                          |
+| `take-profit-market` | `tpm`   | [`trigger-price`](#trigger-price)                      |
+| `take-profit-limit`  | `tpl`   | [`price`](#pricing), [`trigger-price`](#trigger-price) |
 
 ---
 
-#### Size
+#### Sizing
 
 ```
--s, --size <size>  Size to execute (spot: base currency; futures: underlying).
+-s, --size <size>             Size to execute.
+    --size-currency <source>  Source currency for calculating size [default: base].
+    --size-hook <hook>        Source size for calculating relative size [default: default].
 ```
 
-Required.
-
-Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
-
-Examples: `0.001`, `10`, `100k`.
+[Learn more about order sizing](./order-sizing.md).
 
 ---
 
-#### Price
+#### Pricing
 
 ```
--p, --price <price>  Price that limit orders will be executed at.
+-p, --price <price>      Price that orders executed at limit will be placed at.
+    --price-hook <hook>  Source price for calculating relative price [default: market].
 ```
 
-Required for limit orders (`limit`, `stop-limit`, `take-profit-limit`).
-
-Supports [number shorthands](./../../guides/power-users.md#number-shorthands) and price ranges (format: `X:Y`) for [scaled orders](./advanced-orders.md#scaled-order).
-
-Examples: `0.001`, `10:20`, `100k:50k`.
+[Learn more about order pricing](./order-pricing.md).
 
 ---
 
@@ -130,10 +124,6 @@ Examples: `0.001`, `10:20`, `100k:50k`.
 --trigger-price <price>  Price that triggers stop or take profit orders.
 ```
 
-Required for stop and take profit orders (`stop-market`, `stop-limit`, `take-profit-market`, `take-profit-limit`).
-
-Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
-
 Examples: `0.001`, `10`, `100k`.
 
 ---
@@ -141,14 +131,10 @@ Examples: `0.001`, `10`, `100k`.
 #### Trail value
 
 ```
---trail-value <value>  Distance the price must change direction and move in order to trigger trailing stop orders.
+--trail-value <value>  Distance that price must change direction and move in order to trigger trailing stop orders.
 ```
 
-Required for `trailing-stop` orders.
-
 Positive value for `buy` orders (i.e. the price must increase by the value without making a new low); negative value for `sell` orders (i.e. the price must decrease by the value without making a new high).
-
-Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
 
 Examples: `1`, `-1`, `1k`.
 
@@ -157,34 +143,28 @@ Examples: `1`, `-1`, `1k`.
 #### Split
 
 ```
---split <count>  Splits the order into a number of smaller, equal-sized orders.
+--split <count>  Splits the order into a number of smaller, equal-sized individual orders.
 ```
 
-Optional (default: `1` [disabled]).
+Split orders can be used to disguise the total order size.
 
 Compatible with all order types.
 
-Supports [number shorthands](./../../guides/power-users.md#number-shorthands).
-
 Examples: `1`, `100`, `1k`.
-
-[Learn more about split orders](./advanced-orders.md#split-order).
 
 ---
 
 #### Duration
 
 ```
---duration <duration>  Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.
+--duration <duration>  Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
 ```
 
-Optional (default: disabled).
+Timed orders can be combined with market orders to create TWAP orders: these can be used to minimise market impact. Timed orders can also be combined with limit orders to delay individual order placement: these can be used to show smaller parts of an order in the orderbook at once.
 
-Compatible with all order types executed as split orders.
+Compatible with all split orders.
 
 Examples: `30s`, `1h45m10s`, `3h`.
-
-[Learn more about TWAP orders](./advanced-orders.md#twap-order).
 
 ---
 
@@ -194,8 +174,6 @@ Examples: `30s`, `1h45m10s`, `3h`.
 --reduce-only     Enable Reduce-Only mode. Orders will only reduce your position.
 --no-reduce-only  Disable Reduce-Only mode.
 ```
-
-Optional (default: disabled).
 
 Compatible with all order types.
 
@@ -208,8 +186,6 @@ Compatible with all order types.
 --no-ioc  Disable IOC mode.
 ```
 
-Optional (default: disabled).
-
 Compatible order types: `limit`.
 
 ---
@@ -220,8 +196,6 @@ Compatible order types: `limit`.
 --post-only     Enable Post-Only mode. Limit orders will only be executed as the maker.
 --no-post-only  Disable Post-Only mode.
 ```
-
-Optional (default: enabled).
 
 Compatible order types: `limit`.
 
@@ -234,8 +208,6 @@ Compatible order types: `limit`.
 --no-retry  Disable Retry-Until-Filled mode.
 ```
 
-Optional (default: enabled).
-
 Compatible order types: `stop-market`, `trailing-stop`, `take-profit-market`.
 
 ---
@@ -246,11 +218,7 @@ Compatible order types: `stop-market`, `trailing-stop`, `take-profit-market`.
 --rate-limit <rate limit>  Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds).
 ```
 
-Optional (default: `6/200`).
-
-Compatible with all order types.
-
-For example, `6/200` means 'send a maximum of `6` order placement requests every `200` milliseconds'.
+`6/200` means 'send a maximum of `6` order placement requests every `200` milliseconds'.
 
 Examples: `2/200`, `6/200`, `24/200`.
 
@@ -260,31 +228,19 @@ Examples: `2/200`, `6/200`, `24/200`.
 
 ### Examples
 
-```sh
-# Place order: market buy 1 BTC/USD.
-ftx trade --market btc/usd --side buy --type market --size 1
+Please see [here](./examples.md).
 
-# Place order: limit sell 2.5 BTC-PERP at $100,000.
-ftx trade --market btc-perp --side sell --type limit --size 2.5 --price 100k
+### Notes
 
-# Place order: stop market buy 10 ETH/BTC, triggering at 0.1.
-ftx trade --market eth/btc --side buy --type stop-market --size 10 --trigger-price 0.1
+Complex orders can have some individual orders rejected. Individual orders that fail to be placed due to rate limits or unexpected errors will automatically be retried. Individual orders that fail to be placed due to other reasons (e.g. connection loss, not enough margin) will be ignored and execution will continue. This may result in incomplete orders.
 
-# Place order: stop limit buy 100 FTT/USDT at $150, triggering at $150.5.
-ftx trade --market ftt/usdt --side buy --type stop-limit --size 100 --price 150 --trigger-price 150.5
+The order placement sequence of complex orders is not guaranteed: individual orders are often sent in parallel, to increase speed, and it is impossible to predict which will be accepted first by the FTX platform.
 
-# Place order: trailing stop buy 10,000 USDT-0924, trailing by $0.005.
-ftx trade --market usdt-0924 --side buy --type trailing-stop --size 10k --trail-value 0.005
-
-# Place order: take profit market buy 1 BTC/USD, triggering at $30,500.
-ftx trade --market btc/usd --side buy --type take-profit-market --size 1 --trigger-price 30.5k
-
-# Place order: take profit limit buy 1 BTC/USD at $30,450, triggering at $30,500.
-ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 30.45k --trigger-price 30.5k
-```
+FTX trading fees are charged per volume executed, and not per trade executed, so multiple smaller orders will incur the same total fee as if they were placed as a single large order.
 
 ### Resources
 
+- [Twitter thread: FTX CLI TWAP orders](https://twitter.com/dusktrades/status/1431995882040352775)
 - [Article: Advanced Order Types](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
 - [Article: Reduce-only Orders](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
 
@@ -292,45 +248,25 @@ ftx trade --market btc/usd --side buy --type take-profit-limit --size 1 --price 
 
 ## 🔐 `cancel`
 
-```sh
+```
 ftx cancel [options]  Cancel order(s).
 ```
 
 ### Options
 
 ```
--m, --market <market>  Market name.
---side <side>          Order side.
+Optional:
+  -m, --market <market>  Market name.
+      --side <side>      Order side.
 ```
 
 ---
 
-#### Market
-
-```
--m, --market <market>  Market name.
-```
-
-Optional.
-
-Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
-
-Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
+#### [Market](#market)
 
 ---
 
-#### Side
-
-```
---side <side>  Order side.
-```
-
-Optional.
-
-| Choice | Aliases |
-| ------ | ------- |
-| `buy`  | `b`     |
-| `sell` | `s`     |
+#### [Side](#side)
 
 ---
 
@@ -340,12 +276,12 @@ Optional.
 # Cancel all orders.
 ftx cancel
 
-# Cancel all BTC-PERP orders.
-ftx cancel --market btc-perp
+# Cancel all BTC/USD orders.
+ftx cancel --market btc/usd
 
 # Cancel all buy orders.
 ftx cancel --side buy
 
-# Cancel all BTC/USD sell orders.
-ftx cancel --market btc/usd --side sell
+# Cancel all BTC-PERP sell orders.
+ftx cancel --market btc-perp --side sell
 ```

@@ -1,22 +1,32 @@
+import { Logger } from '../../../../../../common/index.js';
 import { sleep } from '../../../../../../util/index.js';
 import { composeIndividualOrderRequest } from './composeIndividualOrderRequest.js';
 
 async function queueIndividualOrderRequest(
   exchange,
   credentials,
-  data,
-  queue,
-  delayMilliseconds
+  individualOrderData,
+  initialMarketData,
+  queue
 ) {
-  await sleep(delayMilliseconds);
+  await sleep(individualOrderData.delayMilliseconds);
 
-  const request = await composeIndividualOrderRequest(
-    exchange,
-    credentials,
-    data
-  );
+  try {
+    const request = await composeIndividualOrderRequest(
+      exchange,
+      credentials,
+      individualOrderData,
+      initialMarketData
+    );
 
-  return queue.add(request);
+    return queue.add(request);
+  } catch (error) {
+    Logger.error(
+      `  Invalid individual order: ${error?.message ?? 'Unhandled error'}`
+    );
+
+    throw error;
+  }
 }
 
 export { queueIndividualOrderRequest };

@@ -1,5 +1,4 @@
 import { Ftx } from '../../api/index.js';
-import { Logger } from '../../common/index.js';
 
 async function run(options) {
   const credentials = {
@@ -14,7 +13,9 @@ async function run(options) {
     type: options.command.type,
     size: options.command.size,
     sizeCurrency: options.global.sizeCurrency,
+    sizeHook: options.global.sizeHook,
     price: options.command.price,
+    priceHook: options.global.priceHook,
     triggerPrice: options.command.triggerPrice,
     trailValue: options.command.trailValue,
     splitCount: options.command.split,
@@ -26,25 +27,11 @@ async function run(options) {
     rateLimit: options.global.rateLimit,
   };
 
-  Logger.info('Processing order(s)');
-
-  try {
-    await Ftx.orders.place({
-      exchange: options.global.exchange,
-      credentials,
-      data,
-    });
-
-    Logger.info('Placed order(s)');
-  } catch {
-    process.exitCode = 1;
-
-    /**
-     * Errors are also handled at per-order level because complex orders may be
-     * partially accepted and/or have several different errors to report.
-     */
-    Logger.error('One or more orders failed to be placed');
-  }
+  await Ftx.orders.place({
+    exchange: options.global.exchange,
+    credentials,
+    data,
+  });
 }
 
 const trade = { run };

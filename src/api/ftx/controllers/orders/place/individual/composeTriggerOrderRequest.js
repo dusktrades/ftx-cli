@@ -1,4 +1,4 @@
-import { ApiError, Logger } from '../../../../../../common/index.js';
+import { ApiError } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
 import {
@@ -13,12 +13,9 @@ function normaliseTriggerPrice(triggerPrice, type) {
   }
 
   if (triggerPrice == null) {
-    const errorMessage =
-      'Stop and take profit orders must specify trigger price';
-
-    Logger.error(`  Failed order: ${errorMessage}`);
-
-    throw new ApiError(errorMessage);
+    throw new ApiError(
+      'Stop and take profit orders must specify trigger price'
+    );
   }
 
   return triggerPrice.toNumber();
@@ -31,23 +28,18 @@ function normaliseTrailValue(trailValue, type) {
   }
 
   if (trailValue == null) {
-    const errorMessage = 'Trailing stop orders must specify trail value';
-
-    Logger.error(`  Failed order: ${errorMessage}`);
-
-    throw new ApiError(errorMessage);
+    throw new ApiError('Trailing stop orders must specify trail value');
   }
 
   return trailValue.toNumber();
 }
 
 function normaliseRetryUntilFilled(enableRetry, type) {
-  // Retry-Until-Filled mode only affects market orders.
+  // Retry-Until-Filled mode only affects orders that are executed at market.
   return ORDER_TYPES[type].executionType === 'market' ? enableRetry : null;
 }
 
-async function composeRequestBody(data) {
-  const orderPrice = await data.calculatePrice();
+function composeRequestBody(data) {
   const triggerPrice = normaliseTriggerPrice(data.triggerPrice, data.type);
   const trailValue = normaliseTrailValue(data.trailValue, data.type);
 
@@ -60,18 +52,18 @@ async function composeRequestBody(data) {
     market: data.market,
     side: data.side,
     type: ORDER_TYPES[data.type].apiArgument,
-    size: await data.calculateSize(orderPrice),
+    size: data.size,
     reduceOnly: data.enableReduceOnly,
 
-    ...(orderPrice != null && { orderPrice }),
+    ...(data.price != null && { orderPrice: data.price }),
     ...(triggerPrice != null && { triggerPrice }),
     ...(trailValue != null && { trailValue }),
     ...(retryUntilFilled != null && { retryUntilFilled }),
   };
 }
 
-async function composeTriggerOrderRequest(exchange, credentials, data) {
-  const requestBody = await composeRequestBody(data);
+function composeTriggerOrderRequest(exchange, credentials, data) {
+  const requestBody = composeRequestBody(data);
 
   return () => orders.placeTriggerOrder({ exchange, credentials, requestBody });
 }
