@@ -262,25 +262,7 @@ Optional:
 
 ---
 
-<<<<<<< HEAD
-
 #### [Market](#market)
-
-=======
-
-#### Market
-
-```
--m, --market <market>  Market name.
-```
-
-Optional.
-
-Case-insensitive but must be formatted as on the FTX platform. You can find lists of available markets using the [`spot`](../markets/README.md#spot) and [`futures`](../markets/README.md#futures) commands.
-
-Examples: `btc/usd`, `btc-perp`, `btc-move-0218`.
-
-> > > > > > > master
 
 ---
 
