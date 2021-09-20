@@ -1,5 +1,6 @@
 import { program } from 'commander';
 
+import { setServerTimeOffset } from '../src/api/ftx/endpoints/request.js';
 import { Commands } from '../src/commands/index.js';
 import { Logger } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
@@ -72,6 +73,7 @@ async function runCommand(command, inlineCommandOptions) {
   }
 
   try {
+    await setServerTimeOffset({ exchange: options.global.exchange });
     await runHandler(command, options);
   } catch (error) {
     handleError(error);

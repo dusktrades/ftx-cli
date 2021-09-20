@@ -106,7 +106,7 @@ function mockPlaceOrder() {
   // TODO: Refactor to match wallet endpoint mocks.
   nock(HOSTNAME, {
     reqheaders: {
-      ...COMMON_REQUEST_HEADERS,
+      ...COMMON_REQUEST_HEADERS.authenticated,
       'ftx-key': 'key',
     },
   })

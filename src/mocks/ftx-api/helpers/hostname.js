@@ -1,3 +1,3 @@
-const HOSTNAME = /ftx\.(com|us)/;
+const HOSTNAME = /(otc\.)?ftx\.(com|us)/;
 
 export { HOSTNAME };
