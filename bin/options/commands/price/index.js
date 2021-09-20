@@ -1,7 +1,11 @@
 import { parseNumber, parseNumberRange } from '../../helpers/index.js';
 
-function parse(price) {
-  const parser = price.includes(':') ? parseNumberRange : parseNumber;
+function getType(price) {
+  return price.includes(':') ? 'range' : 'number';
+}
+
+function parseValue(type, price) {
+  const parser = type === 'range' ? parseNumberRange : parseNumber;
 
   return parser(
     price,
@@ -11,6 +15,12 @@ function parse(price) {
       allowZero: false,
     }
   );
+}
+
+function parse(price) {
+  const type = getType(price);
+
+  return { type, value: parseValue(type, price) };
 }
 
 const PRICE = {

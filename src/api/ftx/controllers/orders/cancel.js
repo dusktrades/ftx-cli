@@ -1,4 +1,4 @@
-import { orders } from '../../../endpoints/index.js';
+import { orders } from '../../endpoints/index.js';
 
 function composeRequestBody({ market, side }) {
   return {

@@ -23,7 +23,7 @@ function isThousandNumberShorthand(number) {
 function parseThousandNumberShorthand(numberShorthand) {
   const [multiplier] = numberShorthand.split(/k/i);
 
-  return new BigNumber(multiplier).multipliedBy(new BigNumber(1000));
+  return new BigNumber(multiplier).multipliedBy(1000);
 }
 
 function isMillionNumberShorthand(number) {
@@ -33,7 +33,7 @@ function isMillionNumberShorthand(number) {
 function parseMillionNumberShorthand(numberShorthand) {
   const [multiplier] = numberShorthand.split(/m/i);
 
-  return new BigNumber(multiplier).multipliedBy(new BigNumber(1_000_000));
+  return new BigNumber(multiplier).multipliedBy(1_000_000);
 }
 
 function parseNumberShorthand(number, allowShorthand) {

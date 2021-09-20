@@ -11,6 +11,10 @@ async function sleepMaxDuration() {
 async function sleep(milliseconds) {
   const normalisedMilliseconds = Math.max(milliseconds, 0);
 
+  if (normalisedMilliseconds === 0) {
+    return;
+  }
+
   async function lapSleep() {
     const remainingMilliseconds = normalisedMilliseconds - MAX_32_BIT_INTEGER;
 

@@ -2,10 +2,6 @@ import { futures } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
 
 function filterData(data, filters) {
-  if (filters == null) {
-    return data;
-  }
-
   return data.filter(
     (entry) =>
       allowValue(filters.underlying, entry.underlying) &&
