@@ -1,14 +1,42 @@
 import PQueue from 'p-queue';
 
+<<<<<<< HEAD:src/api/ftx/controllers/orders/place/createOrderQueue.js
+import {
+  ExchangeUnavailableError,
+  RateLimitError,
+  Logger,
+} from '../../../../../common/index.js';
+
+let queue = null;
+let shouldRetryExchangeUnavailable = false;
+=======
 import { RateLimitError, Logger } from '../../../../../common/index.js';
+>>>>>>> master:src/api/ftx/controllers/orders/place/createOrderQueue.js
 
 function handleRequestSuccess() {
   Logger.info('  Placed order');
 }
 
+<<<<<<< HEAD:src/api/ftx/controllers/orders/place/createOrderQueue.js
+function shouldRetryRequest(error) {
+  // Always retry requests which exceed the rate limit.
+  if (error instanceof RateLimitError) {
+    return true;
+  }
+
+  // Retry requests when the exchange is unavailable if user has configured it.
+  return (
+    error instanceof ExchangeUnavailableError && shouldRetryExchangeUnavailable
+  );
+}
+
+function handleRequestError(error, retry) {
+  if (shouldRetryRequest(error)) {
+=======
 function handleRequestError(error, retry) {
   if (error instanceof RateLimitError) {
     // Order failed due to exceeding rate limit: retry with increased priority.
+>>>>>>> master:src/api/ftx/controllers/orders/place/createOrderQueue.js
     return retry();
   }
 
@@ -20,9 +48,16 @@ function handleRequestError(error, retry) {
   throw error;
 }
 
+<<<<<<< HEAD:src/api/ftx/controllers/orders/place/createOrderQueue.js
+function add(request, priority = 0) {
+  // Retry with increased priority.
+  function retry() {
+    return add(request, priority + 1);
+=======
 function add(request, queue, priority = 0) {
   function retry() {
     return add(request, queue, priority + 1);
+>>>>>>> master:src/api/ftx/controllers/orders/place/createOrderQueue.js
   }
 
   return queue
@@ -48,10 +83,19 @@ function add(request, queue, priority = 0) {
  *
  * Reference: https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX
  */
+<<<<<<< HEAD:src/api/ftx/controllers/orders/place/createOrderQueue.js
+function createOrderQueue({ rateLimit, retryExchangeUnavailable }) {
+  shouldRetryExchangeUnavailable = retryExchangeUnavailable;
+
+  queue = new PQueue({
+    interval: rateLimit.intervalMilliseconds,
+    intervalCap: rateLimit.limitPerInterval,
+=======
 function createOrderQueue({ limitPerInterval, intervalMilliseconds }) {
   const queue = new PQueue({
     interval: intervalMilliseconds,
     intervalCap: limitPerInterval,
+>>>>>>> master:src/api/ftx/controllers/orders/place/createOrderQueue.js
 
     /**
      * If the next interval begins with pending promises, they will carry over
@@ -81,7 +125,11 @@ function createOrderQueue({ limitPerInterval, intervalMilliseconds }) {
      */
   });
 
+<<<<<<< HEAD:src/api/ftx/controllers/orders/place/createOrderQueue.js
+  return { add };
+=======
   return { add: (request) => add(request, queue) };
+>>>>>>> master:src/api/ftx/controllers/orders/place/createOrderQueue.js
 }
 
 export { createOrderQueue };

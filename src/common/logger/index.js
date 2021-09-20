@@ -1,4 +1,8 @@
 /* eslint-disable no-console */
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 
@@ -16,11 +20,19 @@ function shouldColour(colour) {
 
 function formatLevel({ name, colour }) {
   const formattedLevel = name.toUpperCase().padEnd(5);
+<<<<<<< HEAD
 
   if (!shouldColour(colour)) {
     return formattedLevel;
   }
 
+=======
+
+  if (!shouldColour(colour)) {
+    return formattedLevel;
+  }
+
+>>>>>>> master
   return shouldColour(colour) ? chalk[colour](formattedLevel) : formattedLevel;
 }
 

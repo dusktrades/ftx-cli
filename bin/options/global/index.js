@@ -9,6 +9,7 @@ import { PRICE_HOOK } from './price-hook/index.js';
 import { RATE_LIMIT } from './rate-limit/index.js';
 import { REDUCE_ONLY } from './reduce-only/index.js';
 import { RETRY } from './retry/index.js';
+import { RETRY_EXCHANGE_UNAVAILABLE } from './retry-exchange-unavailable/index.js';
 import { SCHEDULE } from './schedule/index.js';
 import { SIZE_CURRENCY } from './size-currency/index.js';
 import { SIZE_HOOK } from './size-hook/index.js';
@@ -51,6 +52,8 @@ const GLOBAL = [
   RETRY.ENABLE,
   RETRY.DISABLE,
   RATE_LIMIT,
+  RETRY_EXCHANGE_UNAVAILABLE.ENABLE,
+  RETRY_EXCHANGE_UNAVAILABLE.DISABLE,
 ];
 
 export { GLOBAL };
