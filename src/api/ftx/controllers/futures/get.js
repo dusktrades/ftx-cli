@@ -3,9 +3,10 @@ import { allowValue } from '../allowValue.js';
 
 function filterData(data, filters) {
   return data.filter(
-    (entry) =>
-      allowValue(filters.underlying, entry.underlying) &&
-      allowValue(filters.type, entry.type)
+    ({ enabled, type, underlying }) =>
+      enabled &&
+      allowValue(filters.type, type) &&
+      allowValue(filters.underlying, underlying)
   );
 }
 
