@@ -2,14 +2,77 @@
 
 ## Contents
 
+- [🔐 `positions`](#-positions)
 - [🔐 `trade`](#-trade)
-  - [Options](#options)
-  - [Examples](#examples)
-  - [Notes](#notes)
-  - [Resources](#resources)
 - [🔐 `cancel`](#-cancel)
-  - [Options](#options-1)
-  - [Examples](#examples-1)
+
+![Divider](../../images/divider.png)
+
+## 🔐 `positions`
+
+```
+ftx positions [options]  Display my open futures positions.
+```
+
+### Options
+
+```
+Optional:
+  -m, --market <market>  Market name(s).
+      --sort <method>    Sorting method.
+```
+
+---
+
+#### Market
+
+```
+-m, --market <market>  Market name(s).
+```
+
+Case-insensitive but must be formatted as it is on the FTX platform. You can find a list of available markets using the [`futures`](../markets/README.md#futures) command.
+
+Examples: `btc-perp`, `eth-perp`, `btc-perp,btc-1231,btc-move-0218`.
+
+---
+
+#### Sort
+
+```
+--sort <method>  Sorting method.
+```
+
+| Choice                        | Aliases | Description                                            |
+| ----------------------------- | ------- | ------------------------------------------------------ |
+| `market`                      | `m`     | Sort by market name (A-Z).                             |
+| `side`                        | `S`     | Sort by order side (high-low).                         |
+| `size`                        | `s`     | Sort by order size (high-low).                         |
+| `notional-size`               | `ns`    | Sort by notional order size (high-low).                |
+| `mark-price`                  | `mp`    | Sort by mark price (high-low).                         |
+| `average-open-price`          | `op`    | Sort by average open price since last flat (high-low). |
+| `break-even-price`            | `bep`   | Sort by break-even price since last flat (high-low).   |
+| `estimated-liquidation-price` | `lp`    | Sort by estimated liquidation price (high-low).        |
+| `pnl`                         |         | Sort by PnL since last flat (high-low).                |
+
+---
+
+### Examples
+
+```sh
+# Display my open futures positions.
+ftx positions
+
+# Display my open BTC-PERP position.
+ftx positions --market btc-perp
+
+# Display my open futures positions, sorted by PnL.
+ftx positions --sort pnl
+```
+
+### Resources
+
+- [Article: PnL, Average Open Price, and Break-Even Price](https://help.ftx.com/hc/en-us/articles/360031893572-PnL-Average-Open-Price-and-Break-Even-Price)
+- [Article: Liquidations](https://help.ftx.com/hc/en-us/articles/360027668712-Liquidations)
 
 ![Divider](../../images/divider.png)
 
@@ -53,7 +116,7 @@ Configurable:
 
 ---
 
-#### Market
+#### [Market](#market)
 
 ```
 -m, --market <market>  Market name.

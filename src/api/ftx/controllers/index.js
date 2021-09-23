@@ -3,6 +3,7 @@ import { lendingEarnings } from './lending-earnings/index.js';
 import { lendingOffers } from './lending-offers/index.js';
 import { lendingRates } from './lending-rates/index.js';
 import { orders } from './orders/index.js';
+import { positions } from './positions/index.js';
 import { spot } from './spot/index.js';
 import { wallet } from './wallet/index.js';
 
@@ -12,6 +13,7 @@ const Controllers = {
   lendingOffers,
   lendingRates,
   orders,
+  positions,
   spot,
   wallet,
 };

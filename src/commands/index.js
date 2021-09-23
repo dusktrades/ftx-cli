@@ -6,6 +6,7 @@ import { lend } from './lend/index.js';
 import { login } from './login/index.js';
 import { logout } from './logout/index.js';
 import { offers } from './offers/index.js';
+import { positions } from './positions/index.js';
 import { rates } from './rates/index.js';
 import { spot } from './spot/index.js';
 import { stop } from './stop/index.js';
@@ -21,6 +22,7 @@ const Commands = {
   login,
   logout,
   offers,
+  positions,
   rates,
   spot,
   stop,
