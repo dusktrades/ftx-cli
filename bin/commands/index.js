@@ -6,6 +6,7 @@ import { LEND } from './lend/index.js';
 import { LOGIN } from './login/index.js';
 import { LOGOUT } from './logout/index.js';
 import { OFFERS } from './offers/index.js';
+import { POSITIONS } from './positions/index.js';
 import { RATES } from './rates/index.js';
 import { SPOT } from './spot/index.js';
 import { STOP } from './stop/index.js';
@@ -31,6 +32,7 @@ const COMMANDS = [
   FUTURES,
 
   // Trading commands.
+  POSITIONS,
   TRADE,
   CANCEL,
 

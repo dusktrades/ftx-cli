@@ -1,9 +1,8 @@
 import { Ftx } from '../../api/index.js';
 import { createTable, Logger } from '../../common/index.js';
-import { shorthandNumber } from '../../util/index.js';
+import { formatUsd, shorthandNumber } from '../../util/index.js';
 import { composeTableData } from '../composeTableData.js';
 import { formatChange } from '../formatChange.js';
-import { formatPrice } from '../formatPrice.js';
 import { formatRates } from '../formatRates.js';
 import { outputData } from '../outputData.js';
 
@@ -41,8 +40,8 @@ function formatFundingRates(fundingRate) {
 function composeTableEntry(entry) {
   return [
     entry.name,
-    formatPrice(entry.lastPrice),
-    formatPrice(entry.markPrice),
+    formatUsd(entry.lastPrice, { strictDecimalPlaces: false }),
+    formatUsd(entry.markPrice, { strictDecimalPlaces: false }),
     formatChange(entry),
     `${shorthandNumber(entry.volume24h)} ${entry.underlying}`,
     `$${shorthandNumber(entry.volumeUsd24h)}`,

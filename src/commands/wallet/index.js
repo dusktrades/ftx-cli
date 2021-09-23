@@ -10,9 +10,10 @@ import {
   formatUsd,
 } from '../../util/index.js';
 
+import { formatHeadingRow } from '../formatHeadingRow.js';
 import { outputData } from '../outputData.js';
 
-const columnHeadingRow = [
+const headingRow = formatHeadingRow([
   'Currency',
   'Available without borrowing',
   'Available with borrowing',
@@ -20,11 +21,11 @@ const columnHeadingRow = [
   'Total',
   'Total (USD)',
   'Allocation',
-].map((heading) => chalk.bold(heading));
+]);
 
 const emptySectionRow = [
   {
-    colSpan: columnHeadingRow.length,
+    colSpan: headingRow.length,
     hAlign: 'center',
     content: chalk.yellow('No balances found.'),
   },
@@ -53,7 +54,7 @@ function composeSubaccountHeading(subaccount) {
 }
 
 function composeSubheadingRow(content) {
-  return [{ colSpan: columnHeadingRow.length, hAlign: 'center', content }];
+  return [{ colSpan: headingRow.length, hAlign: 'center', content }];
 }
 
 function composeBalanceRow(entry) {
@@ -108,7 +109,7 @@ function composeAllSubaccountsTableData({ subaccounts, total }) {
 }
 
 function outputTableData(data) {
-  const table = createTable(columnHeadingRow);
+  const table = createTable(headingRow);
 
   const tableData =
     data.subaccounts == null
