@@ -1,5 +1,6 @@
 export { MAX_32_BIT_INTEGER } from './max32BitInteger.js';
 export { SECONDS_PER_HOUR } from './secondsPerHour.js';
+export { colourBySign } from './colourBySign.js';
 export { compareAToZ } from './compareAToZ.js';
 export { compareHighToLow } from './compareHighToLow.js';
 export { convertDecimalToPercentage } from './convertDecimalToPercentage.js';
