@@ -1,14 +1,14 @@
 const POST_ONLY = {
   ENABLE: {
     name: 'postOnly',
-    FLAGS: '--post-only',
-    DESCRIPTION:
+    flags: '--post-only',
+    description:
       'Enable Post-Only mode. Limit orders will only be executed as the maker.',
     isConfigurable: true,
   },
   DISABLE: {
-    FLAGS: '--no-post-only',
-    DESCRIPTION: 'Disable Post-Only mode.',
+    flags: '--no-post-only',
+    description: 'Disable Post-Only mode.',
   },
 };
 

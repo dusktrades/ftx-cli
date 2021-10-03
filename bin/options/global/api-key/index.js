@@ -1,7 +1,7 @@
 const API_KEY = {
   name: 'key',
-  FLAGS: '-k, --key <key>',
-  DESCRIPTION: 'FTX API key.',
+  flags: '-k, --key <key>',
+  description: 'FTX API key.',
   isConfigurable: true,
 };
 

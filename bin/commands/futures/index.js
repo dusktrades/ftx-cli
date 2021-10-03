@@ -1,45 +1,32 @@
-import { composeSortOptionConfig } from '../../options/helpers/index.js';
+import { composeSortOption } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
+import { run } from './run.js';
 
-const sortOption = composeSortOptionConfig([
-  'name',
-  'n',
+const sortingMethods = [
+  { parsed: 'name', options: ['name', 'n'] },
+  { parsed: 'mark-price', options: ['mark-price', 'mp'] },
+  { parsed: 'last-price', options: ['last-price', 'lp'] },
+  { parsed: 'change-1h', options: ['change-1h', 'c1'] },
+  { parsed: 'change-24h', options: ['change-24h', 'c24'] },
+  { parsed: 'volume', options: ['volume', 'v'] },
+  { parsed: 'open-interest', options: ['open-interest', 'oi'] },
+  { parsed: 'previous-funding', options: ['previous-funding', 'pf'] },
 
-  'last-price',
-  'lp',
-
-  'mark-price',
-  'mp',
-
-  'change-1h',
-  'c1',
-
-  'change-24h',
-  'c24',
-
-  'volume',
-  'v',
-
-  'open-interest',
-  'oi',
-
-  'previous-funding',
-  'pf',
-
-  'estimated-funding',
-  'ef',
-]);
+  // TODO: Change to `next-funding` to be more semantic.
+  { parsed: 'estimated-funding', options: ['estimated-funding', 'ef'] },
+];
 
 // TODO: Remove deprecated `currency` option.
 const FUTURES = {
-  NAME: 'futures',
-  DESCRIPTION: 'Display futures markets.',
-  OPTIONS: [
-    { OPTION: OPTIONS.COMMANDS.UNDERLYING },
-    { OPTION: OPTIONS.COMMANDS.CURRENCY },
-    { OPTION: OPTIONS.COMMANDS.FUTURE_TYPE },
-    { OPTION: sortOption },
+  name: 'futures',
+  description: 'Display futures markets.',
+  options: [
+    { option: OPTIONS.COMMANDS.UNDERLYING },
+    { option: OPTIONS.COMMANDS.CURRENCY },
+    { option: OPTIONS.COMMANDS.FUTURE_TYPE },
+    { option: composeSortOption(sortingMethods) },
   ],
+  run,
 };
 
 export { FUTURES };

@@ -1,7 +1,7 @@
 const API_SECRET = {
   name: 'secret',
-  FLAGS: '-x, --secret <secret>',
-  DESCRIPTION: 'FTX API secret.',
+  flags: '-x, --secret <secret>',
+  description: 'FTX API secret.',
   isConfigurable: true,
 };
 

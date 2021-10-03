@@ -3,9 +3,10 @@ function parse(market) {
 }
 
 const MARKET = {
-  FLAGS: '-m, --market <market>',
-  DESCRIPTION: 'Market name.',
-  PARSER: parse,
+  name: 'market',
+  flags: '-m, --market <market>',
+  description: 'Market name.',
+  parser: parse,
 };
 
 export { MARKET };

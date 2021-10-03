@@ -7,10 +7,11 @@ function parse(trailValue) {
 }
 
 const TRAIL_VALUE = {
-  FLAGS: '--trail-value <value>',
-  DESCRIPTION:
+  name: 'trailValue',
+  flags: '--trail-value <value>',
+  description:
     'Distance the price must change direction and move in order to trigger trailing stop orders.',
-  PARSER: parse,
+  parser: parse,
 };
 
 export { TRAIL_VALUE };

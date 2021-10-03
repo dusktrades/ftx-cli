@@ -29,9 +29,10 @@ function parse(spotType) {
 }
 
 const SPOT_TYPE = {
-  FLAGS: '-t, --type <type>',
-  DESCRIPTION: 'Spot type(s).',
-  PARSER: parse,
+  name: 'type',
+  flags: '-t, --type <type>',
+  description: 'Spot type(s).',
+  parser: parse,
 };
 
 export { SPOT_TYPE };

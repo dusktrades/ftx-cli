@@ -3,18 +3,10 @@
 ## Contents
 
 - [`rates`](#rates)
-  - [Options](#options)
-  - [Examples](#examples)
-- [🔐 `offers`](#-offers)
-  - [Options](#options-1)
-  - [Examples](#examples-1)
-- [🔐 `earnings`](#-earnings)
-- [🔐 `lend`](#-lend)
-  - [Options](#options-2)
-  - [Examples](#examples-2)
-- [🔐 `stop`](#-stop)
-  - [Options](#options-3)
-  - [Examples](#examples-3)
+- [`offers` 🔐](#offers)
+- [`earnings` 🔐](#earnings)
+- [`lend` 🔐](#lend)
+- [`stop` 🔐](#stop)
 
 ![Divider](../../images/divider.png)
 
@@ -78,7 +70,7 @@ ftx rates --currency usd,usdt --sort estimated
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `offers`
+## `offers` 🔐
 
 ```sh
 ftx offers [options]  Display my active lending offers.
@@ -122,7 +114,7 @@ ftx offers --sort locked
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `earnings`
+## `earnings` 🔐
 
 ```sh
 ftx earnings  Display my lending earnings.
@@ -130,7 +122,7 @@ ftx earnings  Display my lending earnings.
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `lend`
+## `lend` 🔐
 
 ```sh
 ftx lend [options]  Create lending offer(s). Matching existing offer(s) will be overwritten.
@@ -216,7 +208,7 @@ ftx lend --currency usd,usdt --min-rate 5 --compound
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `stop`
+## `stop` 🔐
 
 ```sh
 ftx stop [options]  Withdraw lending offer(s).

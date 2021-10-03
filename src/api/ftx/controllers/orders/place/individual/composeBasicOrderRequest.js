@@ -1,14 +1,14 @@
 import { ApiError } from '../../../../../../common/index.js';
 import { orders } from '../../../../endpoints/index.js';
 
-function normaliseIoc({ type, enableIoc }) {
+function normaliseIoc({ type, ioc }) {
   // IOC mode only affects basic limit orders.
-  return type === 'limit' ? enableIoc : null;
+  return type === 'limit' ? ioc : null;
 }
 
-function normalisePostOnly({ type, enablePostOnly }) {
+function normalisePostOnly({ type, postOnly }) {
   // Post-Only mode only affects basic limit orders.
-  return type === 'limit' ? enablePostOnly : null;
+  return type === 'limit' ? postOnly : null;
 }
 
 function composeRequestBody(data) {
@@ -29,7 +29,7 @@ function composeRequestBody(data) {
     type: data.type,
     size: data.size,
     price: data.price,
-    reduceOnly: data.enableReduceOnly,
+    reduceOnly: data.reduceOnly,
 
     ...(ioc != null && { ioc }),
     ...(postOnly != null && { postOnly }),

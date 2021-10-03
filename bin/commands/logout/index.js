@@ -1,6 +1,9 @@
+import { run } from './run.js';
+
 const LOGOUT = {
-  NAME: 'logout',
-  DESCRIPTION: 'Remove local FTX API credentials and subaccount.',
+  name: 'logout',
+  description: 'Remove local FTX API credentials and subaccount.',
+  run,
 };
 
 export { LOGOUT };

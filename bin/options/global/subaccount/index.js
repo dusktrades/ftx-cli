@@ -1,7 +1,7 @@
 const SUBACCOUNT = {
   name: 'subaccount',
-  FLAGS: '-a, --subaccount <subaccount>',
-  DESCRIPTION: 'FTX subaccount name [default: main].',
+  flags: '-a, --subaccount <subaccount>',
+  description: 'FTX subaccount name [default: main].',
   isConfigurable: true,
 };
 

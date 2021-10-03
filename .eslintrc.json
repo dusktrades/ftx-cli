@@ -26,6 +26,7 @@
     "no-mixed-operators": "error",
     "no-nested-ternary": "error",
     "no-param-reassign": ["error", { "props": false }],
+    "no-process-exit": "off",
     "no-restricted-syntax": ["off", "ForOfStatement"],
     "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "quotes": [

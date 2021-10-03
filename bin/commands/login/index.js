@@ -1,6 +1,9 @@
+import { run } from './run.js';
+
 const LOGIN = {
-  NAME: 'login',
-  DESCRIPTION: 'Save FTX API credentials and subaccount locally.',
+  name: 'login',
+  description: 'Save FTX API credentials and subaccount locally.',
+  run,
 };
 
 export { LOGIN };

@@ -6,6 +6,7 @@ import { PACKAGE } from './package.js';
 
 const defaults = {
   // UI.
+  interactive: false,
   output: 'table',
   colour: true,
   updateNotifications: true,

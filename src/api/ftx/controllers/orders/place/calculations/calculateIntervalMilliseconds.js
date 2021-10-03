@@ -2,18 +2,18 @@ import BigNumber from 'bignumber.js';
 
 import { calculateAdditionalOrderCount } from './calculateAdditionalOrderCount.js';
 
-function calculateIntervalMilliseconds({ durationMilliseconds, splitCount }) {
-  if (durationMilliseconds.isZero()) {
+function calculateIntervalMilliseconds({ duration, split }) {
+  if (duration.isZero()) {
     return new BigNumber(0);
   }
 
-  const additionalOrderCount = calculateAdditionalOrderCount(splitCount);
+  const additionalOrderCount = calculateAdditionalOrderCount(split);
 
   if (additionalOrderCount.isZero()) {
     return new BigNumber(0);
   }
 
-  return durationMilliseconds.dividedBy(additionalOrderCount);
+  return duration.dividedBy(additionalOrderCount);
 }
 
 export { calculateIntervalMilliseconds };

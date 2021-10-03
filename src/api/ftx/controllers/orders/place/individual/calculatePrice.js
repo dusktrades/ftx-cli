@@ -34,7 +34,7 @@ function calculatePrice({ price, type }, priceStep, orderIndex) {
     handleMissingPrice();
   }
 
-  return price.type === 'range'
+  return price.type === 'scaled'
     ? calculateSteppedPrice(price, priceStep, orderIndex).toNumber()
     : price.value.toNumber();
 }

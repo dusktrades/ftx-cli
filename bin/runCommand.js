@@ -1,8 +1,7 @@
 import { program } from 'commander';
 
 import { setServerTimeOffset } from '../src/api/ftx/endpoints/request.js';
-import { Commands } from '../src/commands/index.js';
-import { Logger } from '../src/common/index.js';
+import { Logger, OptionError, Prompter } from '../src/common/index.js';
 import { CONFIG } from '../src/config/index.js';
 import { handleError } from './handleError.js';
 import { OPTIONS } from './options/index.js';
@@ -48,37 +47,98 @@ function composeGlobalOptions(compound) {
   };
 }
 
-function composeOptions(inlineCommandOptions) {
+/**
+ * We should prompt for interactive input if the following criteria are met:
+ *
+ * - The user has selected interactive mode
+ * - The command has defined interactive prompts
+ */
+function shouldPromptQuestions(isInteractive, composePrompts) {
+  return isInteractive && composePrompts != null;
+}
+
+async function promptQuestions(globalOptions, composePrompts) {
+  const { questions, handleSubmit } = await composePrompts(globalOptions);
+  const answers = await Prompter.prompt(questions);
+
+  return handleSubmit(answers);
+}
+
+async function composeCommandOptions(
+  commandOptions,
+  inlineCommandOptions,
+  globalOptions,
+  composePrompts
+) {
+  const defaultCommandOptions = Object.fromEntries(
+    commandOptions
+      .filter(({ option }) => option.default != null)
+      .map(({ option }) => [option.name, option.default])
+  );
+
+  const userCommandOptions = shouldPromptQuestions(
+    globalOptions.interactive,
+    composePrompts
+  )
+    ? await promptQuestions(globalOptions, composePrompts)
+    : inlineCommandOptions;
+
   return {
-    global: composeGlobalOptions(inlineCommandOptions.compound),
-    command: inlineCommandOptions,
+    ...defaultCommandOptions,
+    ...userCommandOptions,
   };
+}
+
+function validateCommandOptions(parsedOptions, commandOptions) {
+  const requiredOptions = commandOptions.filter(({ isRequired }) => isRequired);
+
+  for (const { option } of requiredOptions) {
+    if (parsedOptions[option.name] == null) {
+      throw new OptionError(`Missing required option: ${option.flags}`);
+    }
+  }
+}
+
+async function composeOptions(
+  inlineCommandOptions,
+  { options, composePrompts }
+) {
+  const global = composeGlobalOptions(inlineCommandOptions.compound);
+
+  const command = await composeCommandOptions(
+    options,
+    inlineCommandOptions,
+    global,
+    composePrompts
+  );
+
+  validateCommandOptions(command, options);
+
+  return { ...global, ...command };
 }
 
 function shouldNotifyUpdate({ updateNotifications, output }) {
   return updateNotifications && output === 'table';
 }
 
-async function runHandler(command, options) {
-  const { run } = Commands[command];
-
-  await (options.global.schedule == null
+async function runHandler(run, options) {
+  await (options.schedule == null
     ? run(options)
     : scheduleCommand(run, options));
 }
 
-async function runCommand(command, inlineCommandOptions) {
-  const options = composeOptions(inlineCommandOptions);
-
-  Logger.setEnableColours(options.global.colour);
-
-  if (shouldNotifyUpdate(options.global)) {
-    queueUpdateNotification(options.global.colour);
-  }
-
+async function runCommand(commandConfig, inlineCommandOptions) {
   try {
-    await setServerTimeOffset({ exchange: options.global.exchange });
-    await runHandler(command, options);
+    const options = await composeOptions(inlineCommandOptions, commandConfig);
+
+    Logger.setEnableColours(options.colour);
+
+    if (shouldNotifyUpdate(options)) {
+      queueUpdateNotification(options.colour);
+    }
+
+    await setServerTimeOffset(options);
+    await runHandler(commandConfig.run, options);
   } catch (error) {
     handleError(error);
   }

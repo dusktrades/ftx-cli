@@ -3,13 +3,13 @@ import { Command } from 'commander';
 import { composeOption } from '../options/index.js';
 import { runCommand } from '../runCommand.js';
 
-function addOptions(command, optionConfigs) {
-  if (optionConfigs == null) {
+function addOptions(command, options) {
+  if (options == null) {
     return;
   }
 
-  for (const { OPTION, IS_REQUIRED } of optionConfigs) {
-    const option = composeOption(OPTION, IS_REQUIRED);
+  for (const { option: config } of options) {
+    const option = composeOption(config);
 
     command.addOption(option);
   }
@@ -17,14 +17,14 @@ function addOptions(command, optionConfigs) {
 
 function composeCommand(config) {
   // Name, description, and action are required.
-  const command = new Command(config.NAME)
-    .description(config.DESCRIPTION)
+  const command = new Command(config.name)
+    .description(config.description)
     .helpOption('-h, --help', 'Display help for command.')
     .action(async (inlineCommandOptions) => {
-      await runCommand(config.NAME, inlineCommandOptions);
+      await runCommand(config, inlineCommandOptions);
     });
 
-  addOptions(command, config.OPTIONS);
+  addOptions(command, config.options);
 
   return command;
 }

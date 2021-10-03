@@ -10,10 +10,10 @@ import { composeTriggerOrderRequest } from './composeTriggerOrderRequest.js';
  */
 async function composeCurrentMarketData(
   exchange,
-  { market, durationMilliseconds },
+  { market, duration },
   initialMarketData
 ) {
-  return durationMilliseconds == null
+  return duration == null
     ? initialMarketData
     : markets.getSingleMarket({
         exchange,

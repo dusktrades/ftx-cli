@@ -4,6 +4,7 @@ import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
+import { sortData } from '../sortData.js';
 
 function allowActive(filter, { offered, locked }) {
   return filter == null ? true : offered > 0 || locked > 0;
@@ -51,36 +52,23 @@ function normaliseData(data) {
   }));
 }
 
-function composeCompareFunction(sortBy) {
-  if (['lendable', 'le'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.lendable, b.lendable);
+function composeSortCompare(sortBy) {
+  switch (sortBy) {
+    case 'lendable':
+      return (a, b) => compareHighToLow(a.lendable, b.lendable);
+    case 'offered':
+      return (a, b) => compareHighToLow(a.offered, b.offered);
+    case 'locked':
+      return (a, b) => compareHighToLow(a.locked, b.locked);
+    case 'min-rate':
+      return (a, b) => compareHighToLow(a.minRate, b.minRate);
+    default:
+      return null;
   }
-
-  if (['offered', 'o'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.offered, b.offered);
-  }
-
-  if (['locked', 'lo'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.locked, b.locked);
-  }
-
-  if (['min-rate', 'r'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.minRate, b.minRate);
-  }
-
-  return null;
 }
 
-function sortData(data, sortBy) {
-  const alphabeticalData = [...data].sort((a, b) =>
-    compareAToZ(a.coin, b.coin)
-  );
-
-  const compareFunction = composeCompareFunction(sortBy);
-
-  return compareFunction == null
-    ? alphabeticalData
-    : alphabeticalData.sort(compareFunction);
+function initialCompare(a, b) {
+  return compareAToZ(a.coin, b.coin);
 }
 
 function collateData(data, filters, sortBy) {
@@ -91,8 +79,9 @@ function collateData(data, filters, sortBy) {
   }
 
   const normalisedData = normaliseData(filteredData);
+  const sortCompare = composeSortCompare(sortBy);
 
-  return sortData(normalisedData, sortBy);
+  return sortData(normalisedData, initialCompare, sortCompare);
 }
 
 async function get({ exchange, credentials, filters, sortBy }) {

@@ -4,18 +4,20 @@ import {
   ExchangeUnavailableError,
   HttpError,
   Logger,
+  OptionError,
   RateLimitError,
 } from '../src/common/index.js';
 
-function isHandled(error) {
-  const handledErrors = [
-    ApiError,
-    EmptyResultsError,
-    ExchangeUnavailableError,
-    HttpError,
-    RateLimitError,
-  ];
+const handledErrors = [
+  ApiError,
+  EmptyResultsError,
+  ExchangeUnavailableError,
+  HttpError,
+  OptionError,
+  RateLimitError,
+];
 
+function isHandled(error) {
   return handledErrors.some((handledError) => error instanceof handledError);
 }
 

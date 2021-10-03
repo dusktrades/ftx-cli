@@ -79,10 +79,10 @@ function parse(schedule) {
 
 const SCHEDULE = {
   name: 'schedule',
-  FLAGS: '--schedule <schedule>',
-  DESCRIPTION:
+  flags: '--schedule <schedule>',
+  description:
     'Schedule command to run at a future date and time or periodically, according to a given interval, until manually aborted.',
-  PARSER: parse,
+  parser: parse,
 };
 
 export { SCHEDULE };

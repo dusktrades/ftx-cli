@@ -1,26 +1,19 @@
-import { composeSortOptionConfig } from '../../options/helpers/index.js';
+import { composeSortOption } from '../../options/helpers/index.js';
+import { run } from './run.js';
 
-const sortOption = composeSortOptionConfig([
-  'currency',
-  'c',
-
-  'lendable',
-  'le',
-
-  'offered',
-  'o',
-
-  'locked',
-  'lo',
-
-  'min-rate',
-  'r',
-]);
+const sortingMethods = [
+  { parsed: 'currency', options: ['currency', 'c'] },
+  { parsed: 'lendable', options: ['lendable', 'le'] },
+  { parsed: 'offered', options: ['offered', 'o'] },
+  { parsed: 'locked', options: ['locked', 'lo'] },
+  { parsed: 'min-rate', options: ['min-rate', 'r'] },
+];
 
 const OFFERS = {
-  NAME: 'offers',
-  DESCRIPTION: 'Display my active lending offers.',
-  OPTIONS: [{ OPTION: sortOption }],
+  name: 'offers',
+  description: 'Display my active lending offers.',
+  options: [{ option: composeSortOption(sortingMethods) }],
+  run,
 };
 
 export { OFFERS };

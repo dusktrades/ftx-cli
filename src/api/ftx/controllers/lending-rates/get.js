@@ -2,6 +2,7 @@ import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { spotMargin } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
+import { sortData } from '../sortData.js';
 
 function filterData(data, filters) {
   return filters == null
@@ -9,28 +10,19 @@ function filterData(data, filters) {
     : data.filter(({ coin }) => allowValue(filters.currencies, coin));
 }
 
-function composeCompareFunction(sortBy) {
-  if (['previous', 'p'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.previous, b.previous);
+function composeSortCompare(sortBy) {
+  switch (sortBy) {
+    case 'previous':
+      return (a, b) => compareHighToLow(a.previous, b.previous);
+    case 'estimated':
+      return (a, b) => compareHighToLow(a.estimate, b.estimate);
+    default:
+      return null;
   }
-
-  if (['estimated', 'e'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.estimate, b.estimate);
-  }
-
-  return null;
 }
 
-function sortData(data, sortBy) {
-  const alphabeticalData = [...data].sort((a, b) =>
-    compareAToZ(a.coin, b.coin)
-  );
-
-  const compareFunction = composeCompareFunction(sortBy);
-
-  return compareFunction == null
-    ? alphabeticalData
-    : alphabeticalData.sort(compareFunction);
+function initialCompare(a, b) {
+  return compareAToZ(a.coin, b.coin);
 }
 
 function collateData(data, filters, sortBy) {
@@ -44,7 +36,9 @@ function collateData(data, filters, sortBy) {
     throw new EmptyResultsError('No lending rates found');
   }
 
-  return sortData(filteredData, sortBy);
+  const sortCompare = composeSortCompare(sortBy);
+
+  return sortData(filteredData, initialCompare, sortCompare);
 }
 
 async function get({ exchange, filters, sortBy }) {

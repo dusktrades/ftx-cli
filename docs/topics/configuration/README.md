@@ -3,8 +3,6 @@
 ## Contents
 
 - [`config`](#config)
-  - [Options](#options)
-  - [Examples](#examples)
 
 ![Divider](../../images/divider.png)
 

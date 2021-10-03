@@ -57,6 +57,7 @@
     "nock": "^13.1.1",
     "node-cron": "^3.0.0",
     "p-queue": "^7.1.0",
+    "prompts": "^2.4.1",
     "strip-ansi": "^7.0.0",
     "update-notifier": "^5.1.0"
   },

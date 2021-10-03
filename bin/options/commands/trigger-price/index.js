@@ -12,9 +12,10 @@ function parse(triggerPrice) {
 }
 
 const TRIGGER_PRICE = {
-  FLAGS: '--trigger-price <price>',
-  DESCRIPTION: 'Price that triggers stop or take profit orders.',
-  PARSER: parse,
+  name: 'triggerPrice',
+  flags: '--trigger-price <price>',
+  description: 'Price that triggers stop or take profit orders.',
+  parser: parse,
 };
 
 export { TRIGGER_PRICE };

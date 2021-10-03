@@ -2,6 +2,7 @@ import { API_KEY } from './api-key/index.js';
 import { API_SECRET } from './api-secret/index.js';
 import { COLOUR } from './colour/index.js';
 import { EXCHANGE } from './exchange/index.js';
+import { INTERACTIVE } from './interactive/index.js';
 import { IOC } from './ioc/index.js';
 import { OUTPUT } from './output/index.js';
 import { POST_ONLY } from './post-only/index.js';
@@ -19,6 +20,8 @@ import { UPDATE_NOTIFICATIONS } from './update-notifications/index.js';
 // The order here is the order options will appear in help outputs.
 const GLOBAL = [
   // UI.
+  INTERACTIVE.ENABLE,
+  INTERACTIVE.DISABLE,
   OUTPUT,
   COLOUR.ENABLE,
   COLOUR.DISABLE,

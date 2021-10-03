@@ -9,7 +9,7 @@ function logWaiting() {
 
 async function scheduleCommandByDate(run, options) {
   logWaiting();
-  await sleep(options.global.schedule.millisecondsUntilDate);
+  await sleep(options.schedule.millisecondsUntilDate);
   await run(options);
 }
 
@@ -28,16 +28,16 @@ async function runCronTask(run, options) {
 async function scheduleCommandByCron(run, options) {
   // TODO: Add method of ending schedule (e.g. `--schedule-end`).
   cron.schedule(
-    options.global.schedule.cronExpression,
+    options.schedule.cronExpression,
     () => runCronTask(run, options),
-    composeCronOptions(options.global.schedule.timezone)
+    composeCronOptions(options.schedule.timezone)
   );
 
   logWaiting();
 }
 
 async function scheduleCommand(run, options) {
-  await (options.global.schedule.type === 'date'
+  await (options.schedule.type === 'date'
     ? scheduleCommandByDate(run, options)
     : scheduleCommandByCron(run, options));
 }

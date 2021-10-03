@@ -29,9 +29,9 @@ function parse(sizeHook) {
 
 const SIZE_HOOK = {
   name: 'sizeHook',
-  FLAGS: '--size-hook <hook>',
-  DESCRIPTION: 'Source size for calculating relative size [default: default]',
-  PARSER: parse,
+  flags: '--size-hook <hook>',
+  description: 'Source size for calculating relative size [default: default]',
+  parser: parse,
   isConfigurable: true,
 };
 

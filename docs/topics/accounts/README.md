@@ -3,11 +3,8 @@
 ## Contents
 
 - [`login`](#login)
-  - [Options](#options)
-  - [Examples](#examples)
-  - [Resources](#resources)
 - [`logout`](#logout)
-- [`🔐 wallet`](#-wallet)
+- [`wallet` 🔐](#wallet)
 
 ![Divider](../../images/divider.png)
 
@@ -65,7 +62,7 @@ ftx logout  Remove local FTX API credentials and subaccount.
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `wallet`
+## `wallet` 🔐
 
 ```sh
 ftx wallet [options]  Display wallet balances.

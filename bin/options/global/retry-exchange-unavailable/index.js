@@ -1,14 +1,14 @@
 const RETRY_EXCHANGE_UNAVAILABLE = {
   ENABLE: {
     name: 'retryExchangeUnavailable',
-    FLAGS: '--retry-exchange-unavailable',
-    DESCRIPTION:
+    flags: '--retry-exchange-unavailable',
+    description:
       'Advanced users only. Enable retrying order placement requests that are rejected due to the exchange being unavailable.',
     isConfigurable: true,
   },
   DISABLE: {
-    FLAGS: '--no-retry-exchange-unavailable',
-    DESCRIPTION:
+    flags: '--no-retry-exchange-unavailable',
+    description:
       'Disable retrying order placement requests that are rejected due to the exchange being unavailable.',
   },
 };

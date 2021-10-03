@@ -1,9 +1,11 @@
 import { OPTIONS } from '../../options/index.js';
+import { run } from './run.js';
 
 const STOP = {
-  NAME: 'stop',
-  DESCRIPTION: 'Withdraw lending offer(s).',
-  OPTIONS: [{ OPTION: OPTIONS.COMMANDS.CURRENCY }],
+  name: 'stop',
+  description: 'Withdraw lending offer(s).',
+  options: [{ option: OPTIONS.COMMANDS.CURRENCY }],
+  run,
 };
 
 export { STOP };

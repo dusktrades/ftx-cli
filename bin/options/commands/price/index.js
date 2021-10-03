@@ -4,44 +4,77 @@ import {
   parseRelativeNumber,
 } from '../../helpers/index.js';
 
-const errorMessage =
-  'Price must be one of: number greater than zero, range of numbers greater than zero, non-zero relative number, non-zero relative percentage.';
+const numberOptions = {
+  allowNegative: false,
+  allowZero: false,
+};
+
+function isRelative(price) {
+  return ['%', '+', '-'].some((character) => price.includes(character));
+}
 
 function getType(price) {
-  if (['%', '+', '-'].some((character) => price.includes(character))) {
+  if (isRelative(price)) {
     return 'relative';
   }
 
-  return price.includes(':') ? 'range' : 'number';
+  return price.includes(':') ? 'scaled' : 'basic';
 }
 
-function getNumberParser(type) {
-  return type === 'range' ? parseNumberRange : parseNumber;
+function parseRelative(
+  price,
+  errorMessage = 'Price must be a non-zero relative number or percentage.'
+) {
+  return {
+    type: 'relative',
+    value: parseRelativeNumber(price, errorMessage, 'additive'),
+  };
 }
 
-function parseValue(type, price) {
-  if (type === 'relative') {
-    return parseRelativeNumber(price, errorMessage, 'additive');
-  }
+function parseScaled(
+  price,
+  errorMessage = 'Price must be a range of numbers greater than zero.'
+) {
+  return {
+    type: 'scaled',
+    value: parseNumberRange(price, errorMessage, numberOptions),
+  };
+}
 
-  const numberParser = getNumberParser(type);
-
-  return numberParser(price, errorMessage, {
-    allowNegative: false,
-    allowZero: false,
-  });
+function parseBasic(
+  price,
+  errorMessage = 'Price must be a number greater than zero.'
+) {
+  return {
+    type: 'basic',
+    value: parseNumber(price, errorMessage, numberOptions),
+  };
 }
 
 function parse(price) {
+  const errorMessage =
+    'Price must be one of: number greater than zero, range of numbers greater than zero, non-zero relative number, non-zero relative percentage.';
+
   const type = getType(price);
 
-  return { type, value: parseValue(type, price) };
+  switch (type) {
+    case 'relative':
+      return parseRelative(price, errorMessage);
+    case 'scaled':
+      return parseScaled(price, errorMessage);
+    default:
+      return parseBasic(price, errorMessage);
+  }
 }
 
 const PRICE = {
-  FLAGS: '-p, --price <price>',
-  DESCRIPTION: 'Price that limit orders will be executed at.',
-  PARSER: parse,
+  name: 'price',
+  flags: '-p, --price <price>',
+  description: 'Price that limit orders will be executed at.',
+  parser: parse,
+  parseBasic,
+  parseScaled,
+  parseRelative,
 };
 
 export { PRICE };

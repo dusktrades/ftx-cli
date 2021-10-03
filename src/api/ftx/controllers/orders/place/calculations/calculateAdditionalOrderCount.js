@@ -1,5 +1,5 @@
-function calculateAdditionalOrderCount(splitCount) {
-  return splitCount.minus(1);
+function calculateAdditionalOrderCount(split) {
+  return split.minus(1);
 }
 
 export { calculateAdditionalOrderCount };
