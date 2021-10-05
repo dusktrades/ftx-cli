@@ -3,7 +3,7 @@ const INTERACTIVE = {
     name: 'interactive',
     flags: '--interactive',
     description:
-      'Enable interactive mode. If the command supports interactive mode, prompts will guide you through its usage.',
+      'Enable interactive mode. If the command supports interactive mode, prompts will guide you through its usage. Other inline options will be ignored.',
     isConfigurable: true,
   },
   DISABLE: {

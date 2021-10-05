@@ -153,7 +153,7 @@ You can include these options with any command to modify its behaviour.
 
 ```
 -v, --version                           Output the version number.
-    --[no-]interactive                  Toggle interactive mode. When enabled, if the command supports interactive mode, prompts will guide you through its usage [default: disabled].
+    --[no-]interactive                  Toggle interactive mode. When enabled, if the command supports interactive mode, prompts will guide you through its usage. Other inline options will be ignored [default: disabled].
     --output (table | json)             Output format [default: table].
     --[no-]colour                       Toggle coloured output [default: enabled].
     --[no-]update-notifications         Toggle update notifications. When enabled, in table output mode, and an update is available: a notification will appear after command execution at most once a day [default: enabled].

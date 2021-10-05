@@ -116,7 +116,7 @@ Configurable:
 
 ---
 
-#### [Market](#market)
+#### Market
 
 ```
 -m, --market <market>  Market name.
@@ -307,7 +307,7 @@ Please see [here](./examples.md).
 
 ### Notes
 
-Complex orders can have some individual orders rejected. Individual orders that fail to be placed due to rate limits or unexpected errors will automatically be retried. Individual orders that fail to be placed due to other reasons (e.g. connection loss, not enough margin) will be ignored and execution will continue. This may result in incomplete orders.
+Complex orders can have some individual orders rejected. Individual orders that fail to be placed due to rate limits will automatically be retried. Individual orders that fail to be placed due to other reasons (e.g. connection loss, not enough margin) will be ignored and execution will continue. This may result in incomplete orders.
 
 The order placement sequence of complex orders is not guaranteed: individual orders are often sent in parallel, to increase speed, and it is impossible to predict which will be accepted first by the FTX platform.
 
@@ -316,6 +316,7 @@ FTX trading fees are charged per volume executed, and not per trade executed, so
 ### Resources
 
 - [Twitter thread: FTX CLI TWAP orders](https://twitter.com/dusktrades/status/1431995882040352775)
+- [Twitter thread: FTX CLI order sizing and pricing methods](https://twitter.com/dusktrades/status/1440716947616796680)
 - [Article: Advanced Order Types](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
 - [Article: Reduce-only Orders](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
 

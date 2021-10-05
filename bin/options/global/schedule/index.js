@@ -73,7 +73,7 @@ function parse(schedule) {
   }
 
   throw new InvalidOptionArgumentError(
-    'Schedule must be one of: future ISO 8601 timestamp, cron expression, cron shorthand.'
+    'Schedule must be one of: future ISO 8601 timestamp, cron expression, cron shorthand. Help: https://github.com/dusktrades/ftx-cli/blob/master/docs/guides/scheduled-commands.md'
   );
 }
 

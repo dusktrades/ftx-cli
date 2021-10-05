@@ -187,8 +187,6 @@ Examples: `0`, `10`, `100.5`.
 
 Optional (default: disabled).
 
-[Why?](../../studies/auto-compounding.md)
-
 > ℹ️ Auto-compounding creates a special type of [recurring scheduled command](../../guides/scheduled-commands.md#recurring) optimised for lending. The command will run at 59 minutes past every hour; lending rates and locked balances are updated hourly, so we want to lock our additional margin as late as possible.
 
 ---

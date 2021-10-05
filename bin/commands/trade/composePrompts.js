@@ -1,3 +1,4 @@
+import { SCHEDULE } from '../../options/global/schedule/index.js';
 import { OPTIONS } from '../../options/index.js';
 
 import {
@@ -231,6 +232,65 @@ async function composeQuestions(globalOptions) {
       message: 'Enter price',
       validate: (price) => validateAnswer(price, parsePrice),
       format: (price) => parsePrice(price),
+    },
+    {
+      type: 'text',
+      name: 'split',
+      message: 'Enter number of individual orders',
+      initial: '1',
+      validate: (split) => validateAnswer(split, OPTIONS.COMMANDS.SPLIT.parser),
+      format: (split) => OPTIONS.COMMANDS.SPLIT.parser(split),
+    },
+    {
+      type: (split) => (split.isEqualTo(1) ? null : 'text'),
+      name: 'duration',
+      message: 'Enter total order duration (leave blank to skip)',
+      validate: (duration) =>
+        duration == null ||
+        validateAnswer(duration, OPTIONS.COMMANDS.DURATION.parser),
+      format: (duration) =>
+        duration == null
+          ? OPTIONS.COMMANDS.DURATION.default
+          : OPTIONS.COMMANDS.DURATION.parser(duration),
+    },
+    {
+      type: 'select',
+      name: 'schedulingMethod',
+      message: 'Select scheduling method',
+      choices: [
+        { title: 'Now', value: 'now' },
+        { title: 'Date and time', value: 'date' },
+        { title: 'Recurring', value: 'cron' },
+      ],
+    },
+    {
+      type: (schedulingMethod) => {
+        switch (schedulingMethod) {
+          case 'date':
+            return 'date';
+          case 'cron':
+            return 'text';
+          default:
+            return null;
+        }
+      },
+      name: 'schedule',
+      message: (schedulingMethod) =>
+        schedulingMethod === 'cron'
+          ? 'Enter recurring schedule (cron expression/shorthand)'
+          : 'Enter date and time (ISO 8601 timestamp) (local timezone)',
+      initial: (schedulingMethod) =>
+        schedulingMethod === 'cron' ? 'every-minute' : new Date(),
+      validate: (schedule) =>
+        schedule == null ||
+        validateAnswer(
+          schedule instanceof Date ? schedule.toISOString() : schedule,
+          SCHEDULE.parser
+        ),
+      format: (schedule) =>
+        SCHEDULE.parser(
+          schedule instanceof Date ? schedule.toISOString() : schedule
+        ),
     },
   ];
 }
