@@ -47,6 +47,16 @@ function composeGlobalOptions(compound) {
   };
 }
 
+function composeDefaultCommandOptions(commandOptions) {
+  return commandOptions == null
+    ? null
+    : Object.fromEntries(
+        commandOptions
+          .filter(({ option }) => option.default != null)
+          .map(({ option }) => [option.name, option.default])
+      );
+}
+
 /**
  * We should prompt for interactive input if the following criteria are met:
  *
@@ -70,11 +80,7 @@ async function composeCommandOptions(
   globalOptions,
   composePrompts
 ) {
-  const defaultCommandOptions = Object.fromEntries(
-    commandOptions
-      .filter(({ option }) => option.default != null)
-      .map(({ option }) => [option.name, option.default])
-  );
+  const defaultCommandOptions = composeDefaultCommandOptions(commandOptions);
 
   const userCommandOptions = shouldPromptQuestions(
     globalOptions.interactive,
@@ -90,6 +96,10 @@ async function composeCommandOptions(
 }
 
 function validateCommandOptions(parsedOptions, commandOptions) {
+  if (commandOptions == null) {
+    return;
+  }
+
   const requiredOptions = commandOptions.filter(({ isRequired }) => isRequired);
 
   for (const { option } of requiredOptions) {
