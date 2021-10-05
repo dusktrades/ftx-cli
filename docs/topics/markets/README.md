@@ -3,11 +3,7 @@
 ## Contents
 
 - [`spot`](#spot)
-  - [Options](#options)
-  - [Examples](#examples)
 - [`futures`](#futures)
-  - [Options](#options-1)
-  - [Examples](#examples-1)
 
 ![Divider](../../images/divider.png)
 

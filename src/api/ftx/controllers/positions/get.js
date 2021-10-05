@@ -1,6 +1,7 @@
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { account, futures } from '../../endpoints/index.js';
 import { allowValue } from '../allowValue.js';
+import { sortData } from '../sortData.js';
 
 async function fetchData(exchange, credentials) {
   const [positionsData, futuresData] = await Promise.all([
@@ -55,63 +56,43 @@ function normaliseData(data) {
   });
 }
 
-function composeCompareFunction(sortBy) {
-  if (['side', 'S'].includes(sortBy)) {
-    return (a, b) => compareAToZ(a.side, b.side);
+function composeSortCompare(sortBy) {
+  switch (sortBy) {
+    case 'side':
+      return (a, b) => compareAToZ(a.side, b.side);
+    case 'size':
+      return (a, b) => compareHighToLow(a.size, b.size);
+    case 'notional-size':
+      return (a, b) => compareHighToLow(a.notionalSize, b.notionalSize);
+    case 'mark-price':
+      return (a, b) => compareHighToLow(a.markPrice, b.markPrice);
+    case 'average-open-price':
+      return (a, b) => compareHighToLow(a.averageOpenPrice, b.averageOpenPrice);
+    case 'break-even-price':
+      return (a, b) => compareHighToLow(a.breakEvenPrice, b.breakEvenPrice);
+    case 'estimated-liquidation-price':
+      return (a, b) =>
+        compareHighToLow(
+          a.estimatedLiquidationPrice,
+          b.estimatedLiquidationPrice
+        );
+    case 'pnl':
+      return (a, b) => compareHighToLow(a.pnl, b.pnl);
+    default:
+      return null;
   }
-
-  if (['size', 's'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.size, b.size);
-  }
-
-  if (['notional-size', 'ns'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.notionalSize, b.notionalSize);
-  }
-
-  if (['mark-price', 'mp'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.markPrice, b.markPrice);
-  }
-
-  if (['average-open-price', 'op'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.averageOpenPrice, b.averageOpenPrice);
-  }
-
-  if (['break-even-price', 'bep'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.breakEvenPrice, b.breakEvenPrice);
-  }
-
-  if (['estimated-liquidation-price', 'lp'].includes(sortBy)) {
-    return (a, b) =>
-      compareHighToLow(
-        a.estimatedLiquidationPrice,
-        b.estimatedLiquidationPrice
-      );
-  }
-
-  if (sortBy === 'pnl') {
-    return (a, b) => compareHighToLow(a.pnl, b.pnl);
-  }
-
-  return null;
 }
 
-function sortData(data, sortBy) {
-  const alphabeticalData = [...data].sort((a, b) =>
-    compareAToZ(a.market, b.market)
-  );
-
-  const compareFunction = composeCompareFunction(sortBy);
-
-  return compareFunction == null
-    ? alphabeticalData
-    : alphabeticalData.sort(compareFunction);
+function initialCompare(a, b) {
+  return compareAToZ(a.market, b.market);
 }
 
 function collateData(data, filters, sortBy) {
   const filteredData = filterData(data, filters);
   const normalisedData = normaliseData(filteredData);
+  const sortCompare = composeSortCompare(sortBy);
 
-  return sortData(normalisedData, sortBy);
+  return sortData(normalisedData, initialCompare, sortCompare);
 }
 
 async function get({ exchange, credentials, filters, sortBy }) {

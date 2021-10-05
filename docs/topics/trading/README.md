@@ -2,13 +2,13 @@
 
 ## Contents
 
-- [🔐 `positions`](#-positions)
-- [🔐 `trade`](#-trade)
-- [🔐 `cancel`](#-cancel)
+- [`positions` 🔐](#positions)
+- [`trade` 🔐💬](#trade)
+- [`cancel` 🔐](#cancel)
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `positions`
+## `positions` 🔐
 
 ```
 ftx positions [options]  Display my open futures positions.
@@ -76,7 +76,7 @@ ftx positions --sort pnl
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `trade`
+## `trade` 🔐💬
 
 ```
 ftx trade <options>  Place order(s).
@@ -86,37 +86,37 @@ ftx trade <options>  Place order(s).
 
 ```
 Required:
-  -m, --market <market>             Market name.
-      --side <side>                 Order side.
-  -t, --type <type>                 Order type.
-  -s, --size <size>                 Size to execute.
+  -m, --market <market>                  Market name.
+      --side <side>                      Order side.
+  -t, --type <type>                      Order type.
+  -s, --size <size>                      Size to execute.
 
 Order-type-specific:
-  -p, --price <price>               Price that limit orders will be executed at.
-      --trigger-price <price>       Price that triggers stop or take profit orders.
-      --trail-value <value>         Distance that price must change direction and move in order to trigger trailing stop orders.
+  -p, --price <price>                    Price that limit orders will be executed at.
+      --trigger-price <price>            Price that triggers stop or take profit orders.
+      --trail-value <value>              Distance that price must change direction and move in order to trigger trailing stop orders.
 
 Optional:
-      --split <count>               Splits the order into a number of smaller, equal-sized individual orders.
-      --duration <duration>         Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
+      --split <count>                    Splits the order into a number of smaller, equal-sized individual orders.
+      --duration <duration>              Spreads the placement of a split order's individual orders linearly (i.e. fixed interval) over a total duration.
 
 Configurable:
-      --size-currency <source>      Source currency for calculating size [default: base].
-      --size-hook <hook>            Source size for calculating relative size [default: default].
-      --price-hook <hook>           Source price for calculating relative price [default: market].
-      --[no-]reduce-only            Toggle Reduce-Only mode. When enabled, orders will only reduce your position [default: disabled].
-      --[no-]ioc                    Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker [default: disabled].
-      --[no-]post-only              Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker [default: enabled].
-      --[no-]retry                  Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled [default: enabled].
-      --rate-limit <rate limit>     Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds) [default: 6/200].
-      --retry-exchange-unavailable  Advanced users only. Toggle retrying order placement requests that are rejected due to the exchange being unavailable [default: disabled].
+      --size-currency <source>           Source currency for calculating size [default: base].
+      --size-hook <hook>                 Source size for calculating relative size [default: default].
+      --price-hook <hook>                Source price for calculating relative price [default: market].
+      --[no-]reduce-only                 Toggle Reduce-Only mode. When enabled, orders will only reduce your position [default: disabled].
+      --[no-]ioc                         Toggle Immediate-or-Cancel (IOC) mode. When enabled, limit orders will only be executed as the taker [default: disabled].
+      --[no-]post-only                   Toggle Post-Only mode. When enabled, limit orders will only be executed as the maker [default: enabled].
+      --[no-]retry                       Toggle Retry-Until-Filled mode. When enabled, triggered orders that are executed at market will be retried until the order size is filled [default: enabled].
+      --rate-limit <rate limit>          Advanced users only. Order placement rate limit, denoted as request limit per interval (milliseconds) [default: 6/200].
+      --[no-]retry-exchange-unavailable  Advanced users only. Toggle retrying order placement requests that are rejected due to the exchange being unavailable [default: disabled].
 ```
 
 > ℹ️ You can set configurable option defaults using the [`config`](../configuration/README.md#config) command.
 
 ---
 
-#### [Market](#market)
+#### Market
 
 ```
 -m, --market <market>  Market name.
@@ -307,7 +307,7 @@ Please see [here](./examples.md).
 
 ### Notes
 
-Complex orders can have some individual orders rejected. Individual orders that fail to be placed due to rate limits or unexpected errors will automatically be retried. Individual orders that fail to be placed due to other reasons (e.g. connection loss, not enough margin) will be ignored and execution will continue. This may result in incomplete orders.
+Complex orders can have some individual orders rejected. Individual orders that fail to be placed due to rate limits will automatically be retried. Individual orders that fail to be placed due to other reasons (e.g. connection loss, not enough margin) will be ignored and execution will continue. This may result in incomplete orders.
 
 The order placement sequence of complex orders is not guaranteed: individual orders are often sent in parallel, to increase speed, and it is impossible to predict which will be accepted first by the FTX platform.
 
@@ -316,12 +316,13 @@ FTX trading fees are charged per volume executed, and not per trade executed, so
 ### Resources
 
 - [Twitter thread: FTX CLI TWAP orders](https://twitter.com/dusktrades/status/1431995882040352775)
+- [Twitter thread: FTX CLI order sizing and pricing methods](https://twitter.com/dusktrades/status/1440716947616796680)
 - [Article: Advanced Order Types](https://help.ftx.com/hc/en-us/articles/360031896592-Advanced-Order-Types)
 - [Article: Reduce-only Orders](https://help.ftx.com/hc/en-us/articles/360030802012-Reduce-only-Orders)
 
 ![Divider](../../images/divider.png)
 
-## 🔐 `cancel`
+## `cancel` 🔐
 
 ```
 ftx cancel [options]  Cancel order(s).

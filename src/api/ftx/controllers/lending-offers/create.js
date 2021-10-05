@@ -11,12 +11,14 @@ async function fetchLendable({ exchange, credentials, filters }) {
 }
 
 function isSupportedSize(size) {
-  return size == null || size.type === 'number';
+  return size == null || size.type === 'basic';
 }
 
 function normaliseSize(size, lendableSize) {
   if (!isSupportedSize(size)) {
-    throw new ApiError('This command currently only supports number sizes');
+    throw new ApiError(
+      'This command currently only supports basic size format'
+    );
   }
 
   /**

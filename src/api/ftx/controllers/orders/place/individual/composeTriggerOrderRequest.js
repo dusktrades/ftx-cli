@@ -34,26 +34,23 @@ function normaliseTrailValue(trailValue, type) {
   return trailValue.toNumber();
 }
 
-function normaliseRetryUntilFilled(enableRetry, type) {
+function normaliseRetryUntilFilled({ type, retry }) {
   // Retry-Until-Filled mode only affects orders that are executed at market.
-  return ORDER_TYPES[type].executionType === 'market' ? enableRetry : null;
+  return ORDER_TYPES[type].executionType === 'market' ? retry : null;
 }
 
 function composeRequestBody(data) {
   const triggerPrice = normaliseTriggerPrice(data.triggerPrice, data.type);
   const trailValue = normaliseTrailValue(data.trailValue, data.type);
 
-  const retryUntilFilled = normaliseRetryUntilFilled(
-    data.enableRetry,
-    data.type
-  );
+  const retryUntilFilled = normaliseRetryUntilFilled(data);
 
   return {
     market: data.market,
     side: data.side,
     type: ORDER_TYPES[data.type].apiArgument,
     size: data.size,
-    reduceOnly: data.enableReduceOnly,
+    reduceOnly: data.reduceOnly,
 
     ...(data.price != null && { orderPrice: data.price }),
     ...(triggerPrice != null && { triggerPrice }),

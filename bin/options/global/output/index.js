@@ -1,9 +1,28 @@
+import { parseChoice } from '../../helpers/parseChoice.js';
+
+const flags = '-o, --output <format>';
+
+const outputs = [
+  { parsed: 'table', options: ['table'] },
+  { parsed: 'json', options: ['json'] },
+];
+
+const CHOICES = outputs.flatMap(({ options }) => options);
+
+function parse(output) {
+  return parseChoice(
+    output,
+    outputs,
+    `${flags} must be one of: ${CHOICES.join(', ')}`
+  );
+}
+
 const OUTPUT = {
   name: 'output',
-  FLAGS: '-o, --output <format>',
-  DESCRIPTION: 'Output format [default: table].',
-  CHOICES: ['table', 'json'],
+  flags,
+  description: 'Output format [default: table].',
+  parser: parse,
   isConfigurable: true,
 };
 
-export { OUTPUT };
+export { OUTPUT, CHOICES };

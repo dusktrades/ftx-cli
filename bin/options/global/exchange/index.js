@@ -1,9 +1,28 @@
+import { parseChoice } from '../../helpers/parseChoice.js';
+
+const flags = '-e, --exchange <exchange>';
+
+const exchanges = [
+  { parsed: 'ftx', options: ['ftx'] },
+  { parsed: 'ftx-us', options: ['ftx-us'] },
+];
+
+const CHOICES = exchanges.flatMap(({ options }) => options);
+
+function parse(exchange) {
+  return parseChoice(
+    exchange,
+    exchanges,
+    `${flags} must be one of: ${CHOICES.join(', ')}`
+  );
+}
+
 const EXCHANGE = {
   name: 'exchange',
-  FLAGS: '-e, --exchange <exchange>',
-  DESCRIPTION: 'FTX exchange platform.',
-  CHOICES: ['ftx', 'ftx-us'],
+  flags,
+  description: 'FTX exchange platform [default: ftx].',
+  parser: parse,
   isConfigurable: true,
 };
 
-export { EXCHANGE };
+export { EXCHANGE, CHOICES };

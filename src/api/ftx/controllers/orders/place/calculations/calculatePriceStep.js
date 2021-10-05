@@ -6,9 +6,9 @@ function calculateOffset({ from, to }) {
   return to.minus(from);
 }
 
-function calculatePriceStep({ price, splitCount }) {
+function calculatePriceStep({ price, split }) {
   // If user hasn't provided price, or price isn't a range, the price step is 0.
-  if (price?.type !== 'range') {
+  if (price?.type !== 'scaled') {
     return new BigNumber(0);
   }
 
@@ -19,7 +19,7 @@ function calculatePriceStep({ price, splitCount }) {
     return new BigNumber(0);
   }
 
-  const additionalOrderCount = calculateAdditionalOrderCount(splitCount);
+  const additionalOrderCount = calculateAdditionalOrderCount(split);
 
   // If there is only one individual order, the price step is 0.
   return additionalOrderCount.isZero()

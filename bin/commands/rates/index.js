@@ -1,21 +1,23 @@
-import { composeSortOptionConfig } from '../../options/helpers/index.js';
+import { composeSortOption } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
+import { run } from './run.js';
 
-const sortOption = composeSortOptionConfig([
-  'currency',
-  'c',
+const sortingMethods = [
+  { parsed: 'currency', options: ['currency', 'c'] },
+  { parsed: 'previous', options: ['previous', 'p'] },
 
-  'previous',
-  'p',
-
-  'estimated',
-  'e',
-]);
+  // TODO: Change to `next` to be more semantic.
+  { parsed: 'estimated', options: ['estimated', 'e'] },
+];
 
 const RATES = {
-  NAME: 'rates',
-  DESCRIPTION: 'Display lending rates.',
-  OPTIONS: [{ OPTION: OPTIONS.COMMANDS.CURRENCY }, { OPTION: sortOption }],
+  name: 'rates',
+  description: 'Display lending rates.',
+  options: [
+    { option: OPTIONS.COMMANDS.CURRENCY },
+    { option: composeSortOption(sortingMethods) },
+  ],
+  run,
 };
 
 export { RATES };

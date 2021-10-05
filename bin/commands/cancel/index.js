@@ -1,12 +1,14 @@
 import { OPTIONS } from '../../options/index.js';
+import { run } from './run.js';
 
 const CANCEL = {
-  NAME: 'cancel',
-  DESCRIPTION: 'Cancel order(s).',
-  OPTIONS: [
-    { OPTION: OPTIONS.COMMANDS.MARKET },
-    { OPTION: OPTIONS.COMMANDS.SIDE },
+  name: 'cancel',
+  description: 'Cancel order(s).',
+  options: [
+    { option: OPTIONS.COMMANDS.MARKET },
+    { option: OPTIONS.COMMANDS.SIDE },
   ],
+  run,
 };
 
 export { CANCEL };

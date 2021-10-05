@@ -23,9 +23,10 @@ function parse(minRate) {
 }
 
 const MIN_RATE = {
-  FLAGS: '-r, --min-rate <rate>',
-  DESCRIPTION: 'Minimum yearly lending rate (%).',
-  PARSER: parse,
+  name: 'minRate',
+  flags: '-r, --min-rate <rate>',
+  description: 'Minimum yearly lending rate (%).',
+  parser: parse,
 };
 
 export { MIN_RATE };

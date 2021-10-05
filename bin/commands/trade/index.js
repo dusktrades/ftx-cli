@@ -1,19 +1,23 @@
 import { OPTIONS } from '../../options/index.js';
+import { composePrompts } from './composePrompts.js';
+import { run } from './run.js';
 
 const TRADE = {
-  NAME: 'trade',
-  DESCRIPTION: 'Place order(s).',
-  OPTIONS: [
-    { OPTION: OPTIONS.COMMANDS.MARKET, IS_REQUIRED: true },
-    { OPTION: OPTIONS.COMMANDS.SIDE, IS_REQUIRED: true },
-    { OPTION: OPTIONS.COMMANDS.ORDER_TYPE, IS_REQUIRED: true },
-    { OPTION: OPTIONS.COMMANDS.SIZE, IS_REQUIRED: true },
-    { OPTION: OPTIONS.COMMANDS.PRICE },
-    { OPTION: OPTIONS.COMMANDS.TRIGGER_PRICE },
-    { OPTION: OPTIONS.COMMANDS.TRAIL_VALUE },
-    { OPTION: OPTIONS.COMMANDS.SPLIT },
-    { OPTION: OPTIONS.COMMANDS.DURATION },
+  name: 'trade',
+  description: 'Place order(s).',
+  options: [
+    { option: OPTIONS.COMMANDS.MARKET, isRequired: true },
+    { option: OPTIONS.COMMANDS.SIDE, isRequired: true },
+    { option: OPTIONS.COMMANDS.ORDER_TYPE, isRequired: true },
+    { option: OPTIONS.COMMANDS.SIZE, isRequired: true },
+    { option: OPTIONS.COMMANDS.PRICE },
+    { option: OPTIONS.COMMANDS.TRIGGER_PRICE },
+    { option: OPTIONS.COMMANDS.TRAIL_VALUE },
+    { option: OPTIONS.COMMANDS.SPLIT },
+    { option: OPTIONS.COMMANDS.DURATION },
   ],
+  composePrompts,
+  run,
 };
 
 export { TRADE };

@@ -1,6 +1,9 @@
+import { run } from './run.js';
+
 const CONFIG = {
-  NAME: 'config',
-  DESCRIPTION: 'Save configuration options on your machine.',
+  name: 'config',
+  description: 'Save configuration options on your machine.',
+  run,
 };
 
 export { CONFIG };

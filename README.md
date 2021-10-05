@@ -153,6 +153,7 @@ You can include these options with any command to modify its behaviour.
 
 ```
 -v, --version                           Output the version number.
+    --[no-]interactive                  Toggle interactive mode. When enabled, if the command supports interactive mode, prompts will guide you through its usage. Other inline options will be ignored [default: disabled].
     --output (table | json)             Output format [default: table].
     --[no-]colour                       Toggle coloured output [default: enabled].
     --[no-]update-notifications         Toggle update notifications. When enabled, in table output mode, and an update is available: a notification will appear after command execution at most once a day [default: enabled].
@@ -173,23 +174,24 @@ Visit the documentation for a topic to learn more about related commands:
 - [Accounts](./docs/topics/accounts/README.md)
   - [`login`](./docs/topics/accounts/README.md#login)
   - [`logout`](./docs/topics/accounts/README.md#logout)
-  - [`🔐 wallet`](./docs/topics/accounts/README.md#-wallet)
+  - [`wallet` 🔐](./docs/topics/accounts/README.md#wallet)
 - [Configuration](./docs/topics/configuration/README.md)
   - [`config`](./docs/topics/configuration/README.md#config)
 - [Markets](./docs/topics/markets/README.md)
   - [`spot`](./docs/topics/markets/README.md#spot)
   - [`futures`](./docs/topics/markets/README.md#futures)
 - [Trading](./docs/topics/trading/README.md)
-  - [🔐 `trade`](./docs/topics/trading/README.md#-trade)
-  - [🔐 `cancel`](./docs/topics/trading/README.md#-cancel)
+  - [`trade` 🔐💬](./docs/topics/trading/README.md#trade)
+  - [`cancel` 🔐](./docs/topics/trading/README.md#cancel)
 - [Lending](./docs/topics/lending/README.md)
   - [`rates`](./docs/topics/lending/README.md#rates)
-  - [🔐 `offers`](./docs/topics/lending/README.md#-offers)
-  - [🔐 `earnings`](./docs/topics/lending/README.md#-earnings)
-  - [🔐 `lend`](./docs/topics/lending/README.md#-lend)
-  - [🔐 `stop`](./docs/topics/lending/README.md#-stop)
+  - [`offers` 🔐](./docs/topics/lending/README.md#offers)
+  - [`earnings` 🔐](./docs/topics/lending/README.md#earnings)
+  - [`lend` 🔐](./docs/topics/lending/README.md#lend)
+  - [`stop` 🔐](./docs/topics/lending/README.md#stop)
 
-🔐: authentication required
+🔐 Authentication required\
+💬 Supports interactive mode
 
 ### Guides
 

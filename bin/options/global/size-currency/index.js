@@ -17,9 +17,9 @@ function parse(sizeCurrency) {
 
 const SIZE_CURRENCY = {
   name: 'sizeCurrency',
-  FLAGS: '--size-currency <source>',
-  DESCRIPTION: 'Source currency for calculating size [default: base].',
-  PARSER: parse,
+  flags: '--size-currency <source>',
+  description: 'Source currency for calculating size [default: base].',
+  parser: parse,
   isConfigurable: true,
 };
 

@@ -1,4 +1,5 @@
-export { composeSortOptionConfig } from './composeSortOptionConfig.js';
+export { composeInteractiveChoices } from './composeInteractiveChoices.js';
+export { composeSortOption } from './composeSortOption.js';
 export { parseChoice } from './parseChoice.js';
 export { parseChoiceList } from './parseChoiceList.js';
 export { parseNumber } from './parseNumber.js';

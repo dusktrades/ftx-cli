@@ -58,11 +58,12 @@ function parse(duration) {
 }
 
 const DURATION = {
-  FLAGS: '--duration <duration>',
-  DESCRIPTION:
+  name: 'duration',
+  flags: '--duration <duration>',
+  description:
     'Spreads the individual orders of a split order linearly (i.e. fixed interval) over a total order placement duration, creating a TWAP order.',
-  PARSER: parse,
-  DEFAULT: new BigNumber(0),
+  parser: parse,
+  default: new BigNumber(0),
 };
 
 export { DURATION };

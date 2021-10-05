@@ -8,16 +8,16 @@ import { COMMANDS, composeCommand } from './commands/index.js';
 import { OPTIONS, composeOption } from './options/index.js';
 
 function addGlobalOptions() {
-  for (const optionConfig of OPTIONS.GLOBAL) {
-    const option = composeOption(optionConfig);
+  for (const config of OPTIONS.GLOBAL) {
+    const option = composeOption(config);
 
     program.addOption(option);
   }
 }
 
 function addCommands() {
-  for (const commandConfig of COMMANDS) {
-    const command = composeCommand(commandConfig);
+  for (const config of COMMANDS) {
+    const command = composeCommand(config);
 
     program.addCommand(command);
   }

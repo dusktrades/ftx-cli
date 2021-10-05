@@ -43,7 +43,7 @@ async function composeIndividualSizeCalculator(
       }),
     ]);
 
-    const individualSize = totalSize.dividedBy(data.splitCount);
+    const individualSize = totalSize.dividedBy(data.split);
 
     return (currentMarketData, calculatedPrice) =>
       calculateIndividualRelativeSize(
@@ -55,7 +55,7 @@ async function composeIndividualSizeCalculator(
 
   // Quote currency size.
   if (data.sizeCurrency === 'quote') {
-    const individualSize = data.size.value.dividedBy(data.splitCount);
+    const individualSize = data.size.value.dividedBy(data.split);
 
     return (currentMarketData, calculatedPrice) =>
       convertExecutionQuoteSizeToBaseSize(
@@ -65,7 +65,7 @@ async function composeIndividualSizeCalculator(
   }
 
   // Base currency size.
-  return () => data.size.value.dividedBy(data.splitCount).toNumber();
+  return () => data.size.value.dividedBy(data.split).toNumber();
 }
 
 /**
@@ -91,7 +91,7 @@ function composeIndividualPriceCalculator(data, orderIndex) {
     case 'relative':
       return (marketData) =>
         calculateRelativePrice(data, marketData).toNumber();
-    case 'range': {
+    case 'scaled': {
       const priceStep = calculatePriceStep(data);
 
       return () =>
@@ -129,34 +129,32 @@ async function composeOrderRequestArray(
     initialMarketData
   );
 
-  return Array.from({ length: data.splitCount.toNumber() }).map(
-    (_, orderIndex) => {
-      const delayMilliseconds = calculateDelayMilliseconds(
-        intervalMilliseconds,
-        orderIndex
-      );
+  return Array.from({ length: data.split.toNumber() }).map((_, orderIndex) => {
+    const delayMilliseconds = calculateDelayMilliseconds(
+      intervalMilliseconds,
+      orderIndex
+    );
 
-      const calculateIndividualPrice = composeIndividualPriceCalculator(
-        data,
-        orderIndex
-      );
+    const calculateIndividualPrice = composeIndividualPriceCalculator(
+      data,
+      orderIndex
+    );
 
-      const individualOrderData = {
-        ...data,
-        calculateIndividualSize,
-        calculateIndividualPrice,
-        delayMilliseconds,
-      };
+    const individualOrderData = {
+      ...data,
+      calculateIndividualSize,
+      calculateIndividualPrice,
+      delayMilliseconds,
+    };
 
-      return queueIndividualOrderRequest(
-        exchange,
-        credentials,
-        individualOrderData,
-        initialMarketData,
-        queue
-      );
-    }
-  );
+    return queueIndividualOrderRequest(
+      exchange,
+      credentials,
+      individualOrderData,
+      initialMarketData,
+      queue
+    );
+  });
 }
 
 async function composeOrderRequests({ exchange, credentials, data }) {

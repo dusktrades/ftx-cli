@@ -19,9 +19,9 @@ function parse(priceHook) {
 
 const PRICE_HOOK = {
   name: 'priceHook',
-  FLAGS: '--price-hook <hook>',
-  DESCRIPTION: 'Source price for calculating relative price [default: market].',
-  PARSER: parse,
+  flags: '--price-hook <hook>',
+  description: 'Source price for calculating relative price [default: market].',
+  parser: parse,
   isConfigurable: true,
 };
 

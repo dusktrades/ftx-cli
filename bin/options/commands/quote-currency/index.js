@@ -1,9 +1,10 @@
 import { parseUppercaseList } from '../../helpers/index.js';
 
 const QUOTE_CURRENCY = {
-  FLAGS: '-q, --quote-currency <currency>',
-  DESCRIPTION: 'Quote currency symbol(s).',
-  PARSER: parseUppercaseList,
+  name: 'quoteCurrency',
+  flags: '-q, --quote-currency <currency>',
+  description: 'Quote currency symbol(s).',
+  parser: parseUppercaseList,
 };
 
 export { QUOTE_CURRENCY };

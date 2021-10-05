@@ -6,6 +6,7 @@
 
 ## Contents
 
+- [Interactive mode](#interactive-mode)
 - [Basic order](#basic-order)
 - [Relative order](#relative-order)
 - [Split order](#split-order)
@@ -14,6 +15,14 @@
 - [Timed placement order](#timed-placement-order)
 - [Scheduled order](#scheduled-order)
 - [Scenarios](#scenarios)
+
+![Divider](../../images/divider.png)
+
+## Interactive mode
+
+```sh
+ftx trade --interactive
+```
 
 ![Divider](../../images/divider.png)
 

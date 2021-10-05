@@ -1,6 +1,9 @@
+import { run } from './run.js';
+
 const EARNINGS = {
-  NAME: 'earnings',
-  DESCRIPTION: 'Display my lending earnings.',
+  name: 'earnings',
+  description: 'Display my lending earnings.',
+  run,
 };
 
 export { EARNINGS };

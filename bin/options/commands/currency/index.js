@@ -1,9 +1,10 @@
 import { parseUppercaseList } from '../../helpers/index.js';
 
 const CURRENCY = {
-  FLAGS: '-c, --currency <currency>',
-  DESCRIPTION: 'Currency symbol(s).',
-  PARSER: parseUppercaseList,
+  name: 'currency',
+  flags: '-c, --currency <currency>',
+  description: 'Currency symbol(s).',
+  parser: parseUppercaseList,
 };
 
 export { CURRENCY };

@@ -1,33 +1,26 @@
-import { composeSortOptionConfig } from '../../options/helpers/index.js';
+import { composeSortOption } from '../../options/helpers/index.js';
 import { OPTIONS } from '../../options/index.js';
+import { run } from './run.js';
 
-const sortOption = composeSortOptionConfig([
-  'name',
-  'n',
-
-  'price',
-  'p',
-
-  'change-1h',
-  'c1',
-
-  'change-24h',
-  'c24',
-
-  'volume',
-  'v',
-]);
+const sortingMethods = [
+  { parsed: 'name', options: ['name', 'n'] },
+  { parsed: 'price', options: ['price', 'p'] },
+  { parsed: 'change-1h', options: ['change-1h', 'c1'] },
+  { parsed: 'change-24h', options: ['change-24h', 'c24'] },
+  { parsed: 'volume', options: ['volume', 'v'] },
+];
 
 const SPOT = {
-  NAME: 'spot',
-  DESCRIPTION: 'Display spot markets.',
-  OPTIONS: [
-    { OPTION: OPTIONS.COMMANDS.CURRENCY },
-    { OPTION: OPTIONS.COMMANDS.SPOT_TYPE },
-    { OPTION: OPTIONS.COMMANDS.QUOTE_CURRENCY },
-    { OPTION: OPTIONS.COMMANDS.TOKEN_LEVERAGE },
-    { OPTION: sortOption },
+  name: 'spot',
+  description: 'Display spot markets.',
+  options: [
+    { option: OPTIONS.COMMANDS.CURRENCY },
+    { option: OPTIONS.COMMANDS.SPOT_TYPE },
+    { option: OPTIONS.COMMANDS.QUOTE_CURRENCY },
+    { option: OPTIONS.COMMANDS.TOKEN_LEVERAGE },
+    { option: composeSortOption(sortingMethods) },
   ],
+  run,
 };
 
 export { SPOT };

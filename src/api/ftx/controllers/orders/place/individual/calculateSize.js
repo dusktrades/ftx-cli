@@ -1,8 +1,8 @@
 import { markets } from '../../../../endpoints/index.js';
 import { ORDER_TYPES } from '../../../../structures/orderTypes.js';
 
-function calculateIndividualSize({ size, splitCount }) {
-  return size.dividedBy(splitCount);
+function calculateIndividualSize({ size, split }) {
+  return size.dividedBy(split);
 }
 
 /**

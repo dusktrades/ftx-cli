@@ -1,8 +1,8 @@
-import { parseChoice } from '../../helpers/index.js';
+import { composeInteractiveChoices, parseChoice } from '../../helpers/index.js';
 
 const sides = [
-  { parsed: 'buy', options: ['buy', 'b'] },
-  { parsed: 'sell', options: ['sell', 's'] },
+  { parsed: 'buy', options: ['buy', 'b'], human: 'Buy' },
+  { parsed: 'sell', options: ['sell', 's'], human: 'Sell' },
 ];
 
 const CHOICES = sides.flatMap(({ options }) => options);
@@ -16,9 +16,11 @@ function parse(side) {
 }
 
 const SIDE = {
-  FLAGS: '--side <side>',
-  DESCRIPTION: 'Order side.',
-  PARSER: parse,
+  name: 'side',
+  flags: '--side <side>',
+  description: 'Order side.',
+  parser: parse,
+  interactiveChoices: composeInteractiveChoices(sides),
 };
 
 export { SIDE, CHOICES };

@@ -1,6 +1,7 @@
 import { EmptyResultsError } from '../../../../common/index.js';
 import { compareAToZ, compareHighToLow } from '../../../../util/index.js';
 import { futures } from '../../endpoints/index.js';
+import { sortData } from '../sortData.js';
 import { get } from './get.js';
 import { getPreviousFunding } from './getPreviousFunding.js';
 
@@ -33,6 +34,7 @@ async function fetchData(exchange, filters) {
     filters
   );
 
+  // TODO: Show in table UI/JSON empty array instead of throwing error.
   if (futuresList.length === 0) {
     throw new EmptyResultsError('No futures found');
   }
@@ -42,13 +44,17 @@ async function fetchData(exchange, filters) {
   return { futuresList, previousFunding, incompleteStats };
 }
 
-function composeEntry(futuresEntry, previousFunding, incompleteStats, index) {
-  const previousFundingEntry = previousFunding.find(
-    ({ future }) => future === futuresEntry.name
-  );
+function getPreviousFundingRate(name, previousFunding) {
+  const entry = previousFunding.find(({ future }) => future === name);
 
-  const { nextFundingRate } = incompleteStats[index];
+  return entry?.rate ?? null;
+}
 
+function getNextFundingRate(incompleteStatsEntry) {
+  return incompleteStatsEntry.nextFundingRate ?? null;
+}
+
+function composeEntry(futuresEntry, previousFunding, incompleteStatsEntry) {
   return {
     name: futuresEntry.name,
     underlying: futuresEntry.underlying,
@@ -60,72 +66,55 @@ function composeEntry(futuresEntry, previousFunding, incompleteStats, index) {
     volumeUsd24h: futuresEntry.volumeUsd24h,
     openInterest: futuresEntry.openInterest,
     openInterestUsd: futuresEntry.openInterestUsd,
-    previousFundingRate: previousFundingEntry?.rate ?? null,
-    nextFundingRate: nextFundingRate ?? null,
+    previousFundingRate: getPreviousFundingRate(
+      futuresEntry.name,
+      previousFunding
+    ),
+    nextFundingRate: getNextFundingRate(incompleteStatsEntry),
   };
 }
 
 function composeData({ futuresList, previousFunding, incompleteStats }) {
   return futuresList.map((entry, index) =>
-    composeEntry(entry, previousFunding, incompleteStats, index)
+    composeEntry(entry, previousFunding, incompleteStats[index])
   );
 }
 
-function composeCompareFunction(sortBy) {
-  if (['last-price', 'lp'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.lastPrice, b.lastPrice);
+function composeSortCompare(sortBy) {
+  switch (sortBy) {
+    case 'mark-price':
+      return (a, b) => compareHighToLow(a.markPrice, b.markPrice);
+    case 'last-price':
+      return (a, b) => compareHighToLow(a.lastPrice, b.lastPrice);
+    case 'change-1h':
+      return (a, b) =>
+        compareHighToLow(a.change1hPercentage, b.change1hPercentage);
+    case 'change-24h':
+      return (a, b) =>
+        compareHighToLow(a.change24hPercentage, b.change24hPercentage);
+    case 'volume':
+      return (a, b) => compareHighToLow(a.volumeUsd24h, b.volumeUsd24h);
+    case 'open-interest':
+      return (a, b) => compareHighToLow(a.openInterestUsd, b.openInterestUsd);
+    case 'previous-funding':
+      return (a, b) =>
+        compareHighToLow(a.previousFundingRate, b.previousFundingRate);
+    case 'estimated-funding':
+      return (a, b) => compareHighToLow(a.nextFundingRate, b.nextFundingRate);
+    default:
+      return null;
   }
-
-  if (['mark-price', 'mp'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.markPrice, b.markPrice);
-  }
-
-  if (['change-1h', 'c1'].includes(sortBy)) {
-    return (a, b) =>
-      compareHighToLow(a.change1hPercentage, b.change1hPercentage);
-  }
-
-  if (['change-24h', 'c24'].includes(sortBy)) {
-    return (a, b) =>
-      compareHighToLow(a.change24hPercentage, b.change24hPercentage);
-  }
-
-  if (['volume', 'v'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.volumeUsd24h, b.volumeUsd24h);
-  }
-
-  if (['open-interest', 'oi'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.openInterestUsd, b.openInterestUsd);
-  }
-
-  if (['previous-funding', 'pf'].includes(sortBy)) {
-    return (a, b) =>
-      compareHighToLow(a.previousFundingRate, b.previousFundingRate);
-  }
-
-  if (['estimated-funding', 'ef'].includes(sortBy)) {
-    return (a, b) => compareHighToLow(a.nextFundingRate, b.nextFundingRate);
-  }
-
-  return null;
 }
 
-function sortData(data, sortBy) {
-  const alphabeticalData = [...data].sort((a, b) =>
-    compareAToZ(a.name, b.name)
-  );
-
-  const compareFunction = composeCompareFunction(sortBy);
-
-  return compareFunction == null
-    ? alphabeticalData
-    : alphabeticalData.sort(compareFunction);
+function initialCompare(a, b) {
+  return compareAToZ(a.name, b.name);
 }
 
 function collateData(data, sortBy) {
   const composedData = composeData(data);
+  const sortCompare = composeSortCompare(sortBy);
 
-  return sortData(composedData, sortBy);
+  return sortData(composedData, initialCompare, sortCompare);
 }
 
 async function getStats({ exchange, filters, sortBy }) {

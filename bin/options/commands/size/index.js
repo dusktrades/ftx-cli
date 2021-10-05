@@ -1,21 +1,25 @@
 import { parseNumber, parseRelativeNumber } from '../../helpers/index.js';
 
-const errorMessage = 'Size must be a number or percentage greater than zero.';
-
 function getType(size) {
-  return size.includes('%') ? 'relative' : 'number';
+  return size.includes('%') ? 'relative' : 'basic';
 }
 
-function parseRelativeSize(size) {
+function parseRelative(
+  size,
+  errorMessage = 'Size must be a percentage greater than zero.'
+) {
   return {
     type: 'relative',
     value: parseRelativeNumber(size, errorMessage, 'multiplicative'),
   };
 }
 
-function parseNumberSize(size) {
+function parseBasic(
+  size,
+  errorMessage = 'Size must be a number greater than zero.'
+) {
   return {
-    type: 'number',
+    type: 'basic',
     value: parseNumber(size, errorMessage, {
       allowNegative: false,
       allowZero: false,
@@ -24,15 +28,21 @@ function parseNumberSize(size) {
 }
 
 function parse(size) {
+  const errorMessage = 'Size must be a number or percentage greater than zero.';
   const type = getType(size);
 
-  return type === 'relative' ? parseRelativeSize(size) : parseNumberSize(size);
+  return type === 'relative'
+    ? parseRelative(size, errorMessage)
+    : parseBasic(size, errorMessage);
 }
 
 const SIZE = {
-  FLAGS: '-s, --size <size>',
-  DESCRIPTION: 'Size to execute.',
-  PARSER: parse,
+  name: 'size',
+  flags: '-s, --size <size>',
+  description: 'Size to execute.',
+  parser: parse,
+  parseBasic,
+  parseRelative,
 };
 
 export { SIZE };
